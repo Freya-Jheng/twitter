@@ -1,0 +1,59 @@
+// black series
+$eerie-black: #1c1c1c;
+$black: #000000;
+
+// white and grey series
+$white: #ffffff;
+$lynch: #657786;
+$whisper-grey: #e5e5e5;
+$border-grey: #e6ecf0;
+$manatee: #9197a3;
+$silver: #c4c4c4;
+$link-water: #ccd6dd;
+$background-grey: #999999;
+$grey: #f6f7f8;
+$alice-blue: #f5f8fa;
+
+// other colors
+$bittersweet: #fc5a5a;
+$orange: #ff6600;
+$pink: #e0245e;
+$dodger-blue: #0099ff;
+$maya-blue: #50b5ff;
+
+:root {
+  --background: #{$whisper-grey};
+
+  --main-font-color: #{$eerie-black};
+  --smaller-font-color: #{$lynch};
+
+  --input-label: #{$lynch};
+  --input-background: #{$alice-blue};
+  --input-underline: #{$lynch};
+  --input-underline-hover: #{$maya-blue};
+  --error-color: #{$bittersweet};
+  --tweet-placeholder: #{$manatee};
+
+  --button-background: #{$orange};
+  --button-font: #{$white};
+  --mentioned-account: #{$orange};
+
+  --cancel-button: #{$orange};
+  --background-cancel-button: #{$white};
+  --admin-delete-button: #{$lynch};
+
+  --hyperlink-color: #{$dodger-blue};
+  --active-color: #{$orange};
+
+  --border-and-divider: #{$border-grey};
+
+  --user-avatar: #{$silver};
+  --popular-users-background: #{$alice-blue};
+  --return-arrow: #{$black};
+  --reply-connect-line: #{$link-water};
+  --intro-color: #{$black};
+  --no-background: #{$background-grey};
+  --like-color: #{$pink};
+
+  --admin-user-background: #{$grey};
+}
