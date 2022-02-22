@@ -10,6 +10,10 @@ button {
   color: var(--button-font);
 }
 
+button[disabled] {
+  background: rgba(255, 102, 0, 0.6);
+}
+
 .form-label-group {
   display: flex;
   flex-direction: column;
