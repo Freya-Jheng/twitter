@@ -28,6 +28,11 @@
 <script>
 export default {
   name: 'CreateTweet',
+  data() {
+    return {
+      newTweet: '',
+    }
+  },
 }
 </script>
 
