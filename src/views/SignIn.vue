@@ -145,6 +145,9 @@ export default {
     margin-top: 40px;
     height: 46px;
     width: 100%;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 26.06px;
   }
 
   &__links {
@@ -153,10 +156,6 @@ export default {
     justify-content: end;
     margin-top: 20px;
     width: 100%;
-    height: 26px;
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 26.06px;
 
     &--dot {
       font-size: 20px;
@@ -164,6 +163,10 @@ export default {
     }
 
     &--link {
+      height: 26px;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 26.06px;
       color: var(--hyperlink-color);
       &:hover {
         text-decoration: underline;
