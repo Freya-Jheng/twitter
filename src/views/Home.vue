@@ -1,18 +1,22 @@
 <template>
   <div class="home">
     <Navbar />
-    <div class="tweets"></div>
+    <div class="tweets">
+      <CreateTweet />
+    </div>
     <div class="popular-users">Popular users</div>
   </div>
 </template>
 
 <script>
 import Navbar from './../components/Navbar'
+import CreateTweet from './../components/CreateTweet'
 
 export default {
   name: 'Home',
   components: {
     Navbar,
+    CreateTweet,
   },
 }
 </script>
@@ -31,7 +35,7 @@ export default {
     border-left: 1px solid var(--border-and-divider);
     border-right: 1px solid var(--border-and-divider);
     height: 100%;
-    background: lightgrey;
+    background: #e5e5e5;
   }
 
   .popular-users {
