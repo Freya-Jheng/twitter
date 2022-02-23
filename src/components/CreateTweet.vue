@@ -1,10 +1,10 @@
 <template>
   <div class="create-tweet">
     <div class="create-tweet__header">首頁</div>
-    <form class="create-tweet__container">
+    <form class="create-tweet__container" @submit.stop.prevent="handleSubmit">
       <div class="create-tweet__container__main">
         <div class="create-tweet__container__main__user-avatar">
-          <img src="" alt="" class="user-avatar" />
+          <img v-if="currentUser.image" src="" alt="" class="user-avatar" />
         </div>
         <div class="create-tweet__container__main__text">
           <div></div>
@@ -26,12 +26,33 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import { Toast } from './../utils/helpers'
+
 export default {
   name: 'CreateTweet',
   data() {
     return {
       newTweet: '',
     }
+  },
+  computed: {
+    ...mapState(['currentUser']),
+  },
+  methods: {
+    async handleSubmit() {
+      try {
+        // TODO 等後端 API 資料串接
+        console.log(this.newTweet)
+        this.newTweet = ''
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法發布推文，請稍後再試',
+        })
+      }
+    },
   },
 }
 </script>
