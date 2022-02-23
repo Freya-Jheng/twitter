@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <form class="sign-in">
+    <form class="sign-in" @submit.stop.prevent="handleSubmit">
       <div class="sign-in__logo">
         <img src="./../assets/logo@2x.png" alt="logo" />
       </div>
@@ -14,6 +14,7 @@
           placeholder=""
           required
           autofocus
+          v-model="account"
           class="sing-in__form-label-group__account--input input"
         />
       </div>
@@ -27,14 +28,19 @@
           placeholder=""
           required
           autofocus
+          v-model="password"
           class="sing-in__form-label-group__password--input input"
         />
       </div>
-      <div class="sign-in__button button">
-        <button class="sign-in__log-in-button">登入</button>
-      </div>
+      <button
+        class="sign-in__button button"
+        type="submit"
+        :disabled="isProcessing"
+      >
+        {{ isProcessing ? '處理中' : '登入' }}
+      </button>
       <div class="sign-in__links">
-        <router-link to="" class="sign-in__links--link"
+        <router-link to="/signup" class="sign-in__links--link"
           >註冊 Alphitter</router-link
         >
         <div class="sign-in__links--dot">·</div>
@@ -45,8 +51,56 @@
 </template>
 
 <script>
+import { Toast } from './../utils/helpers'
+
 export default {
   name: 'SignIn',
+  data() {
+    return {
+      account: '',
+      password: '',
+      isProcessing: false,
+    }
+  },
+  method: {
+    async handleSubmit() {
+      try {
+        if (!this.account || !this.password) {
+          Toast.fire({
+            icon: 'error',
+            title: '請輸入帳號和密碼',
+          })
+          return
+        }
+
+        this.isProcessing = false
+
+        // TODO 等 API 好了之後再串接
+        // const response = await authorizationAPI.signIn({
+        //   email: this.email,
+        //   password: this.password,
+        // })
+        // const { data } = response
+        // if (data.status !== 'success') {
+        //   throw new Error(data.message)
+        // }
+
+        // TODO 把 token 存入 localStorage 中
+        // localStorage.setItem('token', data.token)
+        // this.$store.commit('setCurrentUser', data.user)
+        // this.$router.push('/tweets')
+      } catch (error) {
+        console.log(error)
+        this.isProcessing = false
+        this.email = ''
+        this.password = ''
+        Toast.fire({
+          icon: 'warning',
+          title: '帳號或密碼錯誤',
+        })
+      }
+    },
+  },
 }
 </script>
 
@@ -91,6 +145,9 @@ export default {
     margin-top: 40px;
     height: 46px;
     width: 100%;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 26.06px;
   }
 
   &__links {
@@ -99,10 +156,6 @@ export default {
     justify-content: flex-end;
     margin-top: 20px;
     width: 100%;
-    height: 26px;
-    font-weight: 700;
-    font-size: 18px;
-    line-height: 26.06px;
 
     &--dot {
       font-size: 20px;
@@ -110,6 +163,10 @@ export default {
     }
 
     &--link {
+      height: 26px;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 26.06px;
       color: var(--hyperlink-color);
       &:hover {
         text-decoration: underline;
