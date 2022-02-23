@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import NotFound from '../views/NotFound.vue'
 import SignIn from '../views/SignIn.vue'
+import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
@@ -10,6 +11,11 @@ const routes = [
     path: '/',
     name: 'root',
     redirect: '/signin',
+  },
+  {
+    path: '/home',
+    name: 'home',
+    component: Home,
   },
   {
     path: '/signin',
