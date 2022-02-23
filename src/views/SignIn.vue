@@ -153,7 +153,7 @@ export default {
   &__links {
     display: flex;
     flex-direction: row;
-    justify-content: end;
+    justify-content: flex-end;
     margin-top: 20px;
     width: 100%;
 
