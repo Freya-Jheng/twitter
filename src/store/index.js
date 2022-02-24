@@ -14,17 +14,13 @@ export default new Vuex.Store({
     },
     isAuthenticated: false,
     token: '',
-
-      account: '',
-      name: '',
-      email: '',
-      image: '',
-      password:'',
-      passwordChecked: '',
-      isAdmin: false
-    },
-    isAuthenticated: false,
-    token: ''
+    account: '',
+    name: '',
+    email: '',
+    image: '',
+    password: '',
+    passwordChecked: '',
+    isAdmin: false,
   },
   mutations: {
     setCurrentUser(state, currentUser) {
