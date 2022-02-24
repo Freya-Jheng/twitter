@@ -61,7 +61,7 @@
 
 <script>
 const dummyUser = {
-  id: uuid(),
+  id: uuidv4(),
   account: "wonderman",
   name: "John Doe",
   email: "JohnDoe@gmail.com",
@@ -69,7 +69,7 @@ const dummyUser = {
   passwordChecked: "12345678",
 };
 
-import uuid from "uuid/v4";
+import {v4 as uuidv4} from "uuid";
 import { Toast } from "../utils/helpers";
 // import { mapState } from 'vuex'
 // import userAPI from 'api'
@@ -105,7 +105,6 @@ export default {
   methods: {
     fetchUser(userId) {
       const { id, account, name, email, passwordChecked, password } = dummyUser; 
-
       // TODO: 綁定API後 這裡要修改成 if currentUser.id != userId
       if (!userId.toString()) {
         this.router.push({name: 'not-found'})

@@ -1,6 +1,9 @@
 <template>
   <div>
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> main
     <h1>404 Not Found</h1>
 =======
     <Navbar />
@@ -10,7 +13,10 @@
 </template>
 
 <script>
+<<<<<<< HEAD
+=======
 
+>>>>>>> main
 export default {
   name: 'NotFound',
 }
