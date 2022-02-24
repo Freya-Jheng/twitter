@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import NotFound from '../views/NotFound.vue'
 import SignIn from '../views/SignIn.vue'
+import Home from '../views/Home.vue'
 
 Vue.use(VueRouter)
 
@@ -11,6 +12,7 @@ const routes = [
     name: 'root',
     redirect: '/signin',
   },
+
   {
     path: '/signin',
     name: 'sign-in',
@@ -22,6 +24,19 @@ const routes = [
     component: () => import('../views/SignUp.vue'),
   },
   {
+
+    path: '/home',
+    name: 'home',
+    component: Home,
+  },
+  {
+    path: '/tweets/:tweet_id',
+    name: 'individual-tweet',
+    component: () => import('../views/IndividualTweet'),
+  },
+
+  {
+
     path: '/setting:id',
     name: 'setting',
     component: () => import('../views/Setting.vue'),
