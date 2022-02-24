@@ -24,6 +24,7 @@ const routes = [
     component: () => import('../views/SignUp.vue'),
   },
   {
+
     path: '/home',
     name: 'home',
     component: Home,
@@ -34,6 +35,12 @@ const routes = [
     component: () => import('../views/IndividualTweet'),
   },
 
+  {
+
+    path: '/setting:id',
+    name: 'setting',
+    component: () => import('../views/Setting.vue'),
+  },
   {
     path: '*',
     name: 'not-found',

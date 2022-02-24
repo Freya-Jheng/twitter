@@ -9,6 +9,11 @@
             alt="navbar__items-icon"
             class="navbar__items-icon home-icon"
           />
+          <img
+            src="./../assets/icon_index_active@2x.png"
+            alt="navbar__items-icon"
+            class="navbar__items-icon home-icon active"
+          />
           <span class="navbar__items-title">首頁</span>
         </router-link>
       </div>
@@ -19,6 +24,11 @@
             alt="navbar__items-icon"
             class="navbar__items-icon profile-icon"
           />
+          <img
+            src="./../assets/icon_user_active@2x.png"
+            alt="navbar__items-icon"
+            class="navbar__items-icon profile-icon active"
+          />
           <span class="navbar__items-title">個人資料</span>
         </router-link>
       </div>
@@ -28,6 +38,11 @@
             src="./../assets/icon_cog@2x.png"
             alt="navbar__items-icon"
             class="navbar__items-icon setting-icon"
+          />
+          <img
+            src="./../assets/icon_cog_active@2x.png"
+            alt="navbar__items-icon"
+            class="navbar__items-icon setting-icon active"
           />
           <span class="navbar__items-title">設定資料</span>
         </router-link>
@@ -60,22 +75,56 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <div class="modal-body"></div>
+            <div class="modal-body">
+              <img :src="user.image" alt="avatar" class="avatar" />
+              <form action="" class="create__tweet">
+                <textarea
+                  v-model="tweet"
+                  placeholder="有什麼新鮮事？"
+                  name="create__tweet-textarea"
+                  id="create__tweet-textarea"
+                  cols="50"
+                  rows="4"
+                ></textarea>
+              </form>
+            </div>
             <div class="modal-footer">
-              <button type="button" class="btn">
+              <router-link to="" class="btn-modal" data-dismiss="modal">
                 推文
-              </button>
+              </router-link>
             </div>
           </div>
         </div>
       </div>
     </div>
+    <router-link to="/signin" class="logout">
+      <img
+        src="./../assets/icon_logout@2x.png"
+        alt="logout-icon"
+        class="logout-icon"
+      />
+      <span class="logout-title">登出</span>
+    </router-link>
   </nav>
 </template>
 
 <script>
+const dummyUser = {
+  id: uuid(),
+  image: "https://i.pravatar.cc",
+};
+
+import uuid from "uuid/v4";
+
 export default {
   name: "Navbar",
+  data() {
+    return {
+      tweet: "",
+      user: dummyUser,
+    };
+  },
+  methods: {},
 };
 </script>
 
@@ -102,12 +151,22 @@ nav {
     gap: 37px;
     .navbar__items-item {
       width: 90%;
+      .active {
+        display: none;
+      }
       .navbar__items-link {
         display: flex;
         flex-flow: row nowrap;
         gap: 30px;
         align-items: center;
-        &:focus, &:hover {
+        &:focus,
+        &:hover {
+          .navbar__items-icon {
+            display: none;
+            ~ .active {
+              display: block;
+            }
+          }
           .navbar__items-title {
             color: var(--button-background);
           }
@@ -128,7 +187,6 @@ nav {
       .navbar__items-title {
         color: var(--main-font-color);
       }
-      
     }
   }
   .navbar__new__tweet {
@@ -137,6 +195,65 @@ nav {
     color: var(--background-cancel-button);
     font-weight: 500;
     border-radius: 100px;
+  }
+  .modal {
+    .modal-content {
+      width: 600px;
+      height: 300px;
+      border-radius: 14px;
+      .modal-header {
+        display: flex;
+        justify-content: flex-start;
+        border-color: var(--border-and-divider);
+
+        button {
+          margin-left: 0;
+          padding-left: 0;
+          span {
+            width: 20px;
+            height: 20px;
+            color: var(--button-background);
+          }
+        }
+      }
+      .modal-body {
+        display: flex;
+        flex-direction: row;
+        gap: 10px;
+        img {
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+        }
+        textarea {
+          margin-top: 8px;
+          border: unset;
+        }
+      }
+      .modal-footer {
+        border: unset;
+      }
+    }
+  }
+  .btn-modal {
+    width: 66px;
+    height: 38px;
+    background-color: var(--button-background);
+    border-radius: 100px;
+    color: var(--button-font);
+    line-height: 38px;
+    text-align: center;
+  }
+  .logout {
+    display: flex;
+    flex-direction: row;
+    gap: 37px;
+    margin-top: 190%;
+    color: var(--main-font-color);
+    .logout-icon {
+      width: 22px;
+      height: 22px;
+    }
   }
 }
 </style>
