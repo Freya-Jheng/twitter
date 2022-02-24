@@ -110,22 +110,22 @@
 
 <script>
 const dummyUser = {
-  id: uuid(),
-  image: "https://i.pravatar.cc",
-};
+  id: uuidv4(),
+  image: 'https://i.pravatar.cc',
+}
 
-import uuid from "uuid/v4";
+import { v4 as uuidv4 } from 'uuid'
 
 export default {
-  name: "Navbar",
+  name: 'Navbar',
   data() {
     return {
-      tweet: "",
+      tweet: '',
       user: dummyUser,
-    };
+    }
   },
   methods: {},
-};
+}
 </script>
 
 <style scoped lang="scss">
