@@ -22,6 +22,11 @@ const routes = [
     component: () => import('../views/SignUp.vue'),
   },
   {
+    path: '/setting:id',
+    name: 'setting',
+    component: () => import('../views/Setting.vue'),
+  },
+  {
     path: '*',
     name: 'not-found',
     component: NotFound,
