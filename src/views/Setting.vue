@@ -1,64 +1,72 @@
 <template>
-  <div class="setting">
-    <div class="setting__title">帳號設定</div>
-    <form @submit.stop.prevent="handleSubmit" class="setting__form">
-      <div class="setting__form__item account">
-        <span class="setting__form__item-title">帳號</span>
-        <label class="account-with-special-icon">
+  <div class="wrapper">
+    <Navbar />
+    <div class="setting">
+      <div class="setting__title">帳號設定</div>
+      <form @submit.stop.prevent="handleSubmit" class="setting__form">
+        <div class="setting__form__item account">
+          <span class="setting__form__item-title">帳號</span>
+          <label class="account-with-special-icon">
+            <input
+              type="text"
+              name="account"
+              class="setting__form__item-input account"
+              id="account"
+              v-model="user.account"
+            />
+          </label>
+        </div>
+        <div class="setting__form__item name">
+          <span class="setting__form__item-title">名稱</span>
           <input
             type="text"
-            name="account"
-            class="setting__form__item-input account"
-            id="account"
-            v-model="user.account"
+            name="name"
+            class="setting__form__item-input"
+            id="name"
+            v-model="user.name"
           />
-        </label>
-      </div>
-      <div class="setting__form__item name">
-        <span class="setting__form__item-title">名稱</span>
-        <input
-          type="text"
-          name="name"
-          class="setting__form__item-input"
-          id="name"
-          v-model="user.name"
-        />
-      </div>
-      <div class="setting__form__item email">
-        <span class="setting__form__item-title">Email</span>
-        <input
-          type="email"
-          name="email"
-          class="setting__form__item-input"
-          id="email"
-          v-model="user.email"
-        />
-      </div>
-      <div class="setting__form__item password">
-        <span class="setting__form__item-title">密碼</span>
-        <input
-          type="text"
-          name="password"
-          class="setting__form__item-input"
-          id="password"
-          v-model="user.password"
-        />
-      </div>
-      <div class="setting__form__item passwordChecked">
-        <span class="setting__form__item-title">密碼確認</span>
-        <input
-          type="text"
-          name="passwordChecked"
-          class="setting__form__item-input"
-          id="passwordChecked"
-          v-model="user.passwordChecked"
-        />
-      </div>
-      <button :disabled="isProcessing" type="submit" class="setting__save btn"> {{isProcessing ? '修改中':'儲存'}} </button>
-    </form>
+        </div>
+        <div class="setting__form__item email">
+          <span class="setting__form__item-title">Email</span>
+          <input
+            type="email"
+            name="email"
+            class="setting__form__item-input"
+            id="email"
+            v-model="user.email"
+          />
+        </div>
+        <div class="setting__form__item password">
+          <span class="setting__form__item-title">密碼</span>
+          <input
+            type="text"
+            name="password"
+            class="setting__form__item-input"
+            id="password"
+            v-model="user.password"
+          />
+        </div>
+        <div class="setting__form__item passwordChecked">
+          <span class="setting__form__item-title">密碼確認</span>
+          <input
+            type="text"
+            name="passwordChecked"
+            class="setting__form__item-input"
+            id="passwordChecked"
+            v-model="user.passwordChecked"
+          />
+        </div>
+        <button
+          :disabled="isProcessing"
+          type="submit"
+          class="setting__save btn"
+        >
+          {{ isProcessing ? "修改中" : "儲存" }}
+        </button>
+      </form>
+    </div>
   </div>
 </template>
-
 <script>
 const dummyUser = {
   id: uuidv4(),
@@ -69,8 +77,9 @@ const dummyUser = {
   passwordChecked: "12345678",
 };
 
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import { Toast } from "../utils/helpers";
+import Navbar from "../components/Navbar.vue";
 // import { mapState } from 'vuex'
 // import userAPI from 'api'
 
@@ -89,9 +98,10 @@ export default {
       isProcessing: false,
     };
   },
-  // components: {
-  //   ...mapState(['currentUser'])
-  // },
+  components: {
+    Navbar,
+    // ...mapState(['currentUser'])
+  },
   // watch: {
   //   currentUser (user) {
   //     if (user.id === -1) return
@@ -104,11 +114,11 @@ export default {
   },
   methods: {
     fetchUser(userId) {
-      const { id, account, name, email, passwordChecked, password } = dummyUser; 
+      const { id, account, name, email, passwordChecked, password } = dummyUser;
       // TODO: 綁定API後 這裡要修改成 if currentUser.id != userId
       if (!userId.toString()) {
-        this.router.push({name: 'not-found'})
-        return
+        this.router.push({ name: "not-found" });
+        return;
       }
 
       this.user = {
@@ -133,17 +143,17 @@ export default {
             icon: "warning",
             title: "請確認資料皆已填寫！",
           });
-          
-          return
+
+          return;
         } else {
-          this.isProcessing = true
-          Toast.fire ({
-            icon: 'success',
-            title: '儲存成功'
-          })
+          this.isProcessing = true;
+          Toast.fire({
+            icon: "success",
+            title: "儲存成功",
+          });
         }
-        this.isProcessing = false
-        console.log(e)
+        this.isProcessing = false;
+        console.log(e);
 
         //TODO: 串接API，將資料傳回資料庫
         // const form = e.target
@@ -155,10 +165,9 @@ export default {
         // if (data.status === 'error') {
         //   throw new Error (data.message)
         // }
-        
       } catch (error) {
         console.log(error);
-        this.isProcessing = false
+        this.isProcessing = false;
         Toast.fire({
           icon: "error",
           title: "無法成功修改資料，請確認輸入資料正確！",
@@ -170,62 +179,79 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.setting {
-  display: flex;
-  flex-direction: column;
+.wrapper {
   width: 100%;
-  font-size: 19px;
-  font-weight: 500;
-  .setting__title {
-    font-weight: 700;
-    margin-top: 13px;
-  }
-  form {
-    position: relative;
+  display: grid;
+  grid-template-columns: 1fr 600px 1.22fr;
+  grid-template-rows: auto;
+  height: 100vh;
+  padding: 0 8%;
+
+  .setting {
     display: flex;
     flex-direction: column;
-    width: 61%;
-    gap: 32px;
-    .setting__form__item {
-      width: 100%;
-      background-color: var(--input-background);
+    width: 100%;
+    grid-column: 2/4;
+    font-size: 19px;
+    font-weight: 500;
+    border-left: 1px solid var(--border-and-divider);
+    .setting__title {
+      border-bottom: 1px solid var(--border-and-divider);
+      height: 55px;
+      width: 112%;
+      line-height: 55px;
+      font-weight: 700;
+      padding-left: 20px ;
+    }
+    form {
+      position: relative;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
-      .setting__form__item-title {
-        font-size: 15px;
-        color: var(--smaller-font-color);
-        padding: 5px 10px;
-      }
-      input {
-        border: unset;
-      }
-      .account-with-special-icon {
-        padding: 0 20px;
-        position: relative;
-        &::before {
-          position: absolute;
-          left: 12px;
-          content: "@";
-          width: 20px;
-          height: 20px;
+      width: 61%;
+      gap: 32px;
+      margin-top: 30px;
+      padding-left: 20px;
+      .setting__form__item {
+        width: 100%;
+        background-color: var(--input-background);
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        .setting__form__item-title {
+          font-size: 15px;
+          color: var(--smaller-font-color);
+          padding: 5px 10px;
+        }
+        input {
+          border: unset;
+        }
+        .account-with-special-icon {
+          padding: 0 20px;
+          position: relative;
+          &::before {
+            position: absolute;
+            left: 12px;
+            content: "@";
+            width: 20px;
+            height: 20px;
+          }
         }
       }
     }
-  }
-  .setting__save {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    margin-top: 42px;
-    width: 116px;
-    height: 48px;
-    border-radius: 50px;
-    background-color: var(--button-background);
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    color: var(--button-font);
+    .setting__save {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 42px;
+      width: 116px;
+      height: 48px;
+      border-radius: 50px;
+      background-color: var(--button-background);
+      text-align: center;
+      font-size: 18px;
+      font-weight: bold;
+      color: var(--button-font);
+    }
   }
 }
 </style>

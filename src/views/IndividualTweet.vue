@@ -1,5 +1,5 @@
 <template>
-  <div class="tweet">
+  <div class="tweet-main">
     <Navbar />
     <div class="tweet">
       <div class="tweet__header">
@@ -147,20 +147,20 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.tweet {
+.tweet-main {
   display: grid;
   grid-template-columns: 1fr 600px 1.22fr;
   grid-template-rows: auto;
+  width: 100%;
   height: 100vh;
-  .navbar {
-    outline: 1px solid red;
-  }
+  padding: 0 8%;
 
   .tweet {
     display: flex;
     flex-direction: column;
     border-left: 1px solid var(--border-and-divider);
     border-right: 1px solid var(--border-and-divider);
+    width: 100%;
     height: 100%;
     background: var(--background);
     &__header {

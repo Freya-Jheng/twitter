@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <Navbar />
+    <router-view />
     <div class="tweets">
       <CreateTweet />
       <Tweets :initial-user-tweets="userTweets" />
@@ -100,10 +101,8 @@ export default {
   grid-template-columns: 1fr 600px 1.22fr;
   grid-template-rows: auto;
   height: 100vh;
-  .navbar {
-    outline: 1px solid red;
-  }
-
+  padding:0 8%;
+  
   .tweets {
     border-left: 1px solid var(--border-and-divider);
     border-right: 1px solid var(--border-and-divider);

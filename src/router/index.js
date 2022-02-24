@@ -34,12 +34,15 @@ const routes = [
     name: 'individual-tweet',
     component: () => import('../views/IndividualTweet'),
   },
-
   {
-
-    path: '/setting:id',
+    path: '/setting/:id',
     name: 'setting',
     component: () => import('../views/Setting.vue'),
+  },
+  {
+    path: '/profile/:id',
+    name: 'sub-profile',
+    component: () => import('../views/SubProfile.vue'),
   },
   {
     path: '*',

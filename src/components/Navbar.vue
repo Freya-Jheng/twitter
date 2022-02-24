@@ -3,7 +3,7 @@
     <img src="./../assets/logo@2x.png" alt="logo" class="logo" />
     <div class="navbar__items">
       <div class="navbar__items-item home">
-        <router-link to="" class="navbar__items-link">
+        <router-link to="/home" class="navbar__items-link">
           <img
             src="./../assets/icon_index@2x.png"
             alt="navbar__items-icon"
@@ -18,7 +18,7 @@
         </router-link>
       </div>
       <div class="navbar__items-item profile">
-        <router-link to="" class="navbar__items-link">
+        <router-link to="/profile/1" class="navbar__items-link">
           <img
             src="./../assets/icon_user@2x.png"
             alt="navbar__items-icon"
@@ -33,7 +33,7 @@
         </router-link>
       </div>
       <div class="navbar__items-item setting">
-        <router-link to="" class="navbar__items-link">
+        <router-link to="/setting/1" class="navbar__items-link">
           <img
             src="./../assets/icon_cog@2x.png"
             alt="navbar__items-icon"
