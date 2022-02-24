@@ -7,17 +7,11 @@
           <img v-if="currentUser.image" src="" alt="" class="user-avatar" />
         </div>
         <div class="create-tweet__container__main__text">
-          <div></div>
-          <textarea
-            name="new-tweet"
-            id="new-tweet"
-            cols="40"
-            rows="1"
-            wrap="hard"
-            placeholder="有什麼新鮮事？"
+          <div
+            contentEditable="true"
+            data-text="有什麼新鮮事？"
             class="create-tweet__container__main__text--new-tweet"
-            v-model="newTweet"
-          ></textarea>
+          ></div>
         </div>
       </div>
       <button class="create-tweet__container__button button">推文</button>
@@ -33,6 +27,7 @@ export default {
   name: 'CreateTweet',
   data() {
     return {
+      // TODO 需要和 div 內容雙向綁定
       newTweet: '',
     }
   },
@@ -60,7 +55,7 @@ export default {
 <style lang="scss" scoped>
 .create-tweet {
   width: 100%;
-  height: calc(54px + 119px);
+  height: auto;
   background: var(--background);
   &__header {
     height: 55px;
@@ -76,11 +71,11 @@ export default {
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: 120px;
+    height: auto;
     &__main {
       display: flex;
       flex-direction: row;
-      align-items: center;
+      align-items: flex-start;
       width: 100%;
       padding-top: 10px;
       padding-left: 15px;
@@ -92,15 +87,16 @@ export default {
         background: var(--user-avatar);
       }
 
-      // TODO 調整依據輸入內如自動換行和變換高度
       &__text {
-        flex: 1;
-        width: 100%;
+        position: relative;
+        margin-top: 10px;
+        width: 80%;
         min-height: 26px;
+
         &--new-tweet {
+          width: 100%;
           padding-left: 10px;
           min-height: 26px;
-
           border: none;
           overflow: auto;
           outline: none;
@@ -114,7 +110,8 @@ export default {
           color: var(--main-font-color);
         }
 
-        &--new-tweet::placeholder {
+        [contentEditable='true']:empty:not(:focus):before {
+          content: attr(data-text);
           font-weight: 500;
           font-style: normal;
           font-size: 18px;
