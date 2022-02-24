@@ -14,6 +14,7 @@ import Navbar from './../components/Navbar'
 import CreateTweet from './../components/CreateTweet'
 import Tweets from './../components/Tweets'
 
+// 模擬 API 傳進來的資料
 const dummyData = {
   userTweets: [
     {

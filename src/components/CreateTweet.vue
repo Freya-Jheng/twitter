@@ -3,9 +3,9 @@
     <div class="create-tweet__header">首頁</div>
     <form class="create-tweet__container" @submit.stop.prevent="handleSubmit">
       <div class="create-tweet__container__main">
-        <div class="create-tweet__container__main__user-avatar">
+        <router-link to="" class="create-tweet__container__main__user-avatar">
           <img v-if="currentUser.image" src="" alt="" class="user-avatar" />
-        </div>
+        </router-link>
         <div class="create-tweet__container__main__text">
           <div
             contentEditable="true"
