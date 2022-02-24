@@ -61,52 +61,21 @@
 <script>
 export default {
   name: 'Tweets',
+  props: {
+    initialUserTweets: {
+      type: Array,
+      required: true,
+    },
+  },
   data() {
     return {
-      userTweets: [
-        {
-          userID: '1',
-          id: '1',
-          image: '',
-          name: 'Apple',
-          account: 'apple',
-          createdAt: '3 小時',
-          content:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut luctus eu ipsum at sollicitudin. Vivamus tristique lorem vitae erat commodo, quis congue leo pellentesque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla rutrum ut tellus viverra congue. Curabitur eu elit et est commodo tempus. ',
-          commentCount: 15,
-          likeCounts: 16,
-          isLiked: false,
-        },
-        {
-          userID: '2',
-          id: '2',
-          image: '',
-          name: 'Orange',
-          account: 'orange',
-          createdAt: '3 小時',
-          content:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id lorem nec nisi venenatis blandit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.',
-          commentCount: 5,
-          likeCounts: 12,
-          isLiked: false,
-        },
-        {
-          userID: '3',
-          id: '3',
-          image: '',
-          name: 'Banana',
-          account: 'Banana',
-          createdAt: '3 小時',
-          content:
-            'Sed hendrerit semper aliquet. Proin tincidunt nunc justo, nec varius diam lobortis in. Duis eget massa mauris. ',
-          commentCount: 100,
-          likeCounts: 500,
-          isLiked: false,
-        },
-      ],
+      userTweets: [],
     }
   },
   methods: {
+    fetchTweets() {
+      this.userTweets = this.initialUserTweets
+    },
     addLike(tweetId) {
       this.userTweets = this.userTweets.map((tweet) => {
         if (tweet.id !== tweetId) {
@@ -133,6 +102,9 @@ export default {
         }
       })
     },
+  },
+  created() {
+    this.fetchTweets()
   },
 }
 </script>
