@@ -3,6 +3,7 @@
     <Navbar />
     <div class="tweets">
       <CreateTweet />
+      <Tweets />
     </div>
     <div class="popular-users">Popular users</div>
   </div>
@@ -11,12 +12,14 @@
 <script>
 import Navbar from './../components/Navbar'
 import CreateTweet from './../components/CreateTweet'
+import Tweets from './../components/Tweets'
 
 export default {
   name: 'Home',
   components: {
     Navbar,
     CreateTweet,
+    Tweets,
   },
 }
 </script>
