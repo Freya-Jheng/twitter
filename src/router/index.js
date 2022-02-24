@@ -12,11 +12,7 @@ const routes = [
     name: 'root',
     redirect: '/signin',
   },
-  {
-    path: '/home',
-    name: 'home',
-    component: Home,
-  },
+
   {
     path: '/signin',
     name: 'sign-in',
@@ -27,6 +23,17 @@ const routes = [
     name: 'sign-up',
     component: () => import('../views/SignUp.vue'),
   },
+  {
+    path: '/home',
+    name: 'home',
+    component: Home,
+  },
+  {
+    path: '/tweets/:tweet_id',
+    name: 'individual-tweet',
+    component: () => import('../views/IndividualTweet'),
+  },
+
   {
     path: '*',
     name: 'not-found',
