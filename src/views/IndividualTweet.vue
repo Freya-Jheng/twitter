@@ -14,32 +14,41 @@
       <div class="tweet__container">
         <div class="tweet__container__user-info">
           <router-link to="" class="tweet__container__user-info__user-avatar">
-            <img src="" alt="" class="user-avatar" />
+            <img
+              v-if="userTweets.image"
+              :src="userTweets.image"
+              alt=""
+              class="user-avatar"
+            />
           </router-link>
           <div class="tweet__container__user-info__wrapper">
             <router-link
               to=""
               class="tweet__container__user-info__wrapper--name"
-              >Apple</router-link
+              >{{ userTweets.name }}</router-link
             >
             <router-link
               to=""
               class="tweet__container__user-info__wrapper--account"
-              >{{ '@apple' }}</router-link
+              >{{ '@' + userTweets.account }}</router-link
             >
           </div>
         </div>
         <div class="tweet__container__content">
-          dnfejidej ijewdij iewjdij idjwidj iwj
+          {{ userTweets.content }}
         </div>
-        <div class="tweet__container__time">2022/2/22 22:22</div>
+        <div class="tweet__container__time">{{ userTweets.createdAt }}</div>
         <div class="tweet__container__numbers">
           <div class="tweet__container__numbers__reply">
-            <span class="tweet__container__numbers__reply--counts">22</span>
+            <span class="tweet__container__numbers__reply--counts">{{
+              userTweets.commentCounts
+            }}</span>
             <span class="tweet__container__numbers__reply--words">回覆</span>
           </div>
           <div class="tweet__container__numbers__like">
-            <span class="tweet__container__numbers__like--counts">222</span>
+            <span class="tweet__container__numbers__like--counts">{{
+              userTweets.likeCounts
+            }}</span>
             <span class="tweet__container__numbers__like--words">喜歡次數</span>
           </div>
         </div>
@@ -50,15 +59,19 @@
             class="tweets__container__icons__comment"
           />
           <img
+            v-if="!userTweets.isLiked"
             src="./../assets/icon_like@2x.png"
             alt=""
             class="tweets__container__icons__like"
+            @click.stop.prevent="addLike(userTweets.id)"
           />
-          <!-- <img
-              src="./../assets/icon_like_fill@2x.png"
-              alt=""
-              class="tweets__container__icons__like"
-            /> -->
+          <img
+            v-if="userTweets.isLiked"
+            src="./../assets/icon_like_fill@2x.png"
+            alt=""
+            class="tweets__container__icons__like"
+            @click.stop.prevent="deleteLike(userTweets.id)"
+          />
         </div>
       </div>
     </div>
@@ -69,10 +82,66 @@
 <script>
 import Navbar from './../components/Navbar'
 
+const dummyData = {
+  userTweets: {
+    userID: 1,
+    id: 1,
+    image: '',
+    name: 'Apple',
+    account: 'apple',
+    createdAt: '2022/2/22 22:22',
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut luctus eu ipsum at sollicitudin. Vivamus tristique lorem vitae erat commodo, quis congue leo pellentesque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla rutrum ut tellus viverra congue. Curabitur eu elit et est commodo tempus. ',
+    commentCounts: 15,
+    likeCounts: 16,
+    isLiked: false,
+  },
+}
+
 export default {
   name: 'IndividualTweet',
   components: {
     Navbar,
+  },
+  data() {
+    return {
+      userTweets: {
+        userID: -1,
+        id: -1,
+        image: '',
+        name: '',
+        account: '',
+        createdAt: '',
+        content: '',
+        commentCounts: -1,
+        likeCounts: -1,
+        isLiked: false,
+      },
+    }
+  },
+  methods: {
+    fetchTweet() {
+      this.userTweets = dummyData.userTweets
+    },
+    addLike(tweetId) {
+      console.log(tweetId)
+      this.userTweets = {
+        ...this.userTweets,
+        isLiked: true,
+        likeCounts: this.userTweets.likeCounts + 1,
+      }
+    },
+    deleteLike(tweetId) {
+      console.log(tweetId)
+      this.userTweets = {
+        ...this.userTweets,
+        isLiked: false,
+        likeCounts: this.userTweets.likeCounts - 1,
+      }
+    },
+  },
+  created() {
+    this.fetchTweet()
   },
 }
 </script>

@@ -5,21 +5,31 @@
       v-for="tweet in userTweets"
       :key="tweet.tweetId"
     >
-      <div class="tweets-container__tweet__user-avatar">
+      <router-link to="" class="tweets-container__tweet__user-avatar">
         <img v-if="tweet.image" src="" alt="" class="user-avatar" />
-      </div>
+      </router-link>
       <div class="tweets-container__tweet__wrapper">
         <div class="tweets-container__tweet__wrapper__info">
-          <div class="tweets-container__tweet__wrapper__info--name">
-            {{ tweet.name }}
-          </div>
+          <router-link
+            to=""
+            class="tweets-container__tweet__wrapper__info--name"
+            >{{ tweet.name }}</router-link
+          >
           <div class="tweets-container__tweet__wrapper__info--account">
-            {{ '@' + tweet.account + ' ・ ' + tweet.createdAt }}
+            <router-link to="" class="router-link">{{
+              '@' + tweet.account
+            }}</router-link>
+            {{ ' ・ ' + tweet.createdAt }}
           </div>
         </div>
-        <div class="tweets-container__tweet__wrapper__tweet">
-          {{ tweet.content }}
-        </div>
+
+        <router-link
+          :to="{ name: 'individual-tweet', params: { tweet_id: tweet.id } }"
+          class="tweets-container__tweet__wrapper__tweet"
+        >
+          {{ tweet.content }}</router-link
+        >
+
         <div class="tweets-container__tweet__wrapper__icons">
           <div class="tweets-container__tweet__wrapper__icons__comment">
             <img
@@ -142,6 +152,9 @@ export default {
           font-size: 15px;
           line-height: 21.72px;
           color: var(--main-font-color);
+          &:hover {
+            text-decoration: underline;
+          }
         }
         &--account {
           margin-left: 5px;
@@ -149,6 +162,12 @@ export default {
           font-size: 15px;
           line-height: 21.72px;
           color: var(--smaller-font-color);
+          .router-link {
+            font-weight: 500;
+            font-size: 15px;
+            line-height: 21.72px;
+            color: var(--smaller-font-color);
+          }
         }
       }
 
