@@ -1,20 +1,24 @@
 <template>
   <div class="tweets-container">
-    <div class="tweets-container__tweet">
+    <div
+      class="tweets-container__tweet"
+      v-for="tweet in userTweets"
+      :key="tweet.tweetId"
+    >
       <div class="tweets-container__tweet__user-avatar">
-        <img src="" alt="" class="user-avatar" />
+        <img v-if="tweet.image" src="" alt="" class="user-avatar" />
       </div>
       <div class="tweets-container__tweet__wrapper">
         <div class="tweets-container__tweet__wrapper__info">
           <div class="tweets-container__tweet__wrapper__info--name">
-            {{ userTweets[0].name }}
+            {{ tweet.name }}
           </div>
           <div class="tweets-container__tweet__wrapper__info--account">
-            {{ '@' + userTweets[0].account + ' ・ ' + userTweets[0].createdAt }}
+            {{ '@' + tweet.account + ' ・ ' + tweet.createdAt }}
           </div>
         </div>
         <div class="tweets-container__tweet__wrapper__tweet">
-          {{ userTweets[0].content }}
+          {{ tweet.content }}
         </div>
         <div class="tweets-container__tweet__wrapper__icons">
           <div class="tweets-container__tweet__wrapper__icons__comment">
@@ -25,18 +29,27 @@
             />
             <span
               class="tweets-container__tweet__wrapper__icons__comment--count"
-              >{{ userTweets[0].commentCount }}</span
+              >{{ tweet.commentCount }}</span
             >
           </div>
           <div class="tweets-container__tweet__wrapper__icons__like">
             <img
+              v-if="!tweet.isLiked"
               src="./../assets/icon_like@2x.png"
               alt=""
               class="tweets-container__tweet__wrapper__icons__like--icon"
+              @click.stop.prevent="addLike(tweet.id)"
+            />
+            <img
+              v-if="tweet.isLiked"
+              src="./../assets/icon_like_fill@2x.png"
+              alt=""
+              class="tweets-container__tweet__wrapper__icons__like--icon"
+              @click.stop.prevent="deleteLike(tweet.id)"
             />
             <span
               class="tweets-container__tweet__wrapper__icons__like--count"
-              >{{ userTweets[0].likeCounts }}</span
+              >{{ tweet.likeCounts }}</span
             >
           </div>
         </div>
@@ -53,18 +66,73 @@ export default {
       userTweets: [
         {
           userID: '1',
-          tweetId: '1',
+          id: '1',
           image: '',
           name: 'Apple',
           account: 'apple',
-          createdAt: '',
+          createdAt: '3 小時',
           content:
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut luctus eu ipsum at sollicitudin. Vivamus tristique lorem vitae erat commodo, quis congue leo pellentesque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla rutrum ut tellus viverra congue. Curabitur eu elit et est commodo tempus. ',
           commentCount: 15,
           likeCounts: 16,
+          isLiked: false,
+        },
+        {
+          userID: '2',
+          id: '2',
+          image: '',
+          name: 'Orange',
+          account: 'orange',
+          createdAt: '3 小時',
+          content:
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id lorem nec nisi venenatis blandit. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.',
+          commentCount: 5,
+          likeCounts: 12,
+          isLiked: false,
+        },
+        {
+          userID: '3',
+          id: '3',
+          image: '',
+          name: 'Banana',
+          account: 'Banana',
+          createdAt: '3 小時',
+          content:
+            'Sed hendrerit semper aliquet. Proin tincidunt nunc justo, nec varius diam lobortis in. Duis eget massa mauris. ',
+          commentCount: 100,
+          likeCounts: 500,
+          isLiked: false,
         },
       ],
     }
+  },
+  methods: {
+    addLike(tweetId) {
+      this.userTweets = this.userTweets.map((tweet) => {
+        if (tweet.id !== tweetId) {
+          return tweet
+        } else {
+          return {
+            ...tweet,
+            isLiked: true,
+            likeCounts: tweet.likeCounts + 1,
+          }
+        }
+      })
+    },
+    deleteLike(tweetId) {
+      this.userTweets = this.userTweets.map((tweet) => {
+        if (tweet.id !== tweetId) {
+          return tweet
+        } else {
+          return {
+            ...tweet,
+            isLiked: false,
+            likeCounts: tweet.likeCounts - 1,
+          }
+        }
+      })
+    },
   },
 }
 </script>
