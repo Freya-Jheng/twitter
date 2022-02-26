@@ -24,7 +24,7 @@
           >密碼</label
         >
         <input
-          type="text"
+          type="password"
           placeholder=""
           required
           autofocus
@@ -52,6 +52,7 @@
 
 <script>
 import { Toast } from './../utils/helpers'
+import authorizationAPI from './../apis/authorization'
 
 export default {
   name: 'SignIn',
@@ -62,7 +63,7 @@ export default {
       isProcessing: false,
     }
   },
-  method: {
+  methods: {
     async handleSubmit() {
       try {
         if (!this.account || !this.password) {
@@ -73,14 +74,15 @@ export default {
           return
         }
 
-        this.isProcessing = false
+        this.isProcessing = true
 
-        // TODO 等 API 好了之後再串接
-        // const response = await authorizationAPI.signIn({
-        //   email: this.email,
-        //   password: this.password,
-        // })
-        // const { data } = response
+        const response = await authorizationAPI.signIn({
+          account: this.account,
+          password: this.password,
+        })
+        const { tokenData } = response
+        console.log(tokenData)
+
         // if (data.status !== 'success') {
         //   throw new Error(data.message)
         // }
@@ -92,7 +94,7 @@ export default {
       } catch (error) {
         console.log(error)
         this.isProcessing = false
-        this.email = ''
+        this.account = ''
         this.password = ''
         Toast.fire({
           icon: 'warning',
