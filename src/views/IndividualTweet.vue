@@ -74,6 +74,8 @@
           />
         </div>
       </div>
+
+      <Comments />
     </div>
     <div class="popular-users">Popular users</div>
   </div>
@@ -81,6 +83,7 @@
 
 <script>
 import Navbar from './../components/Navbar'
+import Comments from './../components/Comments.vue'
 
 const dummyData = {
   userTweets: {
@@ -102,6 +105,7 @@ export default {
   name: 'IndividualTweet',
   components: {
     Navbar,
+    Comments,
   },
   data() {
     return {
@@ -283,7 +287,7 @@ export default {
         align-items: center;
         margin: 0 15px;
         height: 61px;
-        border-bottom: 1px solid var(--border-and-divider);
+
         img {
           cursor: pointer;
           height: 30px;
