@@ -14,26 +14,26 @@
       <div class="tweet__container">
         <div class="tweet__container__user-info">
           <router-link
-            :to="{ name: 'sub-profile', params: { id: userTweet.UserId } }"
+            :to="{ name: 'sub-profile', params: { id: user.id } }"
             class="tweet__container__user-info__user-avatar"
           >
             <img
-              v-if="userTweet.User.avatar"
-              :src="userTweet.User.avatar"
+              v-if="user.avatar"
+              :src="user.avatar ? user.avatar : ''"
               alt=""
               class="user-avatar"
             />
           </router-link>
           <div class="tweet__container__user-info__wrapper">
             <router-link
-              :to="{ name: 'sub-profile', params: { id: userTweet.UserId } }"
+              :to="{ name: 'sub-profile', params: { id: user.id } }"
               class="tweet__container__user-info__wrapper--name"
-              >{{ userTweet.User.name }}</router-link
+              >{{ user.name }}</router-link
             >
             <router-link
-              :to="{ name: 'sub-profile', params: { id: userTweet.UserId } }"
+              :to="{ name: 'sub-profile', params: { id: user.id } }"
               class="tweet__container__user-info__wrapper--account"
-              >{{ '@' + userTweet.User.account }}</router-link
+              >{{ '@' + user.account }}</router-link
             >
           </div>
         </div>
@@ -76,7 +76,7 @@
         </div>
       </div>
 
-      <Comments :initial-replies="userTweet.Replies" />
+      <Comments :initial-replies="replies" />
     </div>
     <div class="popular-users">Popular users</div>
   </div>
@@ -100,6 +100,8 @@ export default {
   data() {
     return {
       userTweet: {},
+      user: {},
+      replies: {},
     }
   },
   computed: {
@@ -113,7 +115,10 @@ export default {
         if (response.status !== 200) {
           throw new Error(response.statusText)
         }
+
         this.userTweet = response.data
+        this.user = response.data.User
+        this.replies = response.data.Replies
       } catch (error) {
         Toast.fire({
           icon: 'error',
