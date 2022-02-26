@@ -80,17 +80,16 @@ export default {
           account: this.account,
           password: this.password,
         })
-        const { tokenData } = response
-        console.log(tokenData)
 
-        // if (data.status !== 'success') {
-        //   throw new Error(data.message)
-        // }
+        const { data } = response.data.tokenData
+        console.log(data)
+        if (response.data.tokenData.status !== 'success') {
+          throw new Error(response.data.tokenData.message)
+        }
 
-        // TODO 把 token 存入 localStorage 中
-        // localStorage.setItem('token', data.token)
-        // this.$store.commit('setCurrentUser', data.user)
-        // this.$router.push('/tweets')
+        localStorage.setItem('token', response.data.tokenData.data.token)
+        this.$store.commit('setCurrentUser', response.data.tokenData.data.user)
+        this.$router.push('/home')
       } catch (error) {
         console.log(error)
         this.isProcessing = false
