@@ -4,4 +4,7 @@ export default {
   get() {
     return apiHelper.get('/tweets')
   },
+  getIndividualTweet({ tweetId }) {
+    return apiHelper.get(`/tweets/${tweetId}`)
+  },
 }
