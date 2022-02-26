@@ -47,20 +47,22 @@
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
+                <div class="header-left">
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                  <span class="modal-title" id="editModalLabel"
+                    >編輯個人資料</span
+                  >
+                </div>
                 <button
                   type="button"
-                  class="close"
-                  data-dismiss="modal"
-                  aria-label="Close"
-                >
-                  <span aria-hidden="true">&times;</span>
-                </button>
-                <span class="modal-title" id="editModalLabel"
-                  >編輯個人資料</span
-                >
-                <button
-                  type="button"
-                  class="btn btn-secondary"
+                  class="btn header-right"
                   data-dismiss="modal"
                 >
                   儲存
@@ -69,22 +71,28 @@
               <div class="modal-body">
                 <div class="modal-top">
                   <img src="" alt="background" class="background" />
-                  <img src="" alt="avatar" class="avatar" />
+                  <img src="./../assets/icon_uploadPhoto@2x.png" alt="" class="upload-bg-image upload">
+                  <img src="./../assets/icon_delete@2x.png" alt="" class="delete-image delete">
+                  <img src="" alt="avatar" class="avatar"/>
+                  <img src="./../assets/icon_uploadPhoto@2x.png" alt="" class="upload-avatar-image upload">  
                 </div>
                 <form class="modal-bottom">
                   <div class="form-group">
                     <label for="name-input" class="name-label">
-                      <span class="title"> 名稱 </span>
+                      <div class="title"> 名稱 </div>
                       <input type="text" class="name-input" id="name-input" />
+                      <span class="letters">{{"字數"}}<span class="letters-length"></span>/50</span>
                     </label>
-                    <label class="description-label">
-                      <span class="title"> 自我介紹 </span>
+                    <label class="introduction-label">
+                      <div class="title"> 自我介紹 </div>
                       <textarea
-                        name="description-input"
+                        name="introduction-input"
+                        class="introduction-input"
                         id="description-input"
-                        cols="30"
-                        rows="10"
+                        cols="65"
+                        rows="5"
                       ></textarea>
+                      <span class="letters"><span class="letters-length">{{"字數"}}</span>/160</span>
                     </label>
                   </div>
                 </form>
@@ -203,6 +211,7 @@
       position: absolute;
       top: 324px;
       padding-left: 15px;
+      cursor: default;
       &__introduction {
         width: 100%;
         display: flex;
@@ -238,6 +247,7 @@
           font-weight: 500;
           &__followers,
           &__followings {
+            cursor: pointer;
             span {
               color: var(--smaller-font-color);
             }
@@ -252,19 +262,138 @@
     border-radius: 14px;
     background-color: var(--background);
     .modal-header {
-      outline: 1px solid red;
       width: 100%;
       height: 59px;
+      padding: 0 15px;
       display: flex;
       justify-content: space-between;
-      margin: 0;
-      padding: 0;
-
+      align-items: center;
+      .header-left {
+        display: flex;
+        gap: 45px;
+        .close {
+          all: unset;
+          width: 15px;
+          height: 15px;
+          color: var(--cancel-button);
+          cursor: pointer;
+        }
+        .modal-title {
+          font-size: 19px;
+          font-weight: 700;
+          cursor: default;
+        }
+      }
+      .header-right {
+        width: 66px;
+        height: 28px;
+        border-radius: 100px;
+        color: var(--button-font);
+        background-color: var(--button-background);
+        font-size: 18px;
+        font-weight: 500;
+        padding: 0;
+      }
     }
     .modal-body {
-
+      width: 100%;
+      padding: 0;
+      position: relative;
+      .modal-top {
+        width: 100%;
+        .background {
+          width: 100%;
+          height: 200px;
+          background-color: grey;
+          position: absolute;
+          top:0
+        }
+        .avatar {
+          width: 120px;
+          height: 120px;
+          border-radius: 50%;
+          border: 4px solid var(--background);          
+          background-color: pink;
+          position: absolute;
+          top: 140px;
+          left: 14px;
+        }
+        .upload, .delete {
+          width: 20px;
+          height: 20px;
+          color: var(--background);
+          cursor: pointer;
+        }
+        .delete {
+          position: absolute;
+          top: 92.5px;
+          right: 264.5px;
+        }
+        .upload-bg-image {
+          position: absolute;
+          top: 90px;
+          left: 262px;
+        }
+        .upload-avatar-image {
+          position: absolute;
+          top: 190px;
+          left: 65px;
+        }
+      }
+      .modal-bottom {
+        width: 100%;
+        position: absolute;
+        top: 280px;
+        .form-group {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          gap: 42px;
+          label {
+            width: 95%;
+            background-color: var(--input-background);
+            border-radius: 4px;
+            padding: 0 15px;
+            position: relative;
+            &::after {
+              position: absolute;
+              content: '';
+              top: 100%;
+              left: 0;
+              width: 100%;
+              height: 2px;
+              border-radius: 0 0 4px 4px;
+              background-color: var(--input-underline);
+            }
+          }
+          input, textarea {
+            border: unset;
+            background-color: var(--input-background);
+          }
+          .title {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--smaller-font-color);
+          }
+          .name-label {
+            .name-input {
+              font-size: 19px;
+              font-weight: 700;
+            }
+          }
+          .letters {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            font-size: 15px;
+            font-size: 500;
+            color: var(--smaller-font-color);
+          }
+        }
+      }
     }
-
   }
 }
 </style>
