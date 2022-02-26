@@ -81,8 +81,6 @@ export default {
           password: this.password,
         })
 
-        const { data } = response.data.tokenData
-        console.log(data)
         if (response.data.tokenData.status !== 'success') {
           throw new Error(response.data.tokenData.message)
         }

@@ -93,9 +93,6 @@ export default {
   methods: {
     fetchTweets() {
       this.userTweets = this.initialUserTweets
-      this.userTweets.sort(function (a, b) {
-        return a.createdAt < b.createdAt
-      })
     },
     addLike(tweetId) {
       this.userTweets = this.userTweets.map((tweet) => {
