@@ -93,6 +93,13 @@ export default {
   methods: {
     fetchTweets() {
       this.userTweets = this.initialUserTweets
+
+      // 將推文依照時間進行排序
+      this.userTweets = this.userTweets.sort(function (a, b) {
+        let timeA = new Date(a.createdAt).getTime()
+        let timeB = new Date(b.createdAt).getTime()
+        return timeA - timeB
+      })
     },
     addLike(tweetId) {
       this.userTweets = this.userTweets.map((tweet) => {

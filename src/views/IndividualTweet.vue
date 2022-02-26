@@ -14,7 +14,7 @@
       <div class="tweet__container">
         <div class="tweet__container__user-info">
           <router-link
-            :to="{ name: 'sub-profile', params: { id: userTweet.User.id } }"
+            :to="{ name: 'sub-profile', params: { id: userTweet.UserId } }"
             class="tweet__container__user-info__user-avatar"
           >
             <img
@@ -26,12 +26,12 @@
           </router-link>
           <div class="tweet__container__user-info__wrapper">
             <router-link
-              :to="{ name: 'sub-profile', params: { id: userTweet.User.id } }"
+              :to="{ name: 'sub-profile', params: { id: userTweet.UserId } }"
               class="tweet__container__user-info__wrapper--name"
               >{{ userTweet.User.name }}</router-link
             >
             <router-link
-              :to="{ name: 'sub-profile', params: { id: userTweet.User.id } }"
+              :to="{ name: 'sub-profile', params: { id: userTweet.UserId } }"
               class="tweet__container__user-info__wrapper--account"
               >{{ '@' + userTweet.User.account }}</router-link
             >
@@ -105,7 +105,6 @@ export default {
         if (response.status !== 200) {
           throw new Error(response.statusText)
         }
-
         this.userTweet = response.data
       } catch (error) {
         Toast.fire({
