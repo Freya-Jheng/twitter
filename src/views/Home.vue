@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <Navbar />
-    <router-view />
+    <!-- <router-view /> -->
     <div class="tweets">
       <CreateTweet />
       <Tweets :initial-user-tweets="userTweets" />
@@ -12,7 +12,7 @@
 
 <script>
 import Navbar from './../components/Navbar'
-import CreateTweet from './../components/CreateTweet'
+import CreateTweet from './../components/CreateTweet.vue'
 import Tweets from './../components/Tweets'
 
 // 模擬 API 傳進來的資料
@@ -101,8 +101,8 @@ export default {
   grid-template-columns: 1fr 600px 1.22fr;
   grid-template-rows: auto;
   height: 100vh;
-  padding:0 8%;
-  
+  padding: 0 8%;
+
   .tweets {
     border-left: 1px solid var(--border-and-divider);
     border-right: 1px solid var(--border-and-divider);

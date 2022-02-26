@@ -4,7 +4,7 @@
     <form class="create-tweet__container" @submit.stop.prevent="handleSubmit">
       <div class="create-tweet__container__main">
         <router-link to="" class="create-tweet__container__main__user-avatar">
-          <img v-if="currentUser.image" src="" alt="" class="user-avatar" />
+          <img v-if="user.avatar" src="" alt="" class="user-avatar" />
         </router-link>
         <div class="create-tweet__container__main__text">
           <div
@@ -32,7 +32,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['currentUser']),
+    ...mapState(['user']),
   },
   methods: {
     async handleSubmit() {

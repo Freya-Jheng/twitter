@@ -5,31 +5,18 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    currentUser: {
+    user: {
       id: -1,
+      account: '',
       name: '',
       email: '',
-      image: '',
-      isAdmin: false,
-<<<<<<< HEAD
-      account: '',
-      password: '',
-      passwordChecked: '',
+      role: '',
+      avatar: '',
+      introduction: '',
+      cover: '',
+      createdAt: '',
+      updatedAt: '',
     },
-    isAuthenticated: false,
-    token: '',
-=======
-    },
-    isAuthenticated: false,
-    token: '',
-    account: '',
-    name: '',
-    email: '',
-    image: '',
-    password: '',
-    passwordChecked: '',
-    isAdmin: false,
->>>>>>> 03222bd2e718248c46d674c38b1f75b486d642e4
   },
   mutations: {
     setCurrentUser(state, currentUser) {
@@ -68,5 +55,5 @@ export default new Vuex.Store({
     //   }
     // },
   },
-  modules: {}
+  modules: {},
 })
