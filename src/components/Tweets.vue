@@ -124,6 +124,14 @@ export default {
   created() {
     this.fetchTweets()
   },
+  watch: {
+    initialUserTweets(newValue) {
+      this.userTweets = {
+        ...this.userTweets,
+        ...newValue,
+      }
+    },
+  },
 }
 </script>
 
