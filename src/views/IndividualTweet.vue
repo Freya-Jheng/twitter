@@ -73,6 +73,8 @@
           />
         </div>
       </div>
+
+      <Comments />
     </div>
     <div class="popular-users">Popular users</div>
   </div>
@@ -83,11 +85,30 @@ import Navbar from './../components/Navbar'
 import tweetsAPI from './../apis/tweets'
 import { Toast } from './../utils/helpers'
 import { mapState } from 'vuex'
+import Comments from './../components/Comments.vue'
+
+const dummyData = {
+  userTweets: {
+    userID: 1,
+    id: 1,
+    image: '',
+    name: 'Apple',
+    account: 'apple',
+    createdAt: '2022/2/22 22:22',
+    content:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut luctus eu ipsum at sollicitudin. Vivamus tristique lorem vitae erat commodo, quis congue leo pellentesque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla rutrum ut tellus viverra congue. Curabitur eu elit et est commodo tempus. ',
+    commentCounts: 15,
+    likeCounts: 16,
+    isLiked: false,
+  },
+}
+>>>>>>> comments
 
 export default {
   name: 'IndividualTweet',
   components: {
     Navbar,
+    Comments,
   },
   data() {
     return {
@@ -275,7 +296,7 @@ export default {
         align-items: center;
         margin: 0 15px;
         height: 61px;
-        border-bottom: 1px solid var(--border-and-divider);
+
         img {
           cursor: pointer;
           height: 30px;
