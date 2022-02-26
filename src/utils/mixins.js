@@ -122,5 +122,13 @@ export const fromNowFilter = {
 
       return moment(value).fromNow()
     },
+
+    fullTime(value) {
+      if (!value) {
+        return '-'
+      }
+
+      return moment(value).format('a h:mm・YYYY年MM月D日')
+    },
   },
 }
