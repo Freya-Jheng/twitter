@@ -76,7 +76,7 @@
         </div>
       </div>
 
-      <Comments />
+      <Comments :initial-replies="userTweet.Replies" />
     </div>
     <div class="popular-users">Popular users</div>
   </div>

@@ -19,9 +19,35 @@
 </template>
 
 <script>
-
 export default {
   name: 'Comments',
+  props: {
+    initialReplies: {
+      type: Object,
+      required: true,
+    },
+  },
+  data() {
+    return {
+      replies: {},
+    }
+  },
+  methods: {
+    fetchReplies() {
+      this.replies = this.initialReplies
+    },
+  },
+  created() {
+    this.fetchReplies()
+  },
+  watch: {
+    initialReplies(newValue) {
+      this.replies = {
+        ...this.replies,
+        newValue,
+      }
+    },
+  },
 }
 </script>
 
