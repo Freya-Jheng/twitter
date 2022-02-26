@@ -97,14 +97,14 @@
         </div>
       </div>
     </div>
-    <router-link to="/signin" class="logout">
+    <div class="logout" @click.stop.prevent="logout">
       <img
         src="./../assets/icon_logout@2x.png"
         alt="logout-icon"
         class="logout-icon"
       />
       <span class="logout-title">登出</span>
-    </router-link>
+    </div>
   </nav>
 </template>
 
@@ -124,7 +124,12 @@ export default {
       user: dummyUser,
     }
   },
-  methods: {},
+  methods: {
+    logout() {
+      this.$store.commit('revokeAuthentication')
+      this.$router.push('/signin')
+    },
+  },
 }
 </script>
 
@@ -250,6 +255,7 @@ nav {
     gap: 37px;
     margin-top: 190%;
     color: var(--main-font-color);
+    cursor: pointer;
     .logout-icon {
       width: 22px;
       height: 22px;
