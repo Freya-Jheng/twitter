@@ -139,6 +139,7 @@ export default {
 .tweets-container {
   margin-top: 10px;
   width: 100%;
+  // height: 200%;
   background: var(--background);
   &__tweet {
     display: flex;
