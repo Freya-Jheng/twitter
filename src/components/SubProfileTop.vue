@@ -355,8 +355,8 @@
             width: 95%;
             background-color: var(--input-background);
             border-radius: 4px;
-            padding: 0 15px;
             position: relative;
+            padding: 0 15px;
             &::after {
               position: absolute;
               content: '';
@@ -381,7 +381,11 @@
             .name-input {
               font-size: 19px;
               font-weight: 700;
+              padding: 0 2px;
             }
+            // .title {
+            //   padding: 0 15px;
+            // }
           }
           .letters {
             position: absolute;

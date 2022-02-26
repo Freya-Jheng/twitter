@@ -4,6 +4,8 @@
     <router-view />
     <div class="subProfile">
       <SubProfileTop :current-user-data="user"/>
+      <NavTab />
+      <router-view />
     </div>
     <div class="popular-users">Popular users</div>
   </div>
@@ -20,7 +22,7 @@
   padding:0 6%;
   outline: 1px solid red;
   .subProfile {
-    
+    position: relative;
   }
   .popular-users {
     background: grey;
@@ -33,6 +35,7 @@
 import Navbar from '../components/Navbar.vue'
 import SubProfileTop from '../components/SubProfileTop.vue'
 import {v4 as uuidv4} from 'uuid'
+import NavTab from '../components/NavTab.vue'
 
 const dummyUser = {
   id: uuidv4(),
@@ -193,6 +196,7 @@ export default {
   components: {
     Navbar,
     SubProfileTop,
+    NavTab,
   },
   created () {
     this.fetchUser()

@@ -45,6 +45,21 @@ const routes = [
     component: () => import('../views/SubProfile.vue'),
   },
   {
+    path: '/profile/:id/tweets',
+    name: 'sub-profile-tweets',
+    component: () => import('../views/SubProfileTweets.vue'),
+  },
+  {
+    path: '/profile/:id/responses',
+    name: 'sub-profile-responses',
+    component: () => import('../views/SubProfileResponses.vue'),
+  },
+  {
+    path: '/profile/:id/liked',
+    name: 'sub-profile-liked',
+    component: () => import('../views/SubProfileLiked.vue'),
+  },
+  {
     path: '*',
     name: 'not-found',
     component: NotFound,
