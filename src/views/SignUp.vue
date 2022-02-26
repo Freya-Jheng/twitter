@@ -50,7 +50,7 @@
           >密碼</label
         >
         <input
-          type="text"
+          type="password"
           placeholder=""
           required
           v-model="password"
@@ -65,10 +65,10 @@
           >密碼確認</label
         >
         <input
-          type="text"
+          type="password"
           placeholder=""
           required
-          v-model="passwordCheck"
+          v-model="checkPassword"
           class="sing-in__form-label-group__password-check--input input"
         />
       </div>
@@ -85,6 +85,7 @@
 </template>
 
 <script>
+import authorizationAPI from './../apis/authorization'
 import { Toast } from './../utils/helpers'
 
 export default {
@@ -95,7 +96,7 @@ export default {
       name: '',
       email: '',
       password: '',
-      passwordCheck: '',
+      checkPassword: '',
       isProcessing: false,
     }
   },
@@ -126,7 +127,7 @@ export default {
           return
         }
 
-        if (!this.password | !this.passwordCheck) {
+        if (!this.password | !this.checkPassword) {
           Toast.fire({
             icon: 'warning',
             title: '請輸入 password',
@@ -136,19 +137,19 @@ export default {
 
         this.isProcessing = true
 
-        // TODO 等 API 完成之後串接
-        // const { data } = await authorizationAPI.signUp({
-        //   account: this.account,
-        //   name: this.name,
-        //   email: this.email,
-        //   password: this.password,
-        //   passwordCheck: this.passwordCheck,
-        // })
+        const response = await authorizationAPI.signUp({
+          account: this.account,
+          name: this.name,
+          email: this.email,
+          password: this.password,
+          checkPassword: this.checkPassword,
+        })
 
-        // if (data.status !== 'success') {
-        //   throw new Error(data.message)
-        // }
-        // this.$router.push({ name: 'sign-in' })
+        if (response.status !== 200) {
+          throw new Error(response.statusText)
+        }
+
+        this.$router.push({ name: 'sign-in' })
       } catch (error) {
         this.isProcessing = false
         console.log(error)
