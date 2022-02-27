@@ -38,14 +38,16 @@
           </div>
         </div>
         <div class="tweet__container__content">
-          {{ userTweet.comment }}
+          {{ userTweet.description }}
         </div>
         <div class="tweet__container__time">
           {{ userTweet.createdAt | fullTime }}
         </div>
         <div class="tweet__container__numbers">
           <div class="tweet__container__numbers__reply">
-            <span class="tweet__container__numbers__reply--counts">{{}}</span>
+            <span class="tweet__container__numbers__reply--counts">{{
+              replies.length
+            }}</span>
             <span class="tweet__container__numbers__reply--words">回覆</span>
           </div>
           <div class="tweet__container__numbers__like">
@@ -101,7 +103,7 @@ export default {
     return {
       userTweet: {},
       user: {},
-      replies: {},
+      replies: [],
     }
   },
   computed: {
@@ -127,22 +129,56 @@ export default {
       }
     },
 
-    // addLike(tweetId) {
-    //   console.log(tweetId)
-    //   this.userTweet = {
-    //     ...this.userTweet,
-    //     isLiked: true,
-    //     likeCounts: this.userTweet.likeCounts + 1,
-    //   }
-    // },
-    // deleteLike(tweetId) {
-    //   console.log(tweetId)
-    //   this.userTweet = {
-    //     ...this.userTweet,
-    //     isLiked: false,
-    //     likeCounts: this.userTweet.likeCounts - 1,
-    //   }
-    // },
+    async addLike(tweetId) {
+      try {
+        const response = await tweetsAPI.addLike({ tweetId })
+
+        if (response.data.status !== 'success') {
+          throw new Error(response.data.statusText)
+        }
+        // this.userTweets = this.userTweets.map((tweet) => {
+        //   if (tweet.id !== tweetId) {
+        //     return tweet
+        //   } else {
+        //     return {
+        //       ...tweet,
+        //       // TODO 針對按讚後的狀態顯示和數量做設定
+        //     }
+        //   }
+        // })
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法按讚推文，請稍後再試',
+        })
+      }
+    },
+    async deleteLike(tweetId) {
+      try {
+        const response = await tweetsAPI.deleteLike({ tweetId })
+
+        if (response.data.status !== 'success') {
+          throw new Error(response.data.statusText)
+        }
+        // this.userTweets = this.userTweets.map((tweet) => {
+        //   if (tweet.id !== tweetId) {
+        //     return tweet
+        //   } else {
+        //     return {
+        //       ...tweet,
+        //       // TODO 針對取消按讚後的狀態顯示和數量做設定
+        //     }
+        //   }
+        // })
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法取消按讚推文，請稍後再試',
+        })
+      }
+    },
   },
   created() {
     const { tweet_id: tweetId } = this.$route.params
