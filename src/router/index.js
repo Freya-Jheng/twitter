@@ -38,14 +38,14 @@ const routes = [
       {
         path: '/admin/tweets/:id',
         component: () => import('../views/AdminTweets.vue'),
-        name: 'admin-tweets'
+        name: 'admin-tweets',
       },
       {
         path: '/admin/users/:id',
         component: () => import('../views/AdminUsers.vue'),
-        name: 'admin-users'
+        name: 'admin-users',
       },
-    ]
+    ],
   },
   {
     path: '/admin/signin',
@@ -63,12 +63,12 @@ const routes = [
     component: () => import('../views/Setting.vue'),
   },
   {
-    path: '/user/followings/:id',
+    path: '/user/:id/followings/',
     name: 'user-followings',
     component: () => import('../views/UserFollowings.vue'),
   },
   {
-    path: '/user/followers/:id',
+    path: '/user/:id/followers/',
     name: 'user-followers',
     component: () => import('../views/UserFollowers.vue'),
   },
