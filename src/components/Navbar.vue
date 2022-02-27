@@ -95,9 +95,13 @@
               </form>
             </div>
             <div class="modal-footer">
-              <router-link to="" class="btn-modal" data-dismiss="modal">
+              <button
+                class="btn-modal"
+                data-dismiss="modal"
+                @click="handleSubmit"
+              >
                 推文
-              </router-link>
+              </button>
             </div>
           </div>
         </div>
@@ -116,6 +120,8 @@
 
 <script>
 import { mapState } from 'vuex'
+import { Toast } from './../utils/helpers'
+import tweetsAPI from './../apis/tweets'
 
 export default {
   name: 'Navbar',
@@ -131,6 +137,47 @@ export default {
     logout() {
       this.$store.commit('revokeAuthentication')
       this.$router.push('/signin')
+    },
+    async handleSubmit() {
+      try {
+        if (!this.tweet) {
+          Toast.fire({
+            icon: 'warning',
+            title: '請輸入推文內容',
+          })
+          return
+        }
+
+        const response = await tweetsAPI.create({
+          description: this.tweet,
+        })
+
+        if (response.status !== 200) {
+          throw new Error(response.statusText)
+        }
+
+        const id = response.data.data.tweet.id
+        this.$emit('after-create-tweet', {
+          id,
+          UserId: this.currentUser.id,
+          account: this.currentUser.account,
+          avatar: this.currentUser.avatar,
+          description: this.newTweet,
+        })
+
+        Toast.fire({
+          icon: 'success',
+          title: '成功發布推文',
+        })
+
+        this.tweet = ''
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法發布推文，請稍後再試',
+        })
+      }
     },
   },
 }
