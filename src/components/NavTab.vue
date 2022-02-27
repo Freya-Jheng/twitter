@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import {v4 as uuidv4} from "uuid";
+import { v4 as uuidv4 } from 'uuid'
 
 export default {
   data() {
@@ -19,23 +19,23 @@ export default {
       tabs: [
         {
           id: uuidv4(),
-          title: "推文",
-          path: "/profile/tweets/:id",
+          title: '推文',
+          path: '/profile/tweets/:id',
         },
         {
           id: uuidv4(),
-          title: "推文與回覆",
-          path: "/profile/responses/:id",
+          title: '推文與回覆',
+          path: '/profile/responses/:id',
         },
         {
           id: uuidv4(),
-          title: "喜歡的內容",
-          path: "/profile/liked/:id",
+          title: '喜歡的內容',
+          path: '/profile/liked/:id',
         },
       ],
-    };
+    }
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
