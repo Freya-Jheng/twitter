@@ -18,7 +18,14 @@
         </router-link>
       </div>
       <div class="navbar__items-item profile">
+<<<<<<< HEAD
         <router-link to="/profile/tweets/1" class="navbar__items-link">
+=======
+        <router-link
+          :to="{ name: 'sub-profile', params: { id: currentUser.id } }"
+          class="navbar__items-link"
+        >
+>>>>>>> main
           <img
             src="./../assets/icon_user@2x.png"
             alt="navbar__items-icon"
@@ -33,7 +40,10 @@
         </router-link>
       </div>
       <div class="navbar__items-item setting">
-        <router-link to="/setting/1" class="navbar__items-link">
+        <router-link
+          :to="{ name: 'setting', params: { id: currentUser.id } }"
+          class="navbar__items-link"
+        >
           <img
             src="./../assets/icon_cog@2x.png"
             alt="navbar__items-icon"
@@ -76,7 +86,7 @@
               </button>
             </div>
             <div class="modal-body">
-              <img :src="user.image" alt="avatar" class="avatar" />
+              <img :src="currentUser.avatar" alt="avatar" class="avatar" />
               <form action="" class="create__tweet">
                 <textarea
                   v-model="tweet"
@@ -97,34 +107,36 @@
         </div>
       </div>
     </div>
-    <router-link to="/signin" class="logout">
+    <div class="logout" @click.stop.prevent="logout">
       <img
         src="./../assets/icon_logout@2x.png"
         alt="logout-icon"
         class="logout-icon"
       />
       <span class="logout-title">登出</span>
-    </router-link>
+    </div>
   </nav>
 </template>
 
 <script>
-const dummyUser = {
-  id: uuidv4(),
-  image: 'https://i.pravatar.cc',
-}
-
-import { v4 as uuidv4 } from 'uuid'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Navbar',
+  computed: {
+    ...mapState(['currentUser', 'isAuthenticated']),
+  },
   data() {
     return {
       tweet: '',
-      user: dummyUser,
     }
   },
-  methods: {},
+  methods: {
+    logout() {
+      this.$store.commit('revokeAuthentication')
+      this.$router.push('/signin')
+    },
+  },
 }
 </script>
 
@@ -137,7 +149,7 @@ nav {
   font-weight: 700;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: flex-start;
   gap: 48px;
   .logo {
@@ -250,6 +262,7 @@ nav {
     gap: 37px;
     margin-top: 190%;
     color: var(--main-font-color);
+    cursor: pointer;
     .logout-icon {
       width: 22px;
       height: 22px;

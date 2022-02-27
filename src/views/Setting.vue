@@ -5,19 +5,17 @@
       <div class="setting__title">帳號設定</div>
       <form @submit.stop.prevent="handleSubmit" class="setting__form">
         <div class="setting__form__item account">
-          <span class="setting__form__item-title">帳號</span>
-          <label class="account-with-special-icon">
-            <input
-              type="text"
-              name="account"
-              class="setting__form__item-input account"
-              id="account"
-              v-model="user.account"
-            />
-          </label>
+          <label class="setting__form__item-title">帳號</label>
+          <input
+            type="text"
+            name="account"
+            class="setting__form__item-input account"
+            id="account"
+            v-model="user.account"
+          />
         </div>
         <div class="setting__form__item name">
-          <span class="setting__form__item-title">名稱</span>
+          <label class="setting__form__item-title">名稱</label>
           <input
             type="text"
             name="name"
@@ -27,7 +25,7 @@
           />
         </div>
         <div class="setting__form__item email">
-          <span class="setting__form__item-title">Email</span>
+          <label class="setting__form__item-title">Email</label>
           <input
             type="email"
             name="email"
@@ -37,7 +35,7 @@
           />
         </div>
         <div class="setting__form__item password">
-          <span class="setting__form__item-title">密碼</span>
+          <label class="setting__form__item-title">密碼</label>
           <input
             type="text"
             name="password"
@@ -47,7 +45,7 @@
           />
         </div>
         <div class="setting__form__item passwordChecked">
-          <span class="setting__form__item-title">密碼確認</span>
+          <label class="setting__form__item-title">密碼確認</label>
           <input
             type="text"
             name="passwordChecked"
@@ -61,7 +59,7 @@
           type="submit"
           class="setting__save btn"
         >
-          {{ isProcessing ? "修改中" : "儲存" }}
+          {{ isProcessing ? '修改中' : '儲存' }}
         </button>
       </form>
     </div>
@@ -70,33 +68,33 @@
 <script>
 const dummyUser = {
   id: uuidv4(),
-  account: "wonderman",
-  name: "John Doe",
-  email: "JohnDoe@gmail.com",
-  password: "12345678",
-  passwordChecked: "12345678",
-};
+  account: 'wonderman',
+  name: 'John Doe',
+  email: 'JohnDoe@gmail.com',
+  password: '12345678',
+  passwordChecked: '12345678',
+}
 
-import { v4 as uuidv4 } from "uuid";
-import { Toast } from "../utils/helpers";
-import Navbar from "../components/Navbar.vue";
+import { v4 as uuidv4 } from 'uuid'
+import { Toast } from '../utils/helpers'
+import Navbar from '../components/Navbar.vue'
 // import { mapState } from 'vuex'
 // import userAPI from 'api'
 
 export default {
-  name: "Setting",
+  name: 'Setting',
   data() {
     return {
       user: {
         id: 0,
-        account: "",
-        name: "",
-        email: "",
-        password: "",
-        passwordChecked: "",
+        account: '',
+        name: '',
+        email: '',
+        password: '',
+        passwordChecked: '',
       },
       isProcessing: false,
-    };
+    }
   },
   components: {
     Navbar,
@@ -110,15 +108,15 @@ export default {
   //   }
   // },
   created() {
-    this.fetchUser(this.user.id);
+    this.fetchUser(this.user.id)
   },
   methods: {
     fetchUser(userId) {
-      const { id, account, name, email, passwordChecked, password } = dummyUser;
+      const { id, account, name, email, passwordChecked, password } = dummyUser
       // TODO: 綁定API後 這裡要修改成 if currentUser.id != userId
       if (!userId.toString()) {
-        this.router.push({ name: "not-found" });
-        return;
+        this.router.push({ name: 'not-found' })
+        return
       }
 
       this.user = {
@@ -128,7 +126,7 @@ export default {
         email,
         password,
         passwordChecked,
-      };
+      }
     },
     async handleSubmit(e) {
       try {
@@ -150,20 +148,20 @@ export default {
           !this.user.passwordChecked
         ) {
           Toast.fire({
-            icon: "warning",
-            title: "請確認資料皆已填寫！",
-          });
+            icon: 'warning',
+            title: '請確認資料皆已填寫！',
+          })
 
-          return;
+          return
         } else {
-          this.isProcessing = true;
+          this.isProcessing = true
           Toast.fire({
-            icon: "success",
-            title: "儲存成功",
-          });
+            icon: 'success',
+            title: '儲存成功',
+          })
         }
-        this.isProcessing = false;
-        console.log(e);
+        this.isProcessing = false
+        console.log(e)
 
         //TODO: 串接API，將資料傳回資料庫
         // const form = e.target
@@ -176,16 +174,16 @@ export default {
         //   throw new Error (data.message)
         // }
       } catch (error) {
-        console.log(error);
-        this.isProcessing = false;
+        console.log(error)
+        this.isProcessing = false
         Toast.fire({
-          icon: "error",
-          title: "無法成功修改資料，請確認輸入資料正確！",
-        });
+          icon: 'error',
+          title: '無法成功修改資料，請確認輸入資料正確！',
+        })
       }
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
@@ -210,6 +208,7 @@ export default {
       height: 55px;
       width: 112%;
       line-height: 55px;
+      font-size: 19px;
       font-weight: 700;
       padding-left: 20px;
     }
@@ -223,28 +222,24 @@ export default {
       padding-left: 20px;
       .setting__form__item {
         width: 100%;
+        height: 52px;
         background-color: var(--input-background);
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         .setting__form__item-title {
           font-size: 15px;
+          line-height: 15px;
+          font-weight: 500;
           color: var(--smaller-font-color);
-          padding: 5px 10px;
+          padding: 5px 0 0 12px;
+          margin-bottom: 0;
         }
         input {
-          border: unset;
-        }
-        .account-with-special-icon {
-          padding: 0 20px;
-          position: relative;
-          &::before {
-            position: absolute;
-            left: 12px;
-            content: "@";
-            width: 20px;
-            height: 20px;
-          }
+          padding-top: 4px;
+          margin-top: 0;
+          width: 100%;
+          height: 32px;
         }
       }
     }

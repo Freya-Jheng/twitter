@@ -7,8 +7,10 @@ export default new Vuex.Store({
   state: {
     currentUser: {
       id: -1,
+      account: '',
       name: '',
       email: '',
+<<<<<<< HEAD
       image: '',
       isAdmin: false,
     },
@@ -21,6 +23,15 @@ export default new Vuex.Store({
     password: '',
     passwordChecked: '',
     isAdmin: false,
+=======
+      role: '',
+      avatar: '',
+      introduction: '',
+      cover: '',
+      createdAt: '',
+      updatedAt: '',
+    },
+>>>>>>> main
   },
   mutations: {
     setCurrentUser(state, currentUser) {
@@ -59,5 +70,5 @@ export default new Vuex.Store({
     //   }
     // },
   },
-  modules: {}
+  modules: {},
 })

@@ -4,13 +4,14 @@
     <form class="create-tweet__container" @submit.stop.prevent="handleSubmit">
       <div class="create-tweet__container__main">
         <router-link to="" class="create-tweet__container__main__user-avatar">
-          <img v-if="currentUser.image" src="" alt="" class="user-avatar" />
+          <img v-if="currentUser.avatar" src="" alt="" class="user-avatar" />
         </router-link>
         <div class="create-tweet__container__main__text">
           <div
             contentEditable="true"
             data-text="有什麼新鮮事？"
             class="create-tweet__container__main__text--new-tweet"
+            @input="onInput"
           ></div>
         </div>
       </div>
@@ -22,12 +23,12 @@
 <script>
 import { mapState } from 'vuex'
 import { Toast } from './../utils/helpers'
+import tweetsAPI from './../apis/tweets'
 
 export default {
   name: 'CreateTweet',
   data() {
     return {
-      // TODO 需要和 div 內容雙向綁定
       newTweet: '',
     }
   },
@@ -37,9 +38,27 @@ export default {
   methods: {
     async handleSubmit() {
       try {
-        // TODO 等後端 API 資料串接
-        console.log(this.newTweet)
+        if (!this.newTweet) {
+          Toast.fire({
+            icon: 'warning',
+            title: '請輸入推文內容',
+          })
+          return
+        }
+
+        const { response } = await tweetsAPI.create({
+          description: this.newTweet,
+        })
+
+        console.log(response)
+        if (response.status !== 200) {
+          throw new Error(response.statusText)
+        }
+
         this.newTweet = ''
+        document.querySelector(
+          'create-tweet__container__main__text--new-tweet'
+        ).innerText = ''
       } catch (error) {
         console.log(error)
         Toast.fire({
@@ -47,6 +66,9 @@ export default {
           title: '無法發布推文，請稍後再試',
         })
       }
+    },
+    onInput(e) {
+      this.newTweet = e.target.innerText
     },
   },
 }

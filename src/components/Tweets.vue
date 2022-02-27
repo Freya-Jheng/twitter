@@ -3,23 +3,28 @@
     <div
       class="tweets-container__tweet"
       v-for="tweet in userTweets"
-      :key="tweet.tweetId"
+      :key="tweet.id"
     >
       <router-link to="" class="tweets-container__tweet__user-avatar">
-        <img v-if="tweet.image" src="" alt="" class="user-avatar" />
+        <img
+          v-if="tweet.User.avatar"
+          :src="tweet.User.avatar"
+          alt=""
+          class="user-avatar"
+        />
       </router-link>
       <div class="tweets-container__tweet__wrapper">
         <div class="tweets-container__tweet__wrapper__info">
           <router-link
             to=""
             class="tweets-container__tweet__wrapper__info--name"
-            >{{ tweet.name }}</router-link
+            >{{ tweet.User.name }}</router-link
           >
           <div class="tweets-container__tweet__wrapper__info--account">
             <router-link to="" class="router-link">{{
-              '@' + tweet.account
-            }}</router-link>
-            {{ ' ・ ' + tweet.createdAt }}
+              '@' + tweet.User.account
+            }}</router-link
+            >・{{ tweet.createdAt | fromNow }}
           </div>
         </div>
 
@@ -27,7 +32,7 @@
           :to="{ name: 'individual-tweet', params: { tweet_id: tweet.id } }"
           class="tweets-container__tweet__wrapper__tweet"
         >
-          {{ tweet.content }}</router-link
+          {{ tweet.description }}</router-link
         >
 
         <div class="tweets-container__tweet__wrapper__icons">
@@ -39,8 +44,8 @@
             />
             <span
               class="tweets-container__tweet__wrapper__icons__comment--count"
-              >{{ tweet.commentCount }}</span
-            >
+              >{{
+            }}</span>
           </div>
           <div class="tweets-container__tweet__wrapper__icons__like">
             <img
@@ -59,8 +64,8 @@
             />
             <span
               class="tweets-container__tweet__wrapper__icons__like--count"
-              >{{ tweet.likeCounts }}</span
-            >
+              >{{
+            }}</span>
           </div>
         </div>
       </div>
@@ -69,6 +74,8 @@
 </template>
 
 <script>
+import { fromNowFilter } from './../utils/mixins'
+
 export default {
   name: 'Tweets',
   props: {
@@ -77,6 +84,7 @@ export default {
       required: true,
     },
   },
+  mixins: [fromNowFilter],
   data() {
     return {
       userTweets: [],
@@ -85,6 +93,13 @@ export default {
   methods: {
     fetchTweets() {
       this.userTweets = this.initialUserTweets
+
+      // 將推文依照時間進行排序
+      this.userTweets = this.userTweets.sort(function (a, b) {
+        let timeA = new Date(a.createdAt).getTime()
+        let timeB = new Date(b.createdAt).getTime()
+        return timeA - timeB
+      })
     },
     addLike(tweetId) {
       this.userTweets = this.userTweets.map((tweet) => {
@@ -116,6 +131,14 @@ export default {
   created() {
     this.fetchTweets()
   },
+  watch: {
+    initialUserTweets(newValue) {
+      this.userTweets = {
+        ...this.userTweets,
+        ...newValue,
+      }
+    },
+  },
 }
 </script>
 
@@ -123,7 +146,7 @@ export default {
 .tweets-container {
   margin-top: 10px;
   width: 100%;
-  height: 100%;
+  // height: 200%;
   background: var(--background);
   &__tweet {
     display: flex;

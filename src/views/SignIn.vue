@@ -24,7 +24,7 @@
           >密碼</label
         >
         <input
-          type="text"
+          type="password"
           placeholder=""
           required
           autofocus
@@ -52,6 +52,7 @@
 
 <script>
 import { Toast } from './../utils/helpers'
+import authorizationAPI from './../apis/authorization'
 
 export default {
   name: 'SignIn',
@@ -62,7 +63,7 @@ export default {
       isProcessing: false,
     }
   },
-  method: {
+  methods: {
     async handleSubmit() {
       try {
         if (!this.account || !this.password) {
@@ -73,26 +74,24 @@ export default {
           return
         }
 
-        this.isProcessing = false
+        this.isProcessing = true
 
-        // TODO 等 API 好了之後再串接
-        // const response = await authorizationAPI.signIn({
-        //   email: this.email,
-        //   password: this.password,
-        // })
-        // const { data } = response
-        // if (data.status !== 'success') {
-        //   throw new Error(data.message)
-        // }
+        const response = await authorizationAPI.signIn({
+          account: this.account,
+          password: this.password,
+        })
 
-        // TODO 把 token 存入 localStorage 中
-        // localStorage.setItem('token', data.token)
-        // this.$store.commit('setCurrentUser', data.user)
-        // this.$router.push('/tweets')
+        if (response.data.tokenData.status !== 'success') {
+          throw new Error(response.data.tokenData.message)
+        }
+
+        localStorage.setItem('token', response.data.tokenData.data.token)
+        this.$store.commit('setCurrentUser', response.data.tokenData.data.user)
+        this.$router.push('/home')
       } catch (error) {
         console.log(error)
         this.isProcessing = false
-        this.email = ''
+        this.account = ''
         this.password = ''
         Toast.fire({
           icon: 'warning',
