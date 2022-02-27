@@ -63,14 +63,21 @@ const routes = [
     component: () => import('../views/Setting.vue'),
   },
   {
-    path: '/user/:id/followings/',
-    name: 'user-followings',
-    component: () => import('../views/UserFollowings.vue'),
-  },
-  {
     path: '/user/:id/followers/',
     name: 'user-followers',
-    component: () => import('../views/UserFollowers.vue'),
+    component: () => import('../views/Followers.vue'),
+    children: [
+      {
+        path: '/user/:id/followers/',
+        name: 'user-followers',
+        component: () => import('../components/UserFollowers.vue'),
+      },
+      {
+        path: '/user/:id/followings/',
+        name: 'user-followings',
+        component: () => import('../components/UserFollowings.vue'),
+      },
+    ],
   },
   {
     path: '/profile/tweets/:id',
@@ -102,6 +109,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
+  linkExactActiveClass: 'active',
   routes,
 })
 
