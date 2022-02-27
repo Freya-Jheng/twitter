@@ -45,18 +45,20 @@ const routes = [
     children: [
       {
         path: '/profile/tweets/:id',
-        component: ()=> import('../views/SubProfileTweets.vue'),
-        name: 'sub-profile-tweets'
-      },
-      { 
-        path: '/profile/responses/:id', component: () => import('../views/SubProfileResponses.vue'),
-        name: 'sub-profile-responses'
+        component: () => import('../views/SubProfileTweets.vue'),
+        name: 'sub-profile-tweets',
       },
       {
-        path: '/profile/liked/:id', component: () => import('../views/SubProfileLiked.vue'),
-        name: 'sub-profile-liked'
-      }
-    ]
+        path: '/profile/responses/:id',
+        component: () => import('../views/SubProfileResponses.vue'),
+        name: 'sub-profile-responses',
+      },
+      {
+        path: '/profile/liked/:id',
+        component: () => import('../views/SubProfileLiked.vue'),
+        name: 'sub-profile-liked',
+      },
+    ],
   },
   {
     path: '*',
