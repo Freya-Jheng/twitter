@@ -14,33 +14,35 @@
       <div class="tweet__container">
         <div class="tweet__container__user-info">
           <router-link
-            :to="{ name: 'sub-profile', params: { id: userTweet.UserId } }"
+            :to="{ name: 'sub-profile', params: { id: user.id } }"
             class="tweet__container__user-info__user-avatar"
           >
             <img
-              v-if="userTweet.User.avatar"
-              :src="userTweet.User.avatar"
+              v-if="user.avatar"
+              :src="user.avatar ? user.avatar : ''"
               alt=""
               class="user-avatar"
             />
           </router-link>
           <div class="tweet__container__user-info__wrapper">
             <router-link
-              :to="{ name: 'sub-profile', params: { id: userTweet.UserId } }"
+              :to="{ name: 'sub-profile', params: { id: user.id } }"
               class="tweet__container__user-info__wrapper--name"
-              >{{ userTweet.User.name }}</router-link
+              >{{ user.name }}</router-link
             >
             <router-link
-              :to="{ name: 'sub-profile', params: { id: userTweet.UserId } }"
+              :to="{ name: 'sub-profile', params: { id: user.id } }"
               class="tweet__container__user-info__wrapper--account"
-              >{{ '@' + userTweet.User.account }}</router-link
+              >{{ '@' + user.account }}</router-link
             >
           </div>
         </div>
         <div class="tweet__container__content">
           {{ userTweet.description }}
         </div>
-        <div class="tweet__container__time">{{ userTweet.createdAt }}</div>
+        <div class="tweet__container__time">
+          {{ userTweet.createdAt | fullTime }}
+        </div>
         <div class="tweet__container__numbers">
           <div class="tweet__container__numbers__reply">
             <span class="tweet__container__numbers__reply--counts">{{}}</span>
@@ -74,7 +76,7 @@
         </div>
       </div>
 
-      <Comments />
+      <Comments :initial-replies="replies" />
     </div>
     <div class="popular-users">Popular users</div>
   </div>
@@ -82,27 +84,11 @@
 
 <script>
 import Navbar from './../components/Navbar'
+import Comments from './../components/Comments.vue'
 import tweetsAPI from './../apis/tweets'
 import { Toast } from './../utils/helpers'
 import { mapState } from 'vuex'
-import Comments from './../components/Comments.vue'
-
-const dummyData = {
-  userTweets: {
-    userID: 1,
-    id: 1,
-    image: '',
-    name: 'Apple',
-    account: 'apple',
-    createdAt: '2022/2/22 22:22',
-    content:
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut luctus eu ipsum at sollicitudin. Vivamus tristique lorem vitae erat commodo, quis congue leo pellentesque. Interdum et malesuada fames ac ante ipsum primis in faucibus. Nulla rutrum ut tellus viverra congue. Curabitur eu elit et est commodo tempus. ',
-    commentCounts: 15,
-    likeCounts: 16,
-    isLiked: false,
-  },
-}
->>>>>>> comments
+import { fromNowFilter } from './../utils/mixins'
 
 export default {
   name: 'IndividualTweet',
@@ -110,9 +96,12 @@ export default {
     Navbar,
     Comments,
   },
+  mixins: [fromNowFilter],
   data() {
     return {
       userTweet: {},
+      user: {},
+      replies: {},
     }
   },
   computed: {
@@ -126,7 +115,10 @@ export default {
         if (response.status !== 200) {
           throw new Error(response.statusText)
         }
+
         this.userTweet = response.data
+        this.user = response.data.User
+        this.replies = response.data.Replies
       } catch (error) {
         Toast.fire({
           icon: 'error',
