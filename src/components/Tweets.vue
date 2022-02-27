@@ -5,7 +5,10 @@
       v-for="tweet in userTweets"
       :key="tweet.id"
     >
-      <router-link to="" class="tweets-container__tweet__user-avatar">
+      <router-link
+        :to="{ name: 'sub-profile', params: { id: tweet.UserId } }"
+        class="tweets-container__tweet__user-avatar"
+      >
         <img
           v-if="tweet.User.avatar"
           :src="tweet.User.avatar"
@@ -16,14 +19,15 @@
       <div class="tweets-container__tweet__wrapper">
         <div class="tweets-container__tweet__wrapper__info">
           <router-link
-            to=""
+            :to="{ name: 'sub-profile', params: { id: tweet.UserId } }"
             class="tweets-container__tweet__wrapper__info--name"
             >{{ tweet.User.name }}</router-link
           >
           <div class="tweets-container__tweet__wrapper__info--account">
-            <router-link to="" class="router-link">{{
-              '@' + tweet.User.account
-            }}</router-link
+            <router-link
+              :to="{ name: 'sub-profile', params: { id: tweet.UserId } }"
+              class="router-link"
+              >{{ '@' + tweet.User.account }}</router-link
             >・{{ tweet.createdAt | fromNow }}
           </div>
         </div>
@@ -44,8 +48,8 @@
             />
             <span
               class="tweets-container__tweet__wrapper__icons__comment--count"
-              >{{
-            }}</span>
+              >{{ tweet.repliesCount }}</span
+            >
           </div>
           <div class="tweets-container__tweet__wrapper__icons__like">
             <img
@@ -64,8 +68,8 @@
             />
             <span
               class="tweets-container__tweet__wrapper__icons__like--count"
-              >{{
-            }}</span>
+              >{{ tweet.likesCount }}</span
+            >
           </div>
         </div>
       </div>
@@ -75,6 +79,8 @@
 
 <script>
 import { fromNowFilter } from './../utils/mixins'
+import { Toast } from './../utils/helpers'
+import tweetsAPI from './../apis/tweets'
 
 export default {
   name: 'Tweets',
@@ -95,37 +101,61 @@ export default {
       this.userTweets = this.initialUserTweets
 
       // 將推文依照時間進行排序
-      this.userTweets = this.userTweets.sort(function (a, b) {
-        let timeA = new Date(a.createdAt).getTime()
-        let timeB = new Date(b.createdAt).getTime()
-        return timeA - timeB
-      })
+      // this.userTweets = this.userTweets.sort(function (a, b) {
+      //   let timeA = new Date(a.createdAt).getTime()
+      //   let timeB = new Date(b.createdAt).getTime()
+      //   return timeA - timeB
+      // })
     },
-    addLike(tweetId) {
-      this.userTweets = this.userTweets.map((tweet) => {
-        if (tweet.id !== tweetId) {
-          return tweet
-        } else {
-          return {
-            ...tweet,
-            isLiked: true,
-            likeCounts: tweet.likeCounts + 1,
-          }
+    async addLike(tweetId) {
+      try {
+        const response = await tweetsAPI.addLike({ tweetId })
+
+        if (response.data.status !== 'success') {
+          throw new Error(response.data.statusText)
         }
-      })
+        // this.userTweets = this.userTweets.map((tweet) => {
+        //   if (tweet.id !== tweetId) {
+        //     return tweet
+        //   } else {
+        //     return {
+        //       ...tweet,
+        //       // TODO 針對按讚後的狀態顯示和數量做設定
+        //     }
+        //   }
+        // })
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法按讚推文，請稍後再試',
+        })
+      }
     },
-    deleteLike(tweetId) {
-      this.userTweets = this.userTweets.map((tweet) => {
-        if (tweet.id !== tweetId) {
-          return tweet
-        } else {
-          return {
-            ...tweet,
-            isLiked: false,
-            likeCounts: tweet.likeCounts - 1,
-          }
+    async deleteLike(tweetId) {
+      try {
+        const response = await tweetsAPI.deleteLike({ tweetId })
+
+        if (response.data.status !== 'success') {
+          throw new Error(response.data.statusText)
         }
-      })
+        // this.userTweets = this.userTweets.map((tweet) => {
+        //   if (tweet.id !== tweetId) {
+        //     return tweet
+        //   } else {
+        //     return {
+        //       ...tweet,
+        //       // TODO 針對取消按讚後的狀態顯示和數量做設定
+        //     }
+        //   }
+        // })
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法取消按讚推文，請稍後再試',
+        })
+      }
     },
   },
   created() {

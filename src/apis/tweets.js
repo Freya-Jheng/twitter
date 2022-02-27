@@ -10,4 +10,10 @@ export default {
   getIndividualTweet({ tweetId }) {
     return apiHelper.get(`/tweets/${tweetId}`)
   },
+  addLike({ tweetId }) {
+    return apiHelper.post(`/tweets/${tweetId}/like`, null)
+  },
+  deleteLike({ tweetId }) {
+    return apiHelper.delete(`/tweets/${tweetId}/like`)
+  },
 }
