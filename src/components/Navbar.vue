@@ -18,7 +18,7 @@
         </router-link>
       </div>
       <div class="navbar__items-item profile">
-        <router-link to="/profile/1" class="navbar__items-link">
+        <router-link to="/profile/tweets/1" class="navbar__items-link">
           <img
             src="./../assets/icon_user@2x.png"
             alt="navbar__items-icon"

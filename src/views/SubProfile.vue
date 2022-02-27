@@ -1,7 +1,6 @@
 <template>
   <div class="home">
     <Navbar />
-    <router-view />
     <div class="subProfile">
       <SubProfileTop :current-user-data="user"/>
       <NavTab />
@@ -20,9 +19,9 @@
   width: 100%;
   height: 100vh;
   padding:0 6%;
-  outline: 1px solid red;
   .subProfile {
     position: relative;
+    border: 1px solid var(--profile-border);
   }
   .popular-users {
     background: grey;

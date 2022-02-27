@@ -149,6 +149,7 @@
     flex-direction: row;
     align-items: center;
     gap: 43px;
+    padding-left: 15px;
     &__back {
       width: 17px;
       height: 14px;
