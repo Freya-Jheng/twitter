@@ -1,5 +1,5 @@
 <template>
-  <div class="create-tweet">
+  <div class="create-tweet" :class="{ error: newTweet.length > 140 }">
     <div class="create-tweet__header">首頁</div>
     <form class="create-tweet__container" @submit.stop.prevent="handleSubmit">
       <div class="create-tweet__container__main">
@@ -17,7 +17,12 @@
           ></div>
         </div>
       </div>
-      <button class="create-tweet__container__button button">推文</button>
+      <button
+        class="create-tweet__container__button button"
+        :disabled="newTweet.length > 140"
+      >
+        推文
+      </button>
     </form>
   </div>
 </template>
@@ -45,6 +50,11 @@ export default {
             icon: 'warning',
             title: '請輸入推文內容',
           })
+          return
+        }
+
+        if (this.newTweet.trim().length > 140) {
+          this.alert = true
           return
         }
 
@@ -92,9 +102,11 @@ export default {
 
 <style lang="scss" scoped>
 .create-tweet {
+  position: relative;
   width: 100%;
   height: auto;
   background: var(--background);
+
   &__header {
     height: 55px;
     width: 100%;
@@ -169,6 +181,20 @@ export default {
       font-size: 18px;
       line-height: 18px;
     }
+  }
+}
+
+.error {
+  position: relative;
+  &::after {
+    content: '字數不可超過 140 字 ';
+    position: absolute;
+    bottom: 20px;
+    right: 101px;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 15px;
+    color: var(--error-color);
   }
 }
 </style>
