@@ -57,8 +57,13 @@ export default {
         }
 
         const id = response.data.data.tweet.id
-        console.log(id)
-        // TODO 是否要把推文回推回 home ?
+        this.$emit('after-create-tweet', {
+          id,
+          UserId: this.currentUser.id,
+          account: this.currentUser.account,
+          avatar: this.currentUser.avatar,
+          description: this.newTweet,
+        })
 
         Toast.fire({
           icon: 'success',
