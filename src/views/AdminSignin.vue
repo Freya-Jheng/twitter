@@ -4,7 +4,7 @@
       <div class="sign-in__logo">
         <img src="./../assets/logo@2x.png" alt="logo" />
       </div>
-      <div class="sign-in__header">登入 Alphitter</div>
+      <div class="sign-in__header">後台登入</div>
       <div class="sign-in__form-label-group form-label-group">
         <label for="account" class="sing-in__form-label-group__account label"
           >帳號</label
@@ -40,22 +40,18 @@
         {{ isProcessing ? '處理中' : '登入' }}
       </button>
       <div class="sign-in__links">
-        <router-link to="/signup" class="sign-in__links--link"
-          >註冊 Alphitter</router-link
-        >
-        <div class="sign-in__links--dot">·</div>
-        <router-link to="/admin/signin" class="sign-in__links--link">後台登入</router-link>
+        <router-link to="/signin" class="sign-in__links--link">前台登入</router-link>
       </div>
     </form>
   </div>
 </template>
 
 <script>
-import { Toast } from './../utils/helpers'
-import authorizationAPI from './../apis/authorization'
+import { Toast } from '../utils/helpers'
+// import authorizationAPI from '../apis/authorization'
 
 export default {
-  name: 'SignIn',
+  name: 'AdminSignIn',
   data() {
     return {
       account: '',
@@ -76,18 +72,17 @@ export default {
 
         this.isProcessing = true
 
-        const response = await authorizationAPI.signIn({
-          account: this.account,
-          password: this.password,
-        })
+        // const response = await authorizationAPI.adminSignIn({
+        //   account: this.account,
+        //   password: this.password,
+        // })
 
-        if (response.data.tokenData.status !== 'success') {
-          throw new Error(response.data.tokenData.message)
-        }
+        // if (response.data.tokenData.status !== 'success') {
+        //   throw new Error(response.data.tokenData.message)
+        // }
 
-        localStorage.setItem('token', response.data.tokenData.data.token)
-        this.$store.commit('setCurrentUser', response.data.tokenData.data.user)
-        this.$router.push('/home')
+        // localStorage.setItem('token', response.data.tokenData.data.token)
+        // this.$router.push('/admin')
       } catch (error) {
         console.log(error)
         this.isProcessing = false

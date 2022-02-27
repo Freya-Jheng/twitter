@@ -82,6 +82,7 @@ export default {
 
         this.newTweet = ''
         this.$refs.input.textContent = ''
+
       } catch (error) {
         console.log(error)
         Toast.fire({

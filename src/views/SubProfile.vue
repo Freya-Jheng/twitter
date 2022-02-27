@@ -18,7 +18,7 @@
   grid-template-rows: auto;
   width: 100%;
   height: 100vh;
-  padding:0 6%;
+  padding: 0 6%;
   .subProfile {
     position: relative;
     border: 1px solid var(--profile-border);
