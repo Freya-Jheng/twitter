@@ -6,7 +6,7 @@
       <CreateTweet @after-create-tweet="afterCreateTweet" />
       <Tweets :initial-user-tweets="userTweets" />
     </div>
-    <div class="popular-users">Popular users</div>
+    <PopularUsers />
   </div>
 </template>
 
@@ -14,6 +14,7 @@
 import Navbar from './../components/Navbar'
 import CreateTweet from './../components/CreateTweet.vue'
 import Tweets from './../components/Tweets'
+import PopularUsers from './../components/PopularUsers'
 import { Toast } from './../utils/helpers'
 import tweetsAPI from './../apis/tweets'
 
@@ -23,6 +24,7 @@ export default {
     Navbar,
     CreateTweet,
     Tweets,
+    PopularUsers,
   },
   data() {
     return {
@@ -91,11 +93,6 @@ export default {
     height: 100%;
     background: #e5e5e5;
     overflow-y: scroll;
-  }
-
-  .popular-users {
-    background: grey;
-    height: 100%;
   }
 }
 </style>
