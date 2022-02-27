@@ -77,6 +77,7 @@
                 class="close"
                 data-dismiss="modal"
                 aria-label="Close"
+                @click="clearTweet"
               >
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -94,11 +95,12 @@
                 ></textarea>
               </form>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer" :class="{ error: tweet.length > 140 }">
               <button
                 class="btn-modal"
                 data-dismiss="modal"
                 @click="handleSubmit"
+                :disabled="tweet.length > 140"
               >
                 推文
               </button>
@@ -178,6 +180,13 @@ export default {
           title: '無法發布推文，請稍後再試',
         })
       }
+    },
+    clearTweet() {
+      if (this.tweet.length > 140) {
+        this.tweet = ''
+      }
+
+      return
     },
   },
 }
@@ -264,6 +273,7 @@ nav {
         button {
           margin-left: 0;
           padding-left: 0;
+
           span {
             width: 20px;
             height: 20px;
@@ -299,6 +309,9 @@ nav {
     color: var(--button-font);
     line-height: 38px;
     text-align: center;
+    &[disabled] {
+      background: rgba(255, 102, 0, 0.6);
+    }
   }
   .logout {
     display: flex;
@@ -311,6 +324,20 @@ nav {
       width: 22px;
       height: 22px;
     }
+  }
+}
+
+.error {
+  position: relative;
+  &::after {
+    content: '字數不可超過 140 字 ';
+    position: absolute;
+    bottom: 28px;
+    right: 101px;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 15px;
+    color: var(--error-color);
   }
 }
 </style>

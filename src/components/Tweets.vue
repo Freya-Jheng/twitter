@@ -77,13 +77,18 @@
                 <div class="modal-body">
                   <div class="modal-body__tweet">
                     <div class="modal-body__tweet__user-avatar">
-                      <img src="" alt="" class="avatar" />
+                      <img
+                        v-if="tweet.User.avatar"
+                        :src="tweet.User.avatar"
+                        alt=""
+                        class="avatar"
+                      />
                     </div>
                     <div class="modal-body__tweet__content">
                       <div class="modal-body__tweet__content__info">
-                        <div class="modal-body__tweet__content__info--name">
-                          apple
-                        </div>
+                        <div
+                          class="modal-body__tweet__content__info--name"
+                        ></div>
                         <div class="modal-body__tweet__content__info--account">
                           @apple
                         </div>
@@ -173,6 +178,7 @@ export default {
   data() {
     return {
       userTweets: [],
+      tweetModal: [],
     }
   },
   methods: {
