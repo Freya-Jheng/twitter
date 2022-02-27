@@ -38,14 +38,14 @@ const routes = [
       {
         path: '/admin/tweets/:id',
         component: () => import('../views/AdminTweets.vue'),
-        name: 'admin-tweets'
+        name: 'admin-tweets',
       },
       {
         path: '/admin/users/:id',
         component: () => import('../views/AdminUsers.vue'),
-        name: 'admin-users'
+        name: 'admin-users',
       },
-    ]
+    ],
   },
   {
     path: '/admin/signin',
@@ -63,12 +63,12 @@ const routes = [
     component: () => import('../views/Setting.vue'),
   },
   {
-    path: '/user/followings/:id',
+    path: '/user/:id/followings/',
     name: 'user-followings',
     component: () => import('../views/UserFollowings.vue'),
   },
   {
-    path: '/user/followers/:id',
+    path: '/user/:id/followers/',
     name: 'user-followers',
     component: () => import('../views/UserFollowers.vue'),
   },
@@ -79,18 +79,20 @@ const routes = [
     children: [
       {
         path: '/profile/tweets/:id',
-        component: ()=> import('../views/SubProfileTweets.vue'),
-        name: 'sub-profile-tweets'
-      },
-      { 
-        path: '/profile/responses/:id', component: () => import('../views/SubProfileResponses.vue'),
-        name: 'sub-profile-responses'
+        component: () => import('../views/SubProfileTweets.vue'),
+        name: 'sub-profile-tweets',
       },
       {
-        path: '/profile/liked/:id', component: () => import('../views/SubProfileLiked.vue'),
-        name: 'sub-profile-liked'
-      }
-    ]
+        path: '/profile/responses/:id',
+        component: () => import('../views/SubProfileResponses.vue'),
+        name: 'sub-profile-responses',
+      },
+      {
+        path: '/profile/liked/:id',
+        component: () => import('../views/SubProfileLiked.vue'),
+        name: 'sub-profile-liked',
+      },
+    ],
   },
   {
     path: '*',
