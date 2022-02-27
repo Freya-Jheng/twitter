@@ -3,6 +3,8 @@ import VueRouter from 'vue-router'
 import NotFound from '../views/NotFound.vue'
 import SignIn from '../views/SignIn.vue'
 import Home from '../views/Home.vue'
+import AdminSignin from '../views/AdminSignin.vue'
+import AdminHome from '../views/AdminHome.vue'
 
 Vue.use(VueRouter)
 
@@ -29,6 +31,28 @@ const routes = [
     component: Home,
   },
   {
+    path: '/admin',
+    name: 'admin-home',
+    component: AdminHome,
+    children: [
+      {
+        path: '/admin/tweets/:id',
+        component: () => import('../views/AdminTweets.vue'),
+        name: 'admin-tweets'
+      },
+      {
+        path: '/admin/users/:id',
+        component: () => import('../views/AdminUsers.vue'),
+        name: 'admin-users'
+      },
+    ]
+  },
+  {
+    path: '/admin/signin',
+    name: 'adminSignin',
+    component: AdminSignin,
+  },
+  {
     path: '/tweets/:tweet_id',
     name: 'individual-tweet',
     component: () => import('../views/IndividualTweet'),
@@ -37,6 +61,16 @@ const routes = [
     path: '/setting/:id',
     name: 'setting',
     component: () => import('../views/Setting.vue'),
+  },
+  {
+    path: '/user/followings/:id',
+    name: 'user-followings',
+    component: () => import('../views/UserFollowings.vue'),
+  },
+  {
+    path: '/user/followers/:id',
+    name: 'user-followers',
+    component: () => import('../views/UserFollowers.vue'),
   },
   {
     path: '/profile/tweets/:id',

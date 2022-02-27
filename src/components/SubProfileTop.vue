@@ -119,17 +119,19 @@
             {{ currentUserData.description }}
           </p>
           <div class="profile__container__bottom__introduction__follow">
-            <span
+            <router-link
+              to="/user/followings/:id"
               class="
                 profile__container__bottom__introduction__follow__followings
               "
-              >{{ currentUserData.followingsNum }}個<span>跟隨中</span></span
+              >{{ currentUserData.followingsNum }}個<span>跟隨中</span></router-link
             >
-            <span
+            <router-link
+              to="/user/followers/:id"
               class="
                 profile__container__bottom__introduction__follow__followers
               "
-              >{{ currentUserData.followersNum }}個<span>跟隨者</span></span
+              >{{ currentUserData.followersNum }}個<span>跟隨者</span></router-link
             >
           </div>
         </div>
@@ -137,6 +139,17 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    currentUserData: {
+      type: Object,
+      required: true,
+    },
+  },
+};
+</script>
 
 <style scoped lang="scss">
 .main-subProfileTop {
@@ -249,6 +262,7 @@
           &__followers,
           &__followings {
             cursor: pointer;
+            color: var(--main-font-color);
             span {
               color: var(--smaller-font-color);
             }
@@ -403,13 +417,3 @@
 }
 </style>
 
-<script>
-export default {
-  props: {
-    currentUserData: {
-      type: Object,
-      required: true,
-    },
-  },
-};
-</script>
