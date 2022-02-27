@@ -1,39 +1,65 @@
 <template>
-  <div class="comments">
-    <div class="comments__user-avatar">
-      <img src="" alt="" class="comments__user-avatar--img" />
-    </div>
-    <div class="comments__container">
-      <div class="comments__container__info">
-        <div class="comments__container__info--name">Banana</div>
-        <div class="comments__container__info--account">@banana</div>
-        <div class="comments__container__info--time">三小時</div>
+  <div>
+    <div class="comments" v-for="reply in replies" :key="reply.id">
+      <router-link
+        :to="{ name: 'sub-profile', params: { id: reply.UserId } }"
+        class="comments__user-avatar"
+      >
+        <img
+          v-if="reply.User.avatar"
+          :src="reply.User.avatar"
+          alt=""
+          class="comments__user-avatar--img"
+        />
+      </router-link>
+      <div class="comments__container">
+        <div class="comments__container__info">
+          <router-link
+            :to="{ name: 'sub-profile', params: { id: reply.UserId } }"
+            class="comments__container__info--name"
+          >
+            {{ reply.User.name }}
+          </router-link>
+          <router-link
+            :to="{ name: 'sub-profile', params: { id: reply.UserId } }"
+            class="comments__container__info--account"
+          >
+            {{ '@' + reply.User.account }}
+          </router-link>
+          <div class="comments__container__info--time">
+            ・ {{ reply.createdAt | fromNow }}
+          </div>
+        </div>
+        <div class="comments__container__reply-to">
+          <div class="comments__container__reply-to--reply">回覆</div>
+          <div class="comments__container__reply-to--account">{{ '@' }}</div>
+        </div>
+        <div class="comments__container__text">{{ reply.comment }}</div>
       </div>
-      <div class="comments__container__reply-to">
-        <div class="comments__container__reply-to--reply">回覆</div>
-        <div class="comments__container__reply-to--account">@apple</div>
-      </div>
-      <div class="comments__container__text">good job</div>
     </div>
   </div>
 </template>
 
 <script>
+import { fromNowFilter } from './../utils/mixins'
+
 export default {
   name: 'Comments',
   props: {
     initialReplies: {
-      type: Object,
+      type: Array,
       required: true,
     },
   },
+  mixins: [fromNowFilter],
   data() {
     return {
-      replies: {},
+      replies: [],
     }
   },
   methods: {
     fetchReplies() {
+      // TODO 缺少 account 資訊
       this.replies = this.initialReplies
     },
   },
@@ -44,7 +70,7 @@ export default {
     initialReplies(newValue) {
       this.replies = {
         ...this.replies,
-        newValue,
+        ...newValue,
       }
     },
   },

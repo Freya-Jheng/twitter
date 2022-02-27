@@ -12,6 +12,8 @@
             data-text="有什麼新鮮事？"
             class="create-tweet__container__main__text--new-tweet"
             @input="onInput"
+            @click="focus"
+            ref="input"
           ></div>
         </div>
       </div>
@@ -46,19 +48,30 @@ export default {
           return
         }
 
-        const { response } = await tweetsAPI.create({
+        const response = await tweetsAPI.create({
           description: this.newTweet,
         })
 
-        console.log(response)
         if (response.status !== 200) {
           throw new Error(response.statusText)
         }
 
+        const id = response.data.data.tweet.id
+        this.$emit('after-create-tweet', {
+          id,
+          UserId: this.currentUser.id,
+          account: this.currentUser.account,
+          avatar: this.currentUser.avatar,
+          description: this.newTweet,
+        })
+
+        Toast.fire({
+          icon: 'success',
+          title: '成功發布推文',
+        })
+
         this.newTweet = ''
-        document.querySelector(
-          'create-tweet__container__main__text--new-tweet'
-        ).innerText = ''
+        this.$refs.input.textContent = ''
       } catch (error) {
         console.log(error)
         Toast.fire({
@@ -69,6 +82,9 @@ export default {
     },
     onInput(e) {
       this.newTweet = e.target.innerText
+    },
+    focus() {
+      this.$refs.input.focus()
     },
   },
 }

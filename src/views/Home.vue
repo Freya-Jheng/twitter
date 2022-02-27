@@ -3,7 +3,7 @@
     <Navbar />
     <!-- <router-view /> -->
     <div class="tweets">
-      <CreateTweet />
+      <CreateTweet @after-create-tweet="afterCreateTweet" />
       <Tweets :initial-user-tweets="userTweets" />
     </div>
     <div class="popular-users">Popular users</div>
@@ -38,6 +38,15 @@ export default {
           throw new Error(response.statusText)
         }
         this.userTweets = response.data
+
+        // 將推文進行排序
+        this.userTweets = this.userTweets.sort((a, b) => {
+          return a.createdAt > b.createdAt
+            ? -1
+            : a.createdAt < b.createdAt
+            ? 1
+            : 0
+        })
       } catch (error) {
         console.log(error)
         Toast.fire({
@@ -46,8 +55,24 @@ export default {
         })
       }
     },
+    afterCreateTweet(payload) {
+      const { id, UserId, account, avatar, description } = payload
+
+      this.userTweets.push({
+        id,
+        UserId,
+        User: {
+          account,
+          avatar: avatar ? avatar : '',
+        },
+        description,
+      })
+    },
   },
   created() {
+    this.fetchTweets()
+  },
+  updated() {
     this.fetchTweets()
   },
 }
