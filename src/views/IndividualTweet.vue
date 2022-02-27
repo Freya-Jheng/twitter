@@ -358,10 +358,5 @@ export default {
       }
     }
   }
-
-  .popular-users {
-    background: grey;
-    height: 100%;
-  }
 }
 </style>
