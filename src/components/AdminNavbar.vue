@@ -3,7 +3,7 @@
     <img src="./../assets/logo@2x.png" alt="logo" class="logo" />
     <div class="navbar__items">
       <div class="navbar__items-item home">
-        <router-link to="/admin/tweets/:id" class="navbar__items-link">
+        <router-link to="/admin/tweets/:id" class="navbar__items-link router-like-active">
           <img
             src="./../assets/icon_index@2x.png"
             alt="navbar__items-icon"
@@ -85,6 +85,9 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 37px;
+    .router-link-active {
+      color: var(--button-background);
+    }
     .navbar__items-item {
       width: 90%;
       .active {

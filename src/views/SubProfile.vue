@@ -6,7 +6,7 @@
       <NavTab />
       <router-view />
     </div>
-    <div class="popular-users">Popular users</div>
+    <PopularUsers />
   </div>
 </template>
 
@@ -24,7 +24,6 @@
     border: 1px solid var(--profile-border);
   }
   .popular-users {
-    background: grey;
     height: 100%;
   }
 }
@@ -35,6 +34,7 @@ import Navbar from '../components/Navbar.vue'
 import SubProfileTop from '../components/SubProfileTop.vue'
 import {v4 as uuidv4} from 'uuid'
 import NavTab from '../components/NavTab.vue'
+import PopularUsers from '../components/PopularUsers.vue'
 
 const dummyUser = {
   id: uuidv4(),
@@ -196,6 +196,7 @@ export default {
     Navbar,
     SubProfileTop,
     NavTab,
+    PopularUsers,
   },
   created () {
     this.fetchUser()

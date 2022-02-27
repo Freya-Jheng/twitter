@@ -4,17 +4,19 @@
     <div class="admin__home__content">
       <router-view />
     </div>
-    <div class="popular-users">Popular users</div>
+    <PopularUsers />
   </div>
 </template>
 
 <script>
 import AdminNavbar from './../components/AdminNavbar.vue'
+import PopularUsers from './../components/PopularUsers.vue'
 
 export default {
   name: 'AdminHome',
   components: {
     AdminNavbar,
+    PopularUsers,
   }
 }
 </script>
