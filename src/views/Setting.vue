@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="main-setting">
     <Navbar />
     <div class="setting">
       <div class="setting__title">帳號設定</div>
@@ -130,6 +130,16 @@ export default {
     },
     async handleSubmit(e) {
       try {
+        if (this.user.passwordChecked && this.user.password) {
+          if (this.user.password !== this.user.passwordChecked) {
+            Toast.fire({
+              icon: "error",
+              title: "密碼與確認密碼不符，請確認！",
+            });
+            return;
+          }
+        }
+
         if (
           !this.user.account ||
           !this.user.name ||
@@ -177,13 +187,13 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.wrapper {
+.main-setting {
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 600px 1.22fr;
   grid-template-rows: auto;
   height: 100vh;
-  padding: 0 8%;
+  padding: 0 6%;
 
   .setting {
     display: flex;

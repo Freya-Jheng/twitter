@@ -84,8 +84,13 @@ export default {
   grid-template-columns: 1fr 600px 1.22fr;
   grid-template-rows: auto;
   height: 100vh;
+<<<<<<< HEAD
+  padding:0 6%;
+  
+=======
   padding: 0 8%;
 
+>>>>>>> main
   .tweets {
     border-left: 1px solid var(--border-and-divider);
     border-right: 1px solid var(--border-and-divider);

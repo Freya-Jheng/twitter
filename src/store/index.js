@@ -10,6 +10,20 @@ export default new Vuex.Store({
       account: '',
       name: '',
       email: '',
+<<<<<<< HEAD
+      image: '',
+      isAdmin: false,
+    },
+    isAuthenticated: false,
+    token: '',
+    account: '',
+    name: '',
+    email: '',
+    image: '',
+    password: '',
+    passwordChecked: '',
+    isAdmin: false,
+=======
       role: '',
       avatar: '',
       introduction: '',
@@ -17,6 +31,7 @@ export default new Vuex.Store({
       createdAt: '',
       updatedAt: '',
     },
+>>>>>>> main
   },
   mutations: {
     setCurrentUser(state, currentUser) {

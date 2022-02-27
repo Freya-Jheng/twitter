@@ -212,7 +212,7 @@ export default {
   grid-template-rows: auto;
   width: 100%;
   height: 100vh;
-  padding: 0 8%;
+  padding: 0 6%;
 
   .tweet {
     display: flex;
@@ -232,6 +232,7 @@ export default {
         margin-left: 18px;
         width: 23px;
         height: 24px;
+        cursor: pointer;
       }
       &__content {
         display: flex;
@@ -242,6 +243,7 @@ export default {
         font-size: 18px;
         line-height: 26.06px;
         height: 24px;
+        cursor: default;
       }
     }
 
