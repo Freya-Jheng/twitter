@@ -11,24 +11,24 @@
 </template>
 
 <script>
-import uuid from "uuid/v4";
+import {v4 as uuid} from "uuid";
 
 export default {
   data() {
     return {
       tabs: [
         {
-          id: uuid(),
+          id: uuidv4(),
           title: "推文",
           path: "/profile/tweets/:id",
         },
         {
-          id: uuid(),
+          id: uuidv4(),
           title: "推文與回覆",
           path: "/profile/responses/:id",
         },
         {
-          id: uuid(),
+          id: uuidv4(),
           title: "喜歡的內容",
           path: "/profile/liked/:id",
         },
