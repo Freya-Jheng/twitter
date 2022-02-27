@@ -80,13 +80,14 @@
 
       <Comments :initial-replies="replies" />
     </div>
-    <div class="popular-users">Popular users</div>
+    <PopularUsers />
   </div>
 </template>
 
 <script>
 import Navbar from './../components/Navbar'
 import Comments from './../components/Comments.vue'
+import PopularUsers from './../components/PopularUsers'
 import tweetsAPI from './../apis/tweets'
 import { Toast } from './../utils/helpers'
 import { mapState } from 'vuex'
@@ -97,6 +98,7 @@ export default {
   components: {
     Navbar,
     Comments,
+    PopularUsers,
   },
   mixins: [fromNowFilter],
   data() {
