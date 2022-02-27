@@ -18,14 +18,10 @@
         </router-link>
       </div>
       <div class="navbar__items-item profile">
-<<<<<<< HEAD
-        <router-link to="/profile/tweets/1" class="navbar__items-link">
-=======
         <router-link
           :to="{ name: 'sub-profile', params: { id: currentUser.id } }"
           class="navbar__items-link"
         >
->>>>>>> main
           <img
             src="./../assets/icon_user@2x.png"
             alt="navbar__items-icon"
