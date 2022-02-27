@@ -1,39 +1,41 @@
 <template>
   <nav class="admin__navbar">
-    <img src="./../assets/logo@2x.png" alt="logo" class="logo" />
-    <div class="navbar__items">
-      <div class="navbar__items-item home">
-        <router-link to="/admin/tweets/:id" class="navbar__items-link router-like-active">
-          <img
-            src="./../assets/icon_index@2x.png"
-            alt="navbar__items-icon"
-            class="navbar__items-icon home-icon"
-          />
-          <img
-            src="./../assets/icon_index_active@2x.png"
-            alt="navbar__items-icon"
-            class="navbar__items-icon home-icon active"
-          />
-          <span class="navbar__items-title">推文清單</span>
-        </router-link>
-      </div>
-      <div class="navbar__items-item profile">
-        <router-link
-          to="/admin/users/:id"
-          class="navbar__items-link"
-        >
-          <img
-            src="./../assets/icon_user@2x.png"
-            alt="navbar__items-icon"
-            class="navbar__items-icon profile-icon"
-          />
-          <img
-            src="./../assets/icon_user_active@2x.png"
-            alt="navbar__items-icon"
-            class="navbar__items-icon profile-icon active"
-          />
-          <span class="navbar__items-title">使用者列表</span>
-        </router-link>
+    <div class="wrapper">
+      <img src="./../assets/logo@2x.png" alt="logo" class="logo" />
+      <div class="navbar__items">
+        <div class="navbar__items-item home">
+          <router-link
+            to="/admin/tweets/:id"
+            class="navbar__items-link router-like-active"
+          >
+            <img
+              src="./../assets/icon_index@2x.png"
+              alt="navbar__items-icon"
+              class="navbar__items-icon home-icon"
+            />
+            <img
+              src="./../assets/icon_index_active@2x.png"
+              alt="navbar__items-icon"
+              class="navbar__items-icon home-icon active"
+            />
+            <span class="navbar__items-title">推文清單</span>
+          </router-link>
+        </div>
+        <div class="navbar__items-item profile">
+          <router-link to="/admin/users/:id" class="navbar__items-link">
+            <img
+              src="./../assets/icon_user@2x.png"
+              alt="navbar__items-icon"
+              class="navbar__items-icon profile-icon"
+            />
+            <img
+              src="./../assets/icon_user_active@2x.png"
+              alt="navbar__items-icon"
+              class="navbar__items-icon profile-icon active"
+            />
+            <span class="navbar__items-title">使用者列表</span>
+          </router-link>
+        </div>
       </div>
     </div>
     <div class="logout" @click.stop.prevent="logout">
@@ -49,19 +51,17 @@
 
 <script>
 export default {
-  name: 'AdminNavbar',
+  name: "AdminNavbar",
   data() {
-    return {
-      
-    }
+    return {};
   },
   methods: {
     logout() {
       // this.$store.commit('revokeAuthentication')
-      this.$router.push('/admin/signin')
+      this.$router.push("/admin/signin");
     },
   },
-}
+};
 </script>
 
 <style scoped lang="scss">
@@ -76,6 +76,12 @@ export default {
   justify-content: space-between;
   align-items: flex-start;
   padding: 14px 0;
+  .wrapper {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 51.7px;
+  }
   .logo {
     width: 30px;
     height: 30px;
@@ -128,7 +134,7 @@ export default {
       }
     }
   }
-  
+
   .logout {
     display: flex;
     flex-direction: row;
@@ -142,5 +148,4 @@ export default {
     }
   }
 }
-
 </style>

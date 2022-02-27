@@ -82,7 +82,7 @@ export default {
         // }
 
         // localStorage.setItem('token', response.data.tokenData.data.token)
-        // this.$router.push('/admin')
+        this.$router.push('/admin/tweets/:id')
       } catch (error) {
         console.log(error)
         this.isProcessing = false

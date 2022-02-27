@@ -4,19 +4,16 @@
     <div class="admin__home__content">
       <router-view />
     </div>
-    <PopularUsers />
   </div>
 </template>
 
 <script>
 import AdminNavbar from './../components/AdminNavbar.vue'
-import PopularUsers from './../components/PopularUsers.vue'
 
 export default {
   name: 'AdminHome',
   components: {
     AdminNavbar,
-    PopularUsers,
   }
 }
 </script>
@@ -26,7 +23,11 @@ export default {
   display: grid;
   grid-template-columns: 1fr 600px 1.22fr;
   grid-template-rows: auto;
+  width: 100%;
   height: 100vh;
-  padding: 0 6%;
+  padding-left: 6%;
+  &__content {
+    grid-column: 2/4;
+  }
 }
 </style>
