@@ -283,6 +283,7 @@ nav {
         textarea {
           margin-top: 8px;
           border: unset;
+          resize: none;
         }
       }
       .modal-footer {
