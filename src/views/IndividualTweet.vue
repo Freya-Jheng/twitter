@@ -120,11 +120,28 @@ export default {
 
         this.userTweet = response.data
         this.user = response.data.User
-        this.replies = response.data.Replies
       } catch (error) {
         Toast.fire({
           icon: 'error',
           title: '無法取得推文資料，請稍後再試',
+        })
+      }
+    },
+
+    async fetchReplies(tweetId) {
+      try {
+        const response = await tweetsAPI.getReplies({ tweetId })
+
+        if (response.status !== 200) {
+          throw new Error(response.statusText)
+        }
+
+        this.replies = response.data
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法取得回覆資料，請稍後再試',
         })
       }
     },
@@ -183,6 +200,7 @@ export default {
   created() {
     const { tweet_id: tweetId } = this.$route.params
     this.fetchTweet(tweetId)
+    this.fetchReplies(tweetId)
   },
 }
 </script>
