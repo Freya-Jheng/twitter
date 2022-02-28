@@ -34,7 +34,9 @@
           class="sing-up__form-label-group__name--input input"
           :class="{ error_input: name.length > 50 }"
         />
-        <span class="remaining">{{ remaining }} / 50</span>
+        <span class="remaining" :class="{ error_color: name.length > 50 }"
+          >{{ remaining | remainingFilter }} / 50</span
+        >
       </div>
 
       <div class="sign-up__form-label-group form-label-group">
@@ -174,7 +176,16 @@ export default {
   },
   computed: {
     remaining() {
-      return 50 - this.name.length ? 50 - this.name.length : 0
+      return 50 - this.name.length
+    },
+  },
+  filters: {
+    remainingFilter: function (value) {
+      if (value < 0) {
+        return 0
+      }
+
+      return value
     },
   },
 }
@@ -274,6 +285,9 @@ export default {
   }
 }
 
+.error_color {
+  color: var(--error-color);
+}
 .error_input {
   border-bottom: 2px solid var(--error-color);
 }

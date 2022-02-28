@@ -17,6 +17,6 @@ export default {
     return apiHelper.post(`/tweets/${tweetId}/like`, null)
   },
   deleteLike({ tweetId }) {
-    return apiHelper.delete(`/tweets/${tweetId}/like`)
+    return apiHelper.post(`/tweets/${tweetId}/like`, null)
   },
 }

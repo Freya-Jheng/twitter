@@ -154,11 +154,11 @@ export default {
           description: this.tweet,
         })
 
-        if (response.status !== 200) {
+        if (response.data.status !== 'success') {
           throw new Error(response.statusText)
         }
 
-        const id = response.data.data.tweet.id
+        const id = response.data.data.Tweet.id
         this.$emit('after-create-tweet', {
           id,
           UserId: this.currentUser.id,
@@ -169,7 +169,7 @@ export default {
 
         Toast.fire({
           icon: 'success',
-          title: '成功發布推文',
+          title: '推文發送成功',
         })
 
         this.tweet = ''

@@ -19,7 +19,7 @@
           >
             <img
               v-if="user.avatar"
-              :src="user.avatar ? user.avatar : ''"
+              :src="user.avatar"
               alt=""
               class="user-avatar"
             />
@@ -46,12 +46,14 @@
         <div class="tweet__container__numbers">
           <div class="tweet__container__numbers__reply">
             <span class="tweet__container__numbers__reply--counts">{{
-              replies.length
+              userTweet.repliesCount
             }}</span>
             <span class="tweet__container__numbers__reply--words">回覆</span>
           </div>
           <div class="tweet__container__numbers__like">
-            <span class="tweet__container__numbers__like--counts">{{}}</span>
+            <span class="tweet__container__numbers__like--counts">{{
+              userTweet.likesCount
+            }}</span>
             <span class="tweet__container__numbers__like--words">喜歡次數</span>
           </div>
         </div>
@@ -78,7 +80,7 @@
         </div>
       </div>
 
-      <Comments :initial-replies="replies" />
+      <Comments :initial-replies="replies" :user-tweet="userTweet"/>
     </div>
     <PopularUsers />
   </div>
@@ -119,9 +121,13 @@ export default {
         if (response.status !== 200) {
           throw new Error(response.statusText)
         }
-
         this.userTweet = response.data
+        this.replies = response.data.Replies
         this.user = response.data.User
+        this.user = {
+          ...this.user,
+          avatar: this.user.avatar ? this.user.avatar : '',
+        }
       } catch (error) {
         Toast.fire({
           icon: 'error',
@@ -129,25 +135,6 @@ export default {
         })
       }
     },
-
-    async fetchReplies(tweetId) {
-      try {
-        const response = await tweetsAPI.getReplies({ tweetId })
-
-        if (response.status !== 200) {
-          throw new Error(response.statusText)
-        }
-
-        this.replies = response.data
-      } catch (error) {
-        console.log(error)
-        Toast.fire({
-          icon: 'error',
-          title: '無法取得回覆資料，請稍後再試',
-        })
-      }
-    },
-
     async addLike(tweetId) {
       try {
         const response = await tweetsAPI.addLike({ tweetId })
@@ -202,7 +189,6 @@ export default {
   created() {
     const { tweet_id: tweetId } = this.$route.params
     this.fetchTweet(tweetId)
-    this.fetchReplies(tweetId)
   },
 }
 </script>

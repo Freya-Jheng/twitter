@@ -44,7 +44,9 @@
           >註冊 Alphitter</router-link
         >
         <div class="sign-in__links--dot">·</div>
-        <router-link to="/admin/signin" class="sign-in__links--link">後台登入</router-link>
+        <router-link to="/admin/signin" class="sign-in__links--link"
+          >後台登入</router-link
+        >
       </div>
     </form>
   </div>
@@ -85,8 +87,9 @@ export default {
           throw new Error(response.data.tokenData.message)
         }
 
+        console.log(response.data.tokenData.data.User)
         localStorage.setItem('token', response.data.tokenData.data.token)
-        this.$store.commit('setCurrentUser', response.data.tokenData.data.user)
+        this.$store.commit('setCurrentUser', response.data.tokenData.data.User)
         this.$router.push('/home')
       } catch (error) {
         console.log(error)
