@@ -1,19 +1,21 @@
 <template>
   <div class="profile__tweets">
-    <div class="profile__tweets__tweet">
+    <div v-for="tweet in TweetsArray" 
+    :key="tweet.id"
+    class="profile__tweets__tweet">
       <router-link to="" class="profile__tweets__tweet__avatar">
-        <img src="" alt="" class="user-avatar" />
+        <img :src="tweet.Tweet.User.avatar" alt="" class="user-avatar" />
       </router-link>
       <div class="profile__tweets__tweet__wrapper">
         <div class="profile__tweets__tweet__wrapper__info">
           <router-link to="" class="profile__tweets__tweet__wrapper__info--name"
-            >tweetName</router-link
+            >{{tweet.Tweet.User.name}}</router-link
           >
           <div class="profile__tweets__tweet__wrapper__info--account">
             <router-link to="" class="router-link">
-              "@" + account
+              {{"@" + tweet.Tweet.User.account}}
             </router-link>
-            " ・ " + createdAt 
+             ・ {{tweet.Tweet.createdAt}} 
           </div>
         </div>
         <div class="profile__tweets__tweet__wrapper__response">
@@ -25,10 +27,10 @@
           </span>
         </div>
         <router-link
-          :to="{ name: 'individual-tweet' }"
+          :to="{ name: 'individual-tweet', params: {id: tweet.TweetId }}"
           class="profile__tweets__tweet__wrapper__tweet"
         >
-          hdbvkahsbdkahbdhvb,hsbdvhs,hdv,hVhdhdbv,</router-link
+          {{tweet.comment}}</router-link
         >
       </div>
     </div>
@@ -43,7 +45,7 @@ export default {
   name: 'SubProfileResponse',
   data () {
     return {
-
+      TweetsArray: [],
     }
   },
   created () {
@@ -54,7 +56,13 @@ export default {
     async fetchResponses(userId) {
       try {
         const {data} = await userAPI.getUserResponses({userId})
-        console.log('re',data)
+        console.log('re', data)
+        
+        if (data.status === 'error') {
+          throw new Error (data.message)
+        }
+
+        this.TweetsArray = data
          
       } catch (error) {
         console.log(error)

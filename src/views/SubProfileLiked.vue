@@ -1,10 +1,10 @@
 <template>
   <div class="profile__tweets">
-    <div class="profile__tweets__tweet">
-      <!-- v-for="tweet in userTweets"
-      :key="tweet.tweetId" -->
+    <div v-for="tweet in likedArray"
+    :key="tweet.id" class="profile__tweets__tweet">
+     
       <router-link to="" class="profile__tweets__tweet__avatar">
-        <img src="" alt="" class="user-avatar" />
+        <img :src="tweet.User.avatar" alt="" class="user-avatar" />
       </router-link>
       <div class="profile__tweets__tweet__wrapper">
         <div class="profile__tweets__tweet__wrapper__info">
@@ -57,6 +57,45 @@
     </div>
   </div>
 </template>
+
+<script>
+import {Toast} from '../utils/helpers'
+import userAPI from '../apis/users'
+
+export default {
+  name: 'SubProfileLiked',
+  data () {
+    return {
+      likedArray: [],
+    }
+  },
+  created () {
+    const {id} = this.$route.params
+    this.fetchUserLiked(id)
+  },
+  methods: {
+    async fetchUserLiked (userId) {
+      try {
+        const {data} = await userAPI.getUserLiked({userId})
+        console.log('like', data)
+        if (data.status === 'error') {
+          throw new Error (data.message)
+        }
+
+        this.likedArray = data
+         
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法成功取的使用者按讚貼文！'
+        })
+      }
+    }
+  }
+}
+</script>
+
 
 <style scoped lang="scss">
 .profile__tweets {
