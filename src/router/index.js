@@ -64,7 +64,7 @@ const routes = [
   },
   {
     path: '/user/:id/followers/',
-    name: 'user-followers',
+    name: 'user-follower',
     component: () => import('../views/Followers.vue'),
     children: [
       {
