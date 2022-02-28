@@ -64,7 +64,7 @@
           />
         </div>
         <button
-          :disabled="isProcessing"
+          :disabled="isProcessing || user.name.length > 50"
           type="submit"
           class="setting__save btn"
         >
@@ -278,7 +278,7 @@ export default {
   &::after {
     content: '字數超出上限';
     position: absolute;
-    top: 60px;
+    top: 55px;
     left: 0px;
     font-weight: 500;
     font-size: 15px;
