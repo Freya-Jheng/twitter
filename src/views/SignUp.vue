@@ -6,7 +6,7 @@
       </div>
       <div class="sign-up__header">建立你的帳號</div>
       <div class="sign-up__form-label-group form-label-group">
-        <label for="account" class="sing-in__form-label-group__account label"
+        <label for="account" class="sing-up__form-label-group__account label"
           >帳號</label
         >
         <input
@@ -15,12 +15,15 @@
           required
           autofocus
           v-model="account"
-          class="sing-in__form-label-group__account--input input"
+          class="sing-up__form-label-group__account--input input"
         />
       </div>
 
-      <div class="sign-up__form-label-group form-label-group">
-        <label for="name" class="sing-in__form-label-group__name label"
+      <div class="sign-up__form-label-group form-label-group name">
+        <label
+          for="name"
+          class="sing-up__form-label-group__name label"
+          :class="{ error: name.length > 50 }"
           >名稱</label
         >
         <input
@@ -28,12 +31,14 @@
           placeholder=""
           required
           v-model="name"
-          class="sing-in__form-label-group__name--input input"
+          class="sing-up__form-label-group__name--input input"
+          :class="{ error_input: name.length > 50 }"
         />
+        <span class="remaining">{{ remaining }} / 50</span>
       </div>
 
       <div class="sign-up__form-label-group form-label-group">
-        <label for="email" class="sing-in__form-label-group__email label"
+        <label for="email" class="sing-up__form-label-group__email label"
           >Email</label
         >
         <input
@@ -41,12 +46,12 @@
           placeholder=""
           required
           v-model="email"
-          class="sing-in__form-label-group__email--input input"
+          class="sing-up__form-label-group__email--input input"
         />
       </div>
 
       <div class="sign-up__form-label-group form-label-group">
-        <label for="password" class="sing-in__form-label-group__password label"
+        <label for="password" class="sing-up__form-label-group__password label"
           >密碼</label
         >
         <input
@@ -54,14 +59,14 @@
           placeholder=""
           required
           v-model="password"
-          class="sing-in__form-label-group__password--input input"
+          class="sing-up__form-label-group__password--input input"
         />
       </div>
 
       <div class="sign-up__form-label-group form-label-group">
         <label
           for="password-check"
-          class="sing-in__form-label-group__password-check label"
+          class="sing-up__form-label-group__password-check label"
           >密碼確認</label
         >
         <input
@@ -69,7 +74,7 @@
           placeholder=""
           required
           v-model="checkPassword"
-          class="sing-in__form-label-group__password-check--input input"
+          class="sing-up__form-label-group__password-check--input input"
         />
       </div>
       <button class="sign-up__button button" :disabled="isProcessing">
@@ -135,6 +140,14 @@ export default {
           return
         }
 
+        if (this.password !== this.checkPassword) {
+          Toast.fire({
+            icon: 'warning',
+            title: '密碼輸入不一致',
+          })
+          return
+        }
+
         this.isProcessing = true
 
         const response = await authorizationAPI.signUp({
@@ -152,12 +165,16 @@ export default {
         this.$router.push({ name: 'sign-in' })
       } catch (error) {
         this.isProcessing = false
-        console.log(error)
         Toast.fire({
           icon: 'error',
-          title: '無法註冊使用者，請稍後再試',
+          title: '帳號或 email 已經註冊，請選擇其他帳號或 email',
         })
       }
+    },
+  },
+  computed: {
+    remaining() {
+      return 50 - this.name.length ? 50 - this.name.length : 0
     },
   },
 }
@@ -227,5 +244,37 @@ export default {
       }
     }
   }
+}
+
+.name {
+  position: relative;
+}
+
+.remaining {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 15px;
+  color: var(--smaller-font-color);
+}
+
+.error {
+  position: relative;
+  &::after {
+    content: '字數超出上限';
+    position: absolute;
+    top: 60px;
+    left: 0px;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 15px;
+    color: var(--error-color);
+  }
+}
+
+.error_input {
+  border-bottom: 2px solid var(--error-color);
 }
 </style>
