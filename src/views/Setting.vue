@@ -14,15 +14,24 @@
             v-model="user.account"
           />
         </div>
-        <div class="setting__form__item name">
+        <div
+          class="setting__form__item name"
+          :class="{ error: user.name.length > 50 }"
+        >
           <label class="setting__form__item-title">名稱</label>
           <input
             type="text"
             name="name"
-            class="setting__form__item-input"
+            class="setting__form__item-input name"
             id="name"
             v-model="user.name"
+            :class="{ error_input: user.name.length > 50 }"
           />
+          <span
+            class="remaining"
+            :class="{ error_color: user.name.length > 50 }"
+            >{{ remaining | remainingFilter }} / 50</span
+          >
         </div>
         <div class="setting__form__item email">
           <label class="setting__form__item-title">Email</label>
@@ -37,7 +46,7 @@
         <div class="setting__form__item password">
           <label class="setting__form__item-title">密碼</label>
           <input
-            type="text"
+            type="password"
             name="password"
             class="setting__form__item-input"
             id="password"
@@ -47,11 +56,11 @@
         <div class="setting__form__item passwordChecked">
           <label class="setting__form__item-title">密碼確認</label>
           <input
-            type="text"
+            type="password"
             name="passwordChecked"
             class="setting__form__item-input"
             id="passwordChecked"
-            v-model="user.passwordChecked"
+            v-model="user.checkPassword"
           />
         </div>
         <button
@@ -66,121 +75,112 @@
   </div>
 </template>
 <script>
-const dummyUser = {
-  id: uuidv4(),
-  account: 'wonderman',
-  name: 'John Doe',
-  email: 'JohnDoe@gmail.com',
-  password: '12345678',
-  passwordChecked: '12345678',
-}
-
-import { v4 as uuidv4 } from 'uuid'
-import { Toast } from '../utils/helpers'
 import Navbar from '../components/Navbar.vue'
-// import { mapState } from 'vuex'
-// import userAPI from 'api'
+import { mapState } from 'vuex'
+import { Toast } from '../utils/helpers'
+import usersAPI from './../apis/users'
 
 export default {
   name: 'Setting',
   data() {
     return {
       user: {
-        id: 0,
+        id: -1,
         account: '',
         name: '',
         email: '',
         password: '',
-        passwordChecked: '',
+        checkPassword: '',
       },
       isProcessing: false,
     }
   },
+  computed: {
+    ...mapState(['currentUser', 'isAuthenticated']),
+    remaining() {
+      return 50 - this.user.name.length ? 50 - this.user.name.length : 0
+    },
+  },
   components: {
     Navbar,
-    // ...mapState(['currentUser'])
   },
-  // watch: {
-  //   currentUser (user) {
-  //     if (user.id === -1) return
-  //     const { id } = this.$route.params
-  //     this.fetchUser(id)
-  //   }
-  // },
   created() {
-    this.fetchUser(this.user.id)
+    this.fetchUser()
   },
   methods: {
-    fetchUser(userId) {
-      const { id, account, name, email, passwordChecked, password } = dummyUser
-      // TODO: 綁定API後 這裡要修改成 if currentUser.id != userId
-      if (!userId.toString()) {
-        this.router.push({ name: 'not-found' })
-        return
-      }
-
-      this.user = {
-        id,
-        account,
-        name,
-        email,
-        password,
-        passwordChecked,
-      }
+    fetchUser() {
+      this.user.id = this.currentUser.id
+      this.user.account = this.currentUser.account
+      this.user.name = this.currentUser.name
+      this.user.email = this.currentUser.email
+      this.user.password = this.currentUser.password
+      this.user.checkPassword = this.currentUser.checkPassword
     },
-    async handleSubmit(e) {
+    async handleSubmit() {
       try {
-        if (this.user.passwordChecked && this.user.password) {
-          if (this.user.password !== this.user.passwordChecked) {
-            Toast.fire({
-              icon: "error",
-              title: "密碼與確認密碼不符，請確認！",
-            });
-            return;
-          }
-        }
-
-        if (
-          !this.user.account ||
-          !this.user.name ||
-          !this.user.email ||
-          !this.user.password ||
-          !this.user.passwordChecked
-        ) {
+        if (!this.user.account) {
           Toast.fire({
             icon: 'warning',
-            title: '請確認資料皆已填寫！',
+            title: '請輸入使用者帳號',
           })
-
           return
-        } else {
-          this.isProcessing = true
-          Toast.fire({
-            icon: 'success',
-            title: '儲存成功',
-          })
         }
-        this.isProcessing = false
-        console.log(e)
 
-        //TODO: 串接API，將資料傳回資料庫
-        // const form = e.target
-        // const formData = new FormData(form)
-        // const {data} = await userAPI.update({
-        //   userId: this.id,
-        //   formData
-        // })
-        // if (data.status === 'error') {
-        //   throw new Error (data.message)
-        // }
+        if (!this.user.name) {
+          Toast.fire({
+            icon: 'warning',
+            title: '請輸入使用者名稱',
+          })
+          return
+        }
+
+        if (!this.user.email) {
+          Toast.fire({
+            icon: 'warning',
+            title: '請輸入 email',
+          })
+          return
+        }
+
+        if (!this.user.password | !this.user.checkPassword) {
+          Toast.fire({
+            icon: 'warning',
+            title: '請輸入 password',
+          })
+          return
+        }
+
+        if (this.user.password !== this.user.checkPassword) {
+          Toast.fire({
+            icon: 'warning',
+            title: '密碼輸入不一致',
+          })
+          return
+        }
+        const response = await usersAPI.update({
+          userId: this.currentUser.id,
+          account: this.user.account,
+          name: this.user.name,
+          password: this.password,
+          checkPassword: this.checkPassword,
+        })
+        console.log(response)
       } catch (error) {
         console.log(error)
-        this.isProcessing = false
         Toast.fire({
           icon: 'error',
-          title: '無法成功修改資料，請確認輸入資料正確！',
+          title: '無法修改個人資料，請稍後再試',
         })
       }
+    },
+  },
+  filters: {
+    remainingFilter: function (value) {
+      if (value < 0) {
+        return 0
+      }
+
+      return value
     },
   },
 }
@@ -258,5 +258,40 @@ export default {
       color: var(--button-font);
     }
   }
+}
+
+.name {
+  position: relative;
+}
+
+.remaining {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 15px;
+  color: var(--smaller-font-color);
+}
+.error {
+  position: relative;
+  &::after {
+    content: '字數超出上限';
+    position: absolute;
+    top: 60px;
+    left: 0px;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 15px;
+    color: var(--error-color);
+  }
+}
+
+.error_color {
+  color: var(--error-color);
+}
+
+.error_input {
+  border-bottom: 2px solid var(--error-color);
 }
 </style>

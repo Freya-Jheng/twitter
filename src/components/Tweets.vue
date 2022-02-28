@@ -190,18 +190,20 @@ export default {
         const response = await tweetsAPI.addLike({ tweetId })
 
         if (response.data.status !== 'success') {
-          throw new Error(response.data.statusText)
+          throw new Error(response.statusText)
         }
-        // this.userTweets = this.userTweets.map((tweet) => {
-        //   if (tweet.id !== tweetId) {
-        //     return tweet
-        //   } else {
-        //     return {
-        //       ...tweet,
-        //       // TODO 針對按讚後的狀態顯示和數量做設定
-        //     }
-        //   }
-        // })
+
+        this.userTweets = this.userTweets.map((tweet) => {
+          if (tweet.id !== tweetId) {
+            return tweet
+          } else {
+            return {
+              ...tweet,
+              isLiked: true,
+              likesCount: tweet.likesCount + 1,
+            }
+          }
+        })
       } catch (error) {
         console.log(error)
         Toast.fire({
@@ -217,16 +219,18 @@ export default {
         if (response.data.status !== 'success') {
           throw new Error(response.data.statusText)
         }
-        // this.userTweets = this.userTweets.map((tweet) => {
-        //   if (tweet.id !== tweetId) {
-        //     return tweet
-        //   } else {
-        //     return {
-        //       ...tweet,
-        //       // TODO 針對取消按讚後的狀態顯示和數量做設定
-        //     }
-        //   }
-        // })
+
+        this.userTweets = this.userTweets.map((tweet) => {
+          if (tweet.id !== tweetId) {
+            return tweet
+          } else {
+            return {
+              ...tweet,
+              isLiked: false,
+              likesCount: tweet.likesCount - 1,
+            }
+          }
+        })
       } catch (error) {
         console.log(error)
         Toast.fire({
@@ -241,10 +245,7 @@ export default {
   },
   watch: {
     initialUserTweets(newValue) {
-      this.userTweets = {
-        ...this.userTweets,
-        ...newValue,
-      }
+      this.userTweets = newValue
     },
   },
 }

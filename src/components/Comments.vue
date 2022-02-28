@@ -5,12 +5,7 @@
         :to="{ name: 'sub-profile', params: { id: reply.UserId } }"
         class="comments__user-avatar"
       >
-        <img
-          v-if="reply.User.avatar"
-          :src="reply.User.avatar"
-          alt=""
-          class="comments__user-avatar--img"
-        />
+        <img src="" alt="" class="comments__user-avatar--img" />
       </router-link>
       <div class="comments__container">
         <div class="comments__container__info">
@@ -32,7 +27,9 @@
         </div>
         <div class="comments__container__reply-to">
           <div class="comments__container__reply-to--reply">回覆</div>
-          <div class="comments__container__reply-to--account">{{ '@' }}</div>
+          <div class="comments__container__reply-to--account">
+            {{ '@' + userTweet.User.account }}
+          </div>
         </div>
         <div class="comments__container__text">{{ reply.comment }}</div>
       </div>
@@ -50,6 +47,10 @@ export default {
       type: Array,
       required: true,
     },
+    userTweet: {
+      type: Object,
+      required: true,
+    },
   },
   mixins: [fromNowFilter],
   data() {
@@ -59,7 +60,6 @@ export default {
   },
   methods: {
     fetchReplies() {
-      // TODO 缺少 account 資訊
       this.replies = this.initialReplies
     },
   },
@@ -68,10 +68,7 @@ export default {
   },
   watch: {
     initialReplies(newValue) {
-      this.replies = {
-        ...this.replies,
-        ...newValue,
-      }
+      this.replies = newValue
     },
   },
 }
