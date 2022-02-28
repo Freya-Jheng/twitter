@@ -1,36 +1,81 @@
 <template>
   <div class="profile__tweets">
-    <div class="profile__tweets__tweet">
+    <div v-for="tweet in TweetsArray" 
+    :key="tweet.id"
+    class="profile__tweets__tweet">
       <router-link to="" class="profile__tweets__tweet__avatar">
-        <img src="" alt="" class="user-avatar" />
+        <img :src="tweet.Tweet.User.avatar" alt="" class="user-avatar" />
       </router-link>
       <div class="profile__tweets__tweet__wrapper">
         <div class="profile__tweets__tweet__wrapper__info">
           <router-link to="" class="profile__tweets__tweet__wrapper__info--name"
-            >tweetName</router-link
+            >{{tweet.Tweet.User.name}}</router-link
           >
           <div class="profile__tweets__tweet__wrapper__info--account">
-            <router-link to="" class="router-link">{{
-              "@" + account
-            }}</router-link>
-            {{ " ・ " + createdAt }}
+            <router-link to="" class="router-link">
+              {{"@" + tweet.Tweet.User.account}}
+            </router-link>
+             ・ {{tweet.Tweet.createdAt}} 
           </div>
         </div>
         <div class="profile__tweets__tweet__wrapper__response">
-          <span class="response-to">回覆 <router-link to="" class="router-link">{{
+          <span class="response-to"
+            >回覆
+            <router-link to="" class="router-link">
               "@" + account
-            }}</router-link> </span>
+            </router-link>
+          </span>
         </div>
         <router-link
-          :to="{ name: 'individual-tweet' }"
+          :to="{ name: 'individual-tweet', params: {id: tweet.TweetId }}"
           class="profile__tweets__tweet__wrapper__tweet"
         >
-          hdbvkahsbdkahbdhvb,hsbdvhs,hdv,hVhdhdbv,</router-link
+          {{tweet.comment}}</router-link
         >
       </div>
     </div>
   </div>
 </template>
+
+<script>
+import {Toast} from '../utils/helpers'
+import userAPI from '../apis/users'
+
+export default {
+  name: 'SubProfileResponse',
+  data () {
+    return {
+      TweetsArray: [],
+    }
+  },
+  created () {
+    const {id} = this.$route.params
+    this.fetchResponses(id)
+  },
+  methods: {
+    async fetchResponses(userId) {
+      try {
+        const {data} = await userAPI.getUserResponses({userId})
+        console.log('re', data)
+        
+        if (data.status === 'error') {
+          throw new Error (data.message)
+        }
+
+        this.TweetsArray = data
+         
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法成功取得回覆資料！'
+        })
+      }
+    }
+  }
+}
+</script>
+
 
 <style scoped lang="scss">
 .profile__tweets {
@@ -86,7 +131,6 @@
         }
         .router-link {
           color: var(--active-color);
-
         }
       }
       &__tweet {

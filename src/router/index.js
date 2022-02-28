@@ -34,17 +34,17 @@ const routes = [
   {
     path: '/admin',
     name: 'admin-home',
-    component: AdminHome,
+    component: () => import('../views/AdminHome.vue'),
     children: [
       {
-        path: '/admin/tweets/:id',
-        component: () => import('../views/AdminTweets.vue'),
+        path: '/admin/tweets',
         name: 'admin-tweets',
+        component: () => import('../components/AdminTweets.vue'),
       },
       {
-        path: '/admin/users/:id',
-        component: () => import('../views/AdminUsers.vue'),
+        path: '/admin/users',
         name: 'admin-users',
+        component: () => import('../components/AdminUsers.vue'),
       },
     ],
   },
