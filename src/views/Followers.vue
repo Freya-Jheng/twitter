@@ -10,8 +10,10 @@
           @click="$router.back()"
         />
         <div class="followers__header__content">
-          <div class="followers__header__content__user-name">abc</div>
-          <div class="followers__header__content__tweet-counts">123</div>
+          <div class="followers__header__content__user-name">
+            {{ currentUser.name }}
+          </div>
+          <div class="followers__header__content__tweet-counts">{{}}</div>
         </div>
       </div>
       <ul class="followers__nav-tabs">
@@ -39,13 +41,38 @@
 <script>
 import Navbar from './../components/Navbar'
 import PopularUsers from './../components/PopularUsers'
-// import { Toast } from './../utils/helpers'
+import { mapState } from 'vuex'
+import { Toast } from './../utils/helpers'
+import usersAPI from './../apis/users'
 
 export default {
   name: 'UserFollowers',
   components: {
     Navbar,
     PopularUsers,
+  },
+  computed: {
+    ...mapState(['currentUser', 'isAuthenticated']),
+  },
+  methods: {
+    async fetchTweets(userId) {
+      try {
+        const response = await usersAPI.getUserTweets({ userId })
+        console.log(response)
+        console.log(response.data)
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法去得推文資料，請稍後再試',
+        })
+      }
+    },
+  },
+  created() {
+    const { userId } = this.$route.params
+    console.log(userId)
+    this.fetchTweets(userId)
   },
 }
 </script>
