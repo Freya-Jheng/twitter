@@ -10,16 +10,19 @@
             >tweetName</router-link
           >
           <div class="profile__tweets__tweet__wrapper__info--account">
-            <router-link to="" class="router-link">{{
+            <router-link to="" class="router-link">
               "@" + account
-            }}</router-link>
-            {{ " ・ " + createdAt }}
+            </router-link>
+            " ・ " + createdAt 
           </div>
         </div>
         <div class="profile__tweets__tweet__wrapper__response">
-          <span class="response-to">回覆 <router-link to="" class="router-link">{{
+          <span class="response-to"
+            >回覆
+            <router-link to="" class="router-link">
               "@" + account
-            }}</router-link> </span>
+            </router-link>
+          </span>
         </div>
         <router-link
           :to="{ name: 'individual-tweet' }"
@@ -31,6 +34,40 @@
     </div>
   </div>
 </template>
+
+<script>
+import {Toast} from '../utils/helpers'
+import userAPI from '../apis/users'
+
+export default {
+  name: 'SubProfileResponse',
+  data () {
+    return {
+
+    }
+  },
+  created () {
+    const {id} = this.$route.params
+    this.fetchResponses(id)
+  },
+  methods: {
+    async fetchResponses(userId) {
+      try {
+        const {data} = await userAPI.getUserResponses({userId})
+        console.log('re',data)
+         
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法成功取得回覆資料！'
+        })
+      }
+    }
+  }
+}
+</script>
+
 
 <style scoped lang="scss">
 .profile__tweets {
@@ -86,7 +123,6 @@
         }
         .router-link {
           color: var(--active-color);
-
         }
       }
       &__tweet {

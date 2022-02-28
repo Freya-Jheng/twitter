@@ -2,27 +2,12 @@ import { apiHelper } from '../utils/helpers'
 
 export default {
   get(userId) {
-    return apiHelper.get(`/user/${userId}`)
+    return apiHelper.get(`/users/${userId}`)
   },
-  // update({
-  //   userId,
-  //   name,
-  //   email,
-  //   introduction,
-  //   cover,
-  //   avatar,
-  //   password,
-  //   checkPassword,
-  // }) {
-  //   return apiHelper.put(`/users/${userId}`, {
-  //     account,
-  //     name,
-  //     email,
-  //     introduction,
-  //     cover,
-  //     avatar,
-  //     password,
-  //     checkPassword,
-  //   })
-  // },
+  getUserTweets( userId ) {
+    return apiHelper.get(`/users/${userId}/tweets`)
+  },
+  getUserResponses( userId ) {
+    return apiHelper.get(`/users/${userId}/replied_tweets`)
+  }
 }

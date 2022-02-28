@@ -12,19 +12,19 @@
           {{ currentUserData.name }}
         </span>
         <span class="profile__header__content__tweetsNum"
-          >{{ currentUserData.tweetsLength }} 推文</span
+          > {{ tweetsLength }} 推文</span
         >
       </div>
     </div>
     <div class="profile__container">
       <div class="profile__container__top">
         <img
-          :src="currentUserData.backgroundImage"
+          :src="currentUserData.cover"
           alt="top-background"
           class="profile__container__top__background"
         />
         <img
-          :src="currentUserData.image"
+          :src="currentUserData.avatar"
           alt="top-avatar"
           class="profile__container__top__avatar"
         />
@@ -73,19 +73,22 @@
                   <img src="" alt="background" class="background" />
                   <img src="./../assets/icon_uploadPhoto@2x.png" alt="" class="upload-bg-image upload">
                   <img src="./../assets/icon_delete@2x.png" alt="" class="delete-image delete">
-                  <img src="" alt="avatar" class="avatar"/>
+                  <img :src="currentUserData.avatar" alt="avatar" class="avatar"/>
                   <img src="./../assets/icon_uploadPhoto@2x.png" alt="" class="upload-avatar-image upload">  
                 </div>
                 <form class="modal-bottom">
                   <div class="form-group">
                     <label for="name-input" class="name-label">
                       <div class="title"> 名稱 </div>
-                      <input type="text" class="name-input" id="name-input" />
+                      <input 
+                      v-model="name"
+                      type="text" class="name-input" id="name-input" />
                       <span class="letters">{{"字數"}}<span class="letters-length"></span>/50</span>
                     </label>
                     <label class="introduction-label">
                       <div class="title"> 自我介紹 </div>
                       <textarea
+                        v-model="introduction"
                         name="introduction-input"
                         class="introduction-input"
                         id="description-input"
@@ -116,7 +119,7 @@
             >
           </div>
           <p class="profile__container__bottom__introduction__description">
-            {{ currentUserData.description }}
+            {{ currentUserData.introduction }}
           </p>
           <div class="profile__container__bottom__introduction__follow">
             <router-link
@@ -124,14 +127,14 @@
               class="
                 profile__container__bottom__introduction__follow__followings
               "
-              >{{ currentUserData.followingsNum }}個<span>跟隨中</span></router-link
+              >{{ currentUserData.followingsCount }}個<span>跟隨中</span></router-link
             >
             <router-link
               to="/user/followers/:id"
               class="
                 profile__container__bottom__introduction__follow__followers
               "
-              >{{ currentUserData.followersNum }}個<span>跟隨者</span></router-link
+              >{{ currentUserData.followersCount }}個<span>跟隨者</span></router-link
             >
           </div>
         </div>
@@ -147,7 +150,28 @@ export default {
       type: Object,
       required: true,
     },
+    tweetsLength: {
+      type: Number,
+      required: true,
+    }
   },
+  data () {
+    return {
+      name: '',
+      introduction: '',
+      avatar: '',
+      cover: '',
+    }
+  },
+  created() {
+    this.fetchModal()
+  },
+  methods: {
+    fetchModal () {
+      this.name = this.currentUserData.name
+      this.introduction = this.currentUserData.introduction
+    }
+  }
 };
 </script>
 

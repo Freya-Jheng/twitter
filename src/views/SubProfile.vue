@@ -2,13 +2,119 @@
   <div class="home">
     <Navbar />
     <div class="subProfile">
-      <SubProfileTop :current-user-data="user"/>
+      <SubProfileTop 
+      :current-user-data="user"
+      :tweets-length="tweetsLength" />
       <NavTab />
-      <router-view />
+      <router-view :current-user-data="user"/>
     </div>
     <PopularUsers />
   </div>
 </template>
+
+<script>
+import Navbar from "../components/Navbar.vue";
+import SubProfileTop from "../components/SubProfileTop.vue";
+import NavTab from "../components/NavTab.vue";
+import PopularUsers from "../components/PopularUsers.vue";
+import userAPI from "../apis/users";
+import { Toast } from "../utils/helpers";
+
+export default {
+  name: "SubProfile",
+  data() {
+    return {
+      user: {
+        id: 0,
+        account: "",
+        avatar: "",
+        cover: "",
+        createdAt: "",
+        followersCount: 0,
+        followingsCount: 0,
+        introduction: "",
+        name: "",
+        updatedAt: "",
+      },
+      tweets: [],
+      tweetsLength: 0,
+    };
+  },
+  components: {
+    Navbar,
+    SubProfileTop,
+    NavTab,
+    PopularUsers,
+  },
+  created() {
+    const { id } = this.$route.params;
+    this.fetchUser(id);
+    this.fetchUserTweets(id)
+    console.log('id', id)
+  },
+  methods: {
+    async fetchUser(userId) {
+      try {
+        const { data } = await userAPI.get({ userId });
+        const {
+          id,
+          account,
+          avatar,
+          cover,
+          createdAt,
+          followersCount,
+          followingsCount,
+          introduction,
+          name,
+          updatedAt,
+        } = data;
+
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+        
+        this.user = {
+          id,
+          account,
+          avatar,
+          cover,
+          createdAt,
+          followersCount,
+          followingsCount,
+          introduction,
+          name,
+          updatedAt,
+        };
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法成功取得使用者資料",
+        });
+      }
+    },
+    async fetchUserTweets (userId) {
+      try {
+        const {data} = await userAPI.getUserTweets({userId})
+        console.log('id',userId)
+        if (data.status === 'error') {
+          throw new Error (data.message)
+        }
+        console.log(data)
+        this.Tweets = data
+        this.tweetsLength = this.Tweets.length
+
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法成功取得使用者貼文！'
+        })
+      }
+    }
+  },
+};
+</script>
 
 
 <style scoped lang='scss'>
@@ -29,195 +135,3 @@
 }
 </style>
 
-<script>
-import Navbar from '../components/Navbar.vue'
-import SubProfileTop from '../components/SubProfileTop.vue'
-import {v4 as uuidv4} from 'uuid'
-import NavTab from '../components/NavTab.vue'
-import PopularUsers from '../components/PopularUsers.vue'
-
-const dummyUser = {
-  id: uuidv4(),
-  image: 'https://i.pravatar.cc',
-  name: 'John Doe',
-  account: 'heyjohn',
-  backgroundImage: '',
-  description: 'Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint',
-  followersNum: 59,
-  followingsNum: 34,
-  Tweets: [
-    {
-      id: uuidv4(),
-      createdAt: '2022/2/22 22:22',
-      content: 'hdbvwhbrljbkhbvqkbrkhbqlrbfkbwegbwkbgw dhbvlqhbwefhbwjebfkjqw whdblqwhbefhbqwekj dhbflqhwbefl dhbvlqhbwevhb.',
-      likedNumber: 96,
-      responses: [
-        {
-          id: uuidv4(),
-          userId: uuidv4(),
-          content: 'dbvqlhegflqkwl hbfvqkwbe whqbrvqlbrgr vhdvlq.',
-          createdAt: '2022/2/22 22:22',
-        },
-        {
-          id: uuidv4(),
-          userId: uuidv4(),
-          content: 'dbvqlhegflqkwl hbfvqkwbe whqbrvqlbrgr vhdvlq.',
-          createdAt: '2022/2/22 22:22',
-        },{
-          id: uuidv4(),
-          userId: uuidv4(),
-          content: 'dbvqlhegflqkwl hbfvqkwbe whqbrvqlbrgr vhdvlq.',
-          createdAt: '2022/2/22 22:22',
-        }
-      ] 
-    },
-    {
-      id: uuidv4(),
-      createdAt: '2022/2/22 22:22',
-      content: 'hdbvwhbrljbkhbvqkbrkhbqlrbfkbwegbwkbgw dhbvlqhbwefhbwjebfkjqw whdblqwhbefhbqwekj dhbflqhwbefl dhbvlqhbwevhb.',
-      likedNumber: 96,
-      responses: [
-        {
-          id: uuidv4(),
-          userId: uuidv4(),
-          content: 'dbvqlhegflqkwl hbfvqkwbe whqbrvqlbrgr vhdvlq.',
-          createdAt: '2022/2/22 22:22',
-        },
-        {
-          id: uuidv4(),
-          userId: uuidv4(),
-          content: 'dbvqlhegflqkwl hbfvqkwbe whqbrvqlbrgr vhdvlq.',
-          createdAt: '2022/2/22 22:22',
-        },{
-          id: uuidv4(),
-          userId: uuidv4(),
-          content: 'dbvqlhegflqkwl hbfvqkwbe whqbrvqlbrgr vhdvlq.',
-          createdAt: '2022/2/22 22:22',
-        }
-      ] 
-    },
-    {
-      id: uuidv4(),
-      createdAt: '2022/2/22 22:22',
-      content: 'hdbvwhbrljbkhbvqkbrkhbqlrbfkbwegbwkbgw dhbvlqhbwefhbwjebfkjqw whdblqwhbefhbqwekj dhbflqhwbefl dhbvlqhbwevhb.',
-      likedNumber: 96,
-      responses: [
-        {
-          id: uuidv4(),
-          userId: uuidv4(),
-          content: 'dbvqlhegflqkwl hbfvqkwbe whqbrvqlbrgr vhdvlq.',
-          createdAt: '2022/2/22 22:22',
-        },
-        {
-          id: uuidv4(),
-          userId: uuidv4(),
-          content: 'dbvqlhegflqkwl hbfvqkwbe whqbrvqlbrgr vhdvlq.',
-          createdAt: '2022/2/22 22:22',
-        },{
-          id: uuidv4(),
-          userId: uuidv4(),
-          content: 'dbvqlhegflqkwl hbfvqkwbe whqbrvqlbrgr vhdvlq.',
-          createdAt: '2022/2/22 22:22',
-        }
-      ] 
-    },
-    {
-      id: uuidv4(),
-      createdAt: '2022/2/22 22:22',
-      content: 'hdbvwhbrljbkhbvqkbrkhbqlrbfkbwegbwkbgw dhbvlqhbwefhbwjebfkjqw whdblqwhbefhbqwekj dhbflqhwbefl dhbvlqhbwevhb.',
-      likedNumber: 96,
-      responses: [
-        {
-          id: uuidv4(),
-          userId: uuidv4(),
-          content: 'dbvqlhegflqkwl hbfvqkwbe whqbrvqlbrgr vhdvlq.',
-          createdAt: '2022/2/22 22:22',
-        },
-        {
-          id: uuidv4(),
-          userId: uuidv4(),
-          content: 'dbvqlhegflqkwl hbfvqkwbe whqbrvqlbrgr vhdvlq.',
-          createdAt: '2022/2/22 22:22',
-        },{
-          id: uuidv4(),
-          userId: uuidv4(),
-          content: 'dbvqlhegflqkwl hbfvqkwbe whqbrvqlbrgr vhdvlq.',
-          createdAt: '2022/2/22 22:22',
-        }
-      ] 
-    },
-    {
-      id: uuidv4(),
-      createdAt: '2022/2/22 22:22',
-      content: 'hdbvwhbrljbkhbvqkbrkhbqlrbfkbwegbwkbgw dhbvlqhbwefhbwjebfkjqw whdblqwhbefhbqwekj dhbflqhwbefl dhbvlqhbwevhb.',
-      likedNumber: 96,
-      responses: [
-        {
-          id: uuidv4(),
-          userId: uuidv4(),
-          content: 'dbvqlhegflqkwl hbfvqkwbe whqbrvqlbrgr vhdvlq.',
-          createdAt: '2022/2/22 22:22',
-        },
-        {
-          id: uuidv4(),
-          userId: uuidv4(),
-          content: 'dbvqlhegflqkwl hbfvqkwbe whqbrvqlbrgr vhdvlq.',
-          createdAt: '2022/2/22 22:22',
-        },{
-          id: uuidv4(),
-          userId: uuidv4(),
-          content: 'dbvqlhegflqkwl hbfvqkwbe whqbrvqlbrgr vhdvlq.',
-          createdAt: '2022/2/22 22:22',
-        }
-      ] 
-    }
-  ]
-}
-
-export default {
-  name: 'SubProfile',
-  data () {
-    return {
-      user: {
-        id: -1,
-        image: '',
-        name: '',
-        account: '',
-        backgroundImage: '',
-        description: '',
-        followersNum: 0,
-        followingsNum: 0,
-        tweetsLength: 0,
-        Tweets: []
-      }
-    }
-  },
-  components: {
-    Navbar,
-    SubProfileTop,
-    NavTab,
-    PopularUsers,
-  },
-  created () {
-    this.fetchUser()
-  },
-  methods: {
-    fetchUser () {
-      const { id, image, name, account, backgroundImage, description, followersNum, followingsNum,Tweets } = dummyUser
-
-      this.user = {
-        id,
-        image,
-        name,
-        account,
-        backgroundImage,
-        description,
-        followersNum,
-        followingsNum,
-        Tweets,
-        tweetsLength: Tweets.length,
-      }
-    }
-  }
-}
-</script>

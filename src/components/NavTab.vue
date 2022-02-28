@@ -1,9 +1,28 @@
 <template>
   <div class="nav-tab">
     <ul class="nav nav-tabs mb-4">
-      <li v-for="tab in tabs" :key="tab.id" class="nav-item">
-        <router-link :to="tab.path" class="nav-link">
-          {{ tab.title }}
+      <li class="nav-item">
+        <router-link 
+        :to="{name: 'sub-profile-tweets', params: {
+        id: currentUser.id
+        }}" class="nav-link">
+        推文
+        </router-link>
+      </li>
+      <li class="nav-item">
+        <router-link 
+        :to="{name: 'sub-profile-responses', params: {
+        id: currentUser.id
+        }}" class="nav-link">
+        推文與回覆
+        </router-link>
+      </li>
+      <li class="nav-item">
+        <router-link 
+        :to="{name: 'sub-profile-liked', params: {
+        id: currentUser.id
+        }}" class="nav-link">
+        喜歡的內容
         </router-link>
       </li>
     </ul>
@@ -11,28 +30,34 @@
 </template>
 
 <script>
-import { v4 as uuidv4 } from 'uuid'
+// import { v4 as uuidv4 } from 'uuid'
+import { mapState } from 'vuex'
+
 
 export default {
+  name: 'SubProfileTweets',
+  computed: {
+    ...mapState(['currentUser', 'isAuthenticated']),
+  },
   data() {
     return {
-      tabs: [
-        {
-          id: uuidv4(),
-          title: '推文',
-          path: '/profile/tweets/:id',
-        },
-        {
-          id: uuidv4(),
-          title: '推文與回覆',
-          path: '/profile/responses/:id',
-        },
-        {
-          id: uuidv4(),
-          title: '喜歡的內容',
-          path: '/profile/liked/:id',
-        },
-      ],
+      // tabs: [
+      //   {
+      //     id: uuidv4(),
+      //     title: '推文',
+      //     path: '/profile/tweets/:id',
+      //   },
+      //   {
+      //     id: uuidv4(),
+      //     title: '推文與回覆',
+      //     path: '/profile/responses/:id',
+      //   },
+      //   {
+      //     id: uuidv4(),
+      //     title: '喜歡的內容',
+      //     path: '/profile/liked/:id',
+      //   },
+      // ],
     }
   },
 }
