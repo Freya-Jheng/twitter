@@ -20,14 +20,14 @@
         <li class="followers__nav-tabs__item">
           <router-link
             class="followers__nav-tabs__item--link"
-            :to="{ name: 'user-followers', params: { id: 1 } }"
+            :to="{ name: 'user-followers', params: { id: currentUser.id } }"
             >跟隨者</router-link
           >
         </li>
         <li class="followers__nav-tabs__item">
           <router-link
             class="followers__nav-tabs__item--link"
-            :to="{ name: 'user-followings', params: { id: 1 } }"
+            :to="{ name: 'user-followings', params: { id: currentUser.id } }"
             >正在跟隨</router-link
           >
         </li>
@@ -42,8 +42,8 @@
 import Navbar from './../components/Navbar'
 import PopularUsers from './../components/PopularUsers'
 import { mapState } from 'vuex'
-import { Toast } from './../utils/helpers'
-import usersAPI from './../apis/users'
+// import { Toast } from './../utils/helpers'
+// import usersAPI from './../apis/users'
 
 export default {
   name: 'UserFollowers',
@@ -55,24 +55,24 @@ export default {
     ...mapState(['currentUser', 'isAuthenticated']),
   },
   methods: {
-    async fetchTweets(userId) {
-      try {
-        const response = await usersAPI.getUserTweets({ userId })
-        console.log(response)
-        console.log(response.data)
-      } catch (error) {
-        console.log(error)
-        Toast.fire({
-          icon: 'error',
-          title: '無法去得推文資料，請稍後再試',
-        })
-      }
-    },
+    // async fetchTweets(userId) {
+    //   try {
+    //     const response = await usersAPI.getUserTweets({ userId })
+    //     console.log(response)
+    //     console.log(response.data)
+    //   } catch (error) {
+    //     console.log(error)
+    //     Toast.fire({
+    //       icon: 'error',
+    //       title: '無法去得推文資料，請稍後再試',
+    //     })
+    //   }
+    // },
   },
   created() {
-    const { userId } = this.$route.params
-    console.log(userId)
-    this.fetchTweets(userId)
+    // const { userId } = this.$route.params
+    // console.log(userId)
+    // this.fetchTweets(userId)
   },
 }
 </script>

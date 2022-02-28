@@ -7,17 +7,22 @@ export default {
   get(userId) {
     return apiHelper.get(`/user/${userId}`)
   },
-  getFollowers(userId) {
-    return apiHelper.get(`/user/${userId}/followers`)
+  getFollowers({ userId }) {
+    return apiHelper.get(`/users/${userId}/followers`)
   },
-
-  getFollowings(userId) {
-    return apiHelper.get(`/user/${userId}/followings`)
+  getFollowings({ userId }) {
+    return apiHelper.get(`/users/${userId}/followings`)
+  },
+  addFollowing({ userId }) {
+    return apiHelper.post('/followships', { id: userId })
+  },
+  deleteFollowing({ followingId }) {
+    return apiHelper.delete(`/followships/${followingId}`)
   },
   getTopUsers() {
     return apiHelper.get('/users/top')
   },
-  getUserTweets(userId) {
+  getUserTweets({ userId }) {
     return apiHelper.get(`/users/${userId}/tweets`)
   },
   update({
