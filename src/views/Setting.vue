@@ -4,12 +4,12 @@
     <div class="setting">
       <div class="setting__title">帳號設定</div>
       <form @submit.stop.prevent="handleSubmit" class="setting__form">
-        <div class="setting__form__item account">
+        <div class="setting__form__item account at">
           <label class="setting__form__item-title">帳號</label>
           <input
             type="text"
             name="account"
-            class="setting__form__item-input account"
+            class="setting__form__item-input account-input"
             id="account"
             v-model="user.account"
           />
@@ -270,7 +270,18 @@ export default {
   }
 }
 
-.name {
+.at:after {
+  position: absolute;
+  content: '@';
+  bottom: 4px;
+  left: 10px;
+}
+
+.account-input {
+  padding-left: 30px;
+}
+.name,
+.account {
   position: relative;
 }
 
