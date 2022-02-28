@@ -14,10 +14,10 @@
                 >tweetName</span
               >
               <div class="admin__tweets__list__item__info__content--account">
-                <span class="router-link">{{
+                <span class="router-link">
                   "@" + account
-                }}</span>
-                {{ " ・ " + createdAt }}
+                </span>
+                 " ・ " + createdAt 
               </div>
             </div>
             <p class="admin__tweets__list__item__info__content__tweet">

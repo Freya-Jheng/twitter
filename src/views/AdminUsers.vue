@@ -66,6 +66,43 @@
   </div>
 </template>
 
+<script>
+import {Toast} from '../utils/helpers'
+import adminAPI from '../apis/admin'
+
+export default {
+  name: 'AdminUsers',
+  data () {
+    return {
+
+    }
+  },
+  created () {
+    this.fetchUsers()
+  },
+  methods: {
+    async fetchUsers () {
+      try {
+        const {data} = await adminAPI.getUsers()
+        console.log(data)
+
+      } catch (error) {
+        console.log(error)
+        Toast.fire ({
+          icon: 'error',
+          title: '無法成功載入使用者清單！'
+        })
+      }
+    }
+
+  }
+}
+
+</script>
+
+
+
+
 <style scoped lang="scss">
 .admin__users {
   width: 100%;
