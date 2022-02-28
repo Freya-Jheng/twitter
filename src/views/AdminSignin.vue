@@ -40,7 +40,9 @@
         {{ isProcessing ? '處理中' : '登入' }}
       </button>
       <div class="sign-in__links">
-        <router-link to="/signin" class="sign-in__links--link">前台登入</router-link>
+        <router-link to="/signin" class="sign-in__links--link"
+          >前台登入</router-link
+        >
       </div>
     </form>
   </div>
@@ -48,7 +50,7 @@
 
 <script>
 import { Toast } from '../utils/helpers'
-// import authorizationAPI from '../apis/authorization'
+import adminAPI from './../apis/admin'
 
 export default {
   name: 'AdminSignIn',
@@ -72,17 +74,18 @@ export default {
 
         this.isProcessing = true
 
-        // const response = await authorizationAPI.adminSignIn({
-        //   account: this.account,
-        //   password: this.password,
-        // })
+        const response = await adminAPI.signIn({
+          account: this.account,
+          password: this.password,
+        })
 
-        // if (response.data.tokenData.status !== 'success') {
-        //   throw new Error(response.data.tokenData.message)
-        // }
+        if (response.data.status !== 'success') {
+          throw new Error(response.data.message)
+        }
 
-        // localStorage.setItem('token', response.data.tokenData.data.token)
-        this.$router.push('/admin/tweets/:id')
+        localStorage.setItem('token', response.data.data.token)
+
+        this.$router.push('/admin')
       } catch (error) {
         console.log(error)
         this.isProcessing = false

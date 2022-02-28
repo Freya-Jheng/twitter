@@ -5,7 +5,7 @@
       <div class="navbar__items">
         <div class="navbar__items-item home">
           <router-link
-            to="/admin/tweets/:id"
+            to="/admin/tweets"
             class="navbar__items-link router-like-active"
           >
             <img
@@ -22,7 +22,7 @@
           </router-link>
         </div>
         <div class="navbar__items-item profile">
-          <router-link to="/admin/users/:id" class="navbar__items-link">
+          <router-link to="/admin/users" class="navbar__items-link">
             <img
               src="./../assets/icon_user@2x.png"
               alt="navbar__items-icon"
@@ -51,17 +51,17 @@
 
 <script>
 export default {
-  name: "AdminNavbar",
+  name: 'AdminNavbar',
   data() {
-    return {};
+    return {}
   },
   methods: {
     logout() {
-      // this.$store.commit('revokeAuthentication')
-      this.$router.push("/admin/signin");
+      this.$store.commit('revokeAuthentication')
+      this.$router.push('/admin/signin')
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
