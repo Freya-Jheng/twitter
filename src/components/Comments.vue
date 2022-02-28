@@ -27,9 +27,12 @@
         </div>
         <div class="comments__container__reply-to">
           <div class="comments__container__reply-to--reply">回覆</div>
-          <div class="comments__container__reply-to--account">
+          <router-link
+            :to="{ name: 'sub-profile', params: { id: userTweet.UserId } }"
+            class="comments__container__reply-to--account"
+          >
             {{ '@' + userTweet.User.account }}
-          </div>
+          </router-link>
         </div>
         <div class="comments__container__text">{{ reply.comment }}</div>
       </div>
@@ -104,6 +107,9 @@ export default {
         font-size: 15px;
         line-height: 21.72px;
         color: var(--main-font-color);
+        &:hover {
+          text-decoration: underline;
+        }
       }
 
       &--account {

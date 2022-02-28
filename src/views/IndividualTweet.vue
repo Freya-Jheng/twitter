@@ -80,7 +80,7 @@
         </div>
       </div>
 
-      <Comments :initial-replies="replies" :user-tweet="userTweet"/>
+      <Comments :initial-replies="replies" :user-tweet="userTweet" />
     </div>
     <PopularUsers />
   </div>
@@ -122,7 +122,6 @@ export default {
           throw new Error(response.statusText)
         }
         this.userTweet = response.data
-        this.replies = response.data.Replies
         this.user = response.data.User
         this.user = {
           ...this.user,
@@ -135,23 +134,37 @@ export default {
         })
       }
     },
+
+    async fetchReplies(tweetId) {
+      try {
+        const response = await tweetsAPI.getReplies({ tweetId })
+
+        if (response.status !== 200) {
+          throw new Error(response.data.statusText)
+        }
+
+        this.replies = response.data
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法取得回覆，請稍後再試',
+        })
+      }
+    },
     async addLike(tweetId) {
       try {
         const response = await tweetsAPI.addLike({ tweetId })
 
         if (response.data.status !== 'success') {
-          throw new Error(response.data.statusText)
+          throw new Error(response.statusText)
         }
-        // this.userTweets = this.userTweets.map((tweet) => {
-        //   if (tweet.id !== tweetId) {
-        //     return tweet
-        //   } else {
-        //     return {
-        //       ...tweet,
-        //       // TODO 針對按讚後的狀態顯示和數量做設定
-        //     }
-        //   }
-        // })
+
+        this.userTweet = {
+          ...this.userTweet,
+          isLiked: true,
+          likesCount: this.userTweet.likesCount + 1,
+        }
       } catch (error) {
         console.log(error)
         Toast.fire({
@@ -167,16 +180,12 @@ export default {
         if (response.data.status !== 'success') {
           throw new Error(response.data.statusText)
         }
-        // this.userTweets = this.userTweets.map((tweet) => {
-        //   if (tweet.id !== tweetId) {
-        //     return tweet
-        //   } else {
-        //     return {
-        //       ...tweet,
-        //       // TODO 針對取消按讚後的狀態顯示和數量做設定
-        //     }
-        //   }
-        // })
+
+        this.userTweet = {
+          ...this.userTweet,
+          isLiked: false,
+          likesCount: this.userTweet.likesCount - 1,
+        }
       } catch (error) {
         console.log(error)
         Toast.fire({
@@ -189,6 +198,7 @@ export default {
   created() {
     const { tweet_id: tweetId } = this.$route.params
     this.fetchTweet(tweetId)
+    this.fetchReplies(tweetId)
   },
 }
 </script>

@@ -4,6 +4,16 @@ export default {
   get(userId) {
     return apiHelper.get(`/user/${userId}`)
   },
+  getFollowers(userId) {
+    return apiHelper.get(`/user/${userId}/followers`)
+  },
+
+  getFollowings(userId) {
+    return apiHelper.get(`/user/${userId}/followings`)
+  },
+  getTopUsers() {
+    return apiHelper.get('/users/top')
+  },
   // update({
   //   userId,
   //   name,
