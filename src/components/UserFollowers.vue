@@ -37,7 +37,6 @@
 </template>
 
 <script>
-// import { Toast } from './../utils/helpers'
 
 export default {
   name: 'UserFollowers',

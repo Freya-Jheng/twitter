@@ -87,7 +87,6 @@ export default {
           throw new Error(response.data.tokenData.message)
         }
 
-        console.log(response.data.tokenData.data.User)
         localStorage.setItem('token', response.data.tokenData.data.token)
         this.$store.commit('setCurrentUser', response.data.tokenData.data.User)
         this.$router.push('/home')

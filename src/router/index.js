@@ -5,6 +5,7 @@ import SignIn from '../views/SignIn.vue'
 import Home from '../views/Home.vue'
 import AdminSignin from '../views/AdminSignin.vue'
 import AdminHome from '../views/AdminHome.vue'
+import store from './../store'
 
 Vue.use(VueRouter)
 
@@ -111,6 +112,33 @@ const routes = [
 const router = new VueRouter({
   linkExactActiveClass: 'active',
   routes,
+})
+
+router.beforeEach(async (to, from, next) => {
+  const token = localStorage.getItem('token')
+  const tokenInStore = store.state.token
+
+  let isAuthenticated = store.state.isAuthenticated
+
+  // 如果有 token，且 token 不一樣的時候才向後端驗證
+  if (token && token !== tokenInStore) {
+    isAuthenticated = await store.dispatch('fetchCurrentUser')
+  }
+
+  const pathWithoutAuthentication = ['sign-in', 'sign-up']
+
+  // 如果驗證不通過，則轉址到 sign-in 頁面
+  if (!isAuthenticated && !pathWithoutAuthentication.includes(to.name)) {
+    next('/signin')
+    return
+  }
+
+  // 如果驗證通過，則轉址到 restaurants 頁面
+  if (isAuthenticated && pathWithoutAuthentication.includes(to.name)) {
+    next('/home')
+    return
+  }
+  next()
 })
 
 export default router
