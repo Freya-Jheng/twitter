@@ -20,25 +20,26 @@ export default {
   getUserTweets(userId) {
     return apiHelper.get(`/users/${userId}/tweets`)
   },
-  // update({
-  //   userId,
-  //   name,
-  //   email,
-  //   introduction,
-  //   cover,
-  //   avatar,
-  //   password,
-  //   checkPassword,
-  // }) {
-  //   return apiHelper.put(`/users/${userId}`, {
-  //     account,
-  //     name,
-  //     email,
-  //     introduction,
-  //     cover,
-  //     avatar,
-  //     password,
-  //     checkPassword,
-  //   })
-  // },
+  update({
+    userId,
+    account,
+    name,
+    email,
+    introduction,
+    cover,
+    avatar,
+    password,
+    checkPassword,
+  }) {
+    return apiHelper.put(`/users/${userId}`, {
+      account,
+      name,
+      email,
+      introduction,
+      cover,
+      avatar,
+      password,
+      checkPassword,
+    })
+  },
 }

@@ -164,7 +164,17 @@ export default {
           password: this.password,
           checkPassword: this.checkPassword,
         })
-        console.log(response)
+
+        if (response.status !== 200) {
+          throw new Error(response.statusText)
+        }
+
+        Toast.fire({
+          icon: 'success',
+          title: '修改個人資料成功',
+        })
+
+        this.$router.push('/home')
       } catch (error) {
         console.log(error)
         Toast.fire({
