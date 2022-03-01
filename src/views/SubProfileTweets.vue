@@ -5,39 +5,43 @@
       <router-link 
       to=""
       class="profile__tweets__tweet__avatar">
-        <img src="" alt="" class="user-avatar" />
+        <img :src="currentUserData.avatar" alt="" class="user-avatar" />
       </router-link>
       <div class="profile__tweets__tweet__wrapper">
         <div class="profile__tweets__tweet__wrapper__info">
-          <router-link to="" class="profile__tweets__tweet__wrapper__info--name"
+          <router-link 
+          :to="{name: 'sub-profile', params: {id: currentUserData.id}}"
+          class="profile__tweets__tweet__wrapper__info--name"
             >{{currentUserData.name}}</router-link
           >
           <div class="profile__tweets__tweet__wrapper__info--account">
             <router-link to="" class="router-link">
-              {{"@" + currentUserData.account}}
+              {{"@" + tweet.User.account}}
             </router-link>
            ・{{ currentUserData.createdAt | fromNow }}
           </div>
         </div>
 
         <router-link
-          to=""
+          :to="{name: 'individual-tweet', params: {tweet_id: tweet.id}}"
           class="profile__tweets__tweet__wrapper__tweet"
         >
           {{tweet.description}}</router-link
         >
 
         <div class="profile__tweets__tweet__wrapper__icons">
-          <div class="profile__tweets__tweet__wrapper__icons__comment">
+          <router-link
+           to=""
+           class="profile__tweets__tweet__wrapper__icons__comment">
             <img
               src="./../assets/icon_reply@2x.png"
               alt=""
               class="profile__tweets__tweet__wrapper__icons__comment--icon"
             />
             <span class="profile__tweets__tweet__wrapper__icons__comment--count"
-              >70</span
+              >{{tweet.repliesCount}}</span
             >
-          </div>
+          </router-link>
           <div class="profile__tweets__tweet__wrapper__icons__like">
             <img
               v-if="!tweet.isLiked"
@@ -236,6 +240,7 @@ export default {
           gap: 12px;
         }
         &__comment {
+          color: var(--main-font-color);
           &--icon {
             height: 12.34px;
             width: 12.34px;

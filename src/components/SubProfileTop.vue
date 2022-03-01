@@ -70,7 +70,7 @@
               </div>
               <div class="modal-body">
                 <div class="modal-top">
-                  <img src="" alt="background" class="background" />
+                  <img :src="currentUserData.cover" alt="background" class="background" />
                   <img src="./../assets/icon_uploadPhoto@2x.png" alt="" class="upload-bg-image upload">
                   <img src="./../assets/icon_delete@2x.png" alt="" class="delete-image delete">
                   <img :src="currentUserData.avatar" alt="avatar" class="avatar"/>

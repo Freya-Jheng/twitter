@@ -6,23 +6,27 @@
       class="profile__tweets__tweet"
     >
       <router-link to="" class="profile__tweets__tweet__avatar">
-        <img :src="tweet.User.avatar" alt="" class="user-avatar" />
+        <img :src="tweet.Tweet.User.avatar" alt="" class="user-avatar" />
       </router-link>
       <div class="profile__tweets__tweet__wrapper">
         <div class="profile__tweets__tweet__wrapper__info">
           <router-link
-            to=""
+            :to="{name: 'sub-profile', params: {id: tweet.Tweet.User.id}}"
             class="profile__tweets__tweet__wrapper__info--name"
-            >{{ tweet.User.name }}</router-link
+            >{{ tweet.Tweet.User.name }}</router-link
           >
           <div class="profile__tweets__tweet__wrapper__info--account">
-            <router-link to="" class="router-link">
-              {{ "@" + tweet.User.account }}
+            <router-link 
+            :to="{name: 'sub-profile', params: {id: tweet.Tweet.User.id}}"
+            class="router-link">
+              {{ "@" + tweet.Tweet.User.account }}
             </router-link>
-            ・ {{ tweet.Tweet.createdAt | fromNow }}
+            ・ {{ tweet.Tweet.User.createdAt | fromNow }}
           </div>
         </div>
-        <router-link to="" class="profile__tweets__tweet__wrapper__tweet">
+        <router-link 
+        :to="{name: 'individual-tweet', params: {tweet_id: tweet.TweetId}}"
+        class="profile__tweets__tweet__wrapper__tweet">
           {{ tweet.Tweet.description }}
         </router-link>
 
@@ -41,14 +45,14 @@
           <div class="profile__tweets__tweet__wrapper__icons__like">
             <img
               v-if="!tweet.isLiked"
-              @click.stop.prevent="addLike(tweet.id)"
+              @click.stop.prevent="addLike(tweet.Tweet.id)"
               src="./../assets/icon_like@2x.png"
               alt=""
               class="profile__tweets__tweet__wrapper__icons__like--icon"
             />
             <img
               v-if="tweet.isLiked"
-              @click.stop.prevent="deleteLike(tweet.id)"
+              @click.stop.prevent="deleteLike(tweet.Tweet.id)"
               src="./../assets/icon_like_fill@2x.png"
               alt=""
               class="profile__tweets__tweet__wrapper__icons__like--icon"
@@ -102,11 +106,11 @@ export default {
     async addLike (tweetId) {
       try {
         const {data} = await tweetsAPI.addLike({ tweetId })
-
+        console.log(tweetId)
         if (data.status !== 'success') {
           throw new Error (data.message)
         }
-
+        
         this.likedTweets = this.likedTweets.map ((tweet) => {
           if (tweet.id !== tweetId) {
             return tweet
@@ -115,7 +119,7 @@ export default {
             return {
               ...tweet,
               isLiked: true,
-              // likesCount: tweet.Tweet.likesCount + 1,
+              likesCount: tweet.Tweet.likesCount + 1,
             }
           }
         })

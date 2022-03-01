@@ -4,16 +4,19 @@
     :key="tweet.id"
     class="profile__tweets__tweet">
       <router-link to="" class="profile__tweets__tweet__avatar">
-        <img :src="tweet.Tweet.User.avatar" alt="" class="user-avatar" />
+        <img :src="currentUser.avatar" alt="" class="user-avatar" />
       </router-link>
       <div class="profile__tweets__tweet__wrapper">
         <div class="profile__tweets__tweet__wrapper__info">
-          <router-link to="" class="profile__tweets__tweet__wrapper__info--name"
-            >{{tweet.Tweet.User.name}}</router-link
+          <router-link 
+          :to="{name: 'sub-profile', params: {id: tweet.Tweet.User.id}}" class="profile__tweets__tweet__wrapper__info--name"
+            >{{currentUser.name}}</router-link
           >
           <div class="profile__tweets__tweet__wrapper__info--account">
-            <router-link to="" class="router-link">
-              {{"@" + tweet.Tweet.User.account}}
+            <router-link 
+              :to="{name: 'sub-profile', params: { id: tweet.Tweet.User.id }}" 
+              class="router-link">
+              {{"@" + currentUser.account}}
             </router-link>
              ・ {{tweet.Tweet.createdAt | fromNow}} 
           </div>
@@ -22,15 +25,15 @@
           <span class="response-to"
             >回覆
             <router-link to="" class="router-link">
-              "@" + account
+              {{"@" + tweet.Tweet.User.account}}
             </router-link>
           </span>
         </div>
         <router-link
-          to=""
+          :to="{name: 'individual-tweet', params: {tweet_id: tweet.id}}"
           class="profile__tweets__tweet__wrapper__tweet"
         >
-          {{tweet.comment}}</router-link
+          {{tweet.Tweet.description}}</router-link
         >
       </div>
     </div>
@@ -47,6 +50,7 @@ export default {
   data () {
     return {
       TweetsArray: [],
+      currentUser: {},
     }
   },
   mixins: [
@@ -55,6 +59,7 @@ export default {
   created () {
     const {id} = this.$route.params
     this.fetchResponses(id)
+    this.fetchCurrentUser(id)
   },
   methods: {
     async fetchResponses(userId) {
@@ -73,6 +78,22 @@ export default {
         Toast.fire({
           icon: 'error',
           title: '無法成功取得回覆資料！'
+        })
+      }
+    },
+    async fetchCurrentUser(userId) {
+      try {
+        const { data } = await userAPI.get({userId})
+        if (data.status !== 'success') {
+          console.log(data.message)
+        }
+
+        this.currentUser = data
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法成功取得當前使用者！'
         })
       }
     }

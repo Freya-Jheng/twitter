@@ -81,7 +81,7 @@ const routes = [
     ],
   },
   {
-    path: '/profile/tweets/:id',
+    path: '/profile/tweets/:id/',
     name: 'sub-profile',
     component: () => import('../views/SubProfile.vue'),
     children: [

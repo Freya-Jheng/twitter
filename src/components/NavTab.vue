@@ -1,7 +1,7 @@
 <template>
   <div class="nav-tab">
     <ul class="nav nav-tabs mb-4">
-      <li class="nav-item">
+      <li class="nav-item active">
         <router-link 
         :to="{name: 'sub-profile-tweets', params: {
         id: currentUser.id
@@ -38,10 +38,6 @@ export default {
   computed: {
     ...mapState(['currentUser', 'isAuthenticated']),
   },
-  data() {
-    return {
-    }
-  },
 }
 </script>
 
@@ -60,12 +56,12 @@ export default {
       text-align: center;
       margin-right: 2px;
       .nav-link {
-        color: var(--smaller-font-color);
+        color: var(--smaller-font-cor);
         font-size: 15px;
         font-weight: 700;
+        border: unset;
         &:hover,
         &:focus {
-          border: unset;
           border-bottom: 2px solid var(--active-color);
           color: var(--active-color);
         }
