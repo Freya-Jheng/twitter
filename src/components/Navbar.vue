@@ -1,6 +1,8 @@
 <template>
   <nav class="navbar">
-    <img src="./../assets/logo@2x.png" alt="logo" class="logo" />
+    <router-link to="/home">
+      <img src="./../assets/logo@2x.png" alt="logo" class="logo" />
+    </router-link>
     <div class="navbar__items">
       <div class="navbar__items-item home">
         <router-link to="/home" class="navbar__items-link">
