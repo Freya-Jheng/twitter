@@ -96,7 +96,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['currentUser', 'isAuthenticated']),
+    ...mapState(['currentUser']),
     remaining() {
       return 50 - this.user.name.length ? 50 - this.user.name.length : 0
     },
