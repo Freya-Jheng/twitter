@@ -123,14 +123,14 @@
           </p>
           <div class="profile__container__bottom__introduction__follow">
             <router-link
-              to="/user/:id/followings/"
+              :to="{name: 'user-followings', params: {id: currentUser.id}}"
               class="
                 profile__container__bottom__introduction__follow__followings
               "
               >{{ user.followingsCount }}個<span>跟隨中</span></router-link
             >
             <router-link
-              to="/user/:id/followers/"
+               :to="{name: 'user-followers', params: {id: currentUser.id}}"
               class="
                 profile__container__bottom__introduction__follow__followers
               "
