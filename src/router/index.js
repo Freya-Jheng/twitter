@@ -132,7 +132,7 @@ router.beforeEach(async (to, from, next) => {
     return
   }
 
-  // 如果驗證通過，則轉址到 restaurants 頁面
+  // 如果驗證通過，則轉址到 home 頁面
   if (isAuthenticated && pathWithoutAuthentication.includes(to.name)) {
     next('/home')
     return

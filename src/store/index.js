@@ -15,17 +15,12 @@ export default new Vuex.Store({
       avatar: '',
       introduction: '',
       cover: '',
-      createdAt: '',
-      updatedAt: '',
-      image: '',
-      isAdmin: false,
     },
     isAuthenticated: false,
     token: '',
   },
   mutations: {
     setCurrentUser(state, currentUser) {
-      console.log('this',currentUser)
       state.currentUser = {
         ...state.currentUser,
         ...currentUser,
@@ -43,20 +38,23 @@ export default new Vuex.Store({
   actions: {
     async fetchCurrentUser({ commit }) {
       try {
-        const { data } = await usersAPI.getCurrentUser()
-        const { id, account, name, email, isAdmin } = data
+        const response = await usersAPI.getCurrentUser()
+
+        const user = response.data.data.User
+
         commit('setCurrentUser', {
-          id,
-          account,
-          name,
-          email,
-          isAdmin,
+          id: user.id,
+          account: user.account,
+          name: user.name,
+          email: user.email,
+          role: user.role,
+          avatar: user.avatar,
+          introduction: user.introduction,
+          cover: user.cover,
         })
-        return true
       } catch (error) {
         console.error(error.message)
         commit('revokeAuthentication')
-        return false
       }
     },
   },

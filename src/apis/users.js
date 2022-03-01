@@ -2,7 +2,7 @@ import { apiHelper } from '../utils/helpers'
 
 export default {
   getCurrentUser() {
-    return apiHelper.get('/user/get_current_user')
+    return apiHelper.get('/users/get_current_user')
   },
   getFollowers({ userId }) {
     return apiHelper.get(`/users/${userId}/followers`)
