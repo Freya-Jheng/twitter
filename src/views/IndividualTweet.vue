@@ -62,6 +62,9 @@
             src="./../assets/icon_reply@2x.png"
             alt=""
             class="tweets__container__icons__comment"
+            @click="handleClick(userTweet)"
+            data-toggle="modal"
+            :data-target="'#' + 'tweet-' + userTweet.id"
           />
           <img
             v-if="!userTweet.isLiked"
@@ -77,6 +80,97 @@
             class="tweets__container__icons__like"
             @click.stop.prevent="deleteLike(userTweet.id)"
           />
+        </div>
+      </div>
+
+      <!-- Modal -->
+      <div
+        class="modal fade"
+        :id="'tweet-' + userTweet.id"
+        tabindex="-1"
+        aria-labelledby="replyModal"
+        aria-hidden="true"
+      >
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-label="Close"
+                @click="handleCancel"
+              >
+                <span aria-hidden="true" class="close--text">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="modal-body__tweet">
+                <div class="modal-body__tweet__user-avatar">
+                  <img
+                    v-if="userTweet.User.avatar"
+                    :src="userTweet.User.avatar"
+                    alt=""
+                    class="avatar"
+                  />
+                </div>
+                <div class="modal-body__tweet__content">
+                  <div class="modal-body__tweet__content__info">
+                    <div class="modal-body__tweet__content__info--name">
+                      {{ userTweet.User.name }}
+                    </div>
+                    <div class="modal-body__tweet__content__info--account">
+                      {{ '@' + userTweet.User.account }}
+                    </div>
+                    <div class="modal-body__tweet__content__info--time">
+                      {{ userTweet.createdAt | fromNow }}
+                    </div>
+                  </div>
+                  <div class="modal-body__tweet__content__text">
+                    {{ userTweet.description }}
+                  </div>
+                  <div class="modal-body__tweet__content__reply-to">
+                    <div class="modal-body__tweet__content__reply-to--reply">
+                      回覆給
+                    </div>
+                    <div class="modal-body__tweet__content__reply-to--account">
+                      {{ '@' + userTweet.User.account }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-body__reply">
+                <div class="modal-body__reply__user-avatar">
+                  <img
+                    v-if="currentUser.avatar"
+                    :src="currentUser.avatar"
+                    alt=""
+                    class="avatar"
+                  />
+                </div>
+                <form action="" class="reply">
+                  <textarea
+                    placeholder="推你的回覆"
+                    name="reply-textarea"
+                    id="reply-textarea"
+                    cols="50"
+                    rows="4"
+                    v-model="reply"
+                  ></textarea>
+                </form>
+              </div>
+            </div>
+            <div class="modal-footer" :class="{ error: reply.length > 140 }">
+              <button
+                class="btn-modal button"
+                data-dismiss="modal"
+                @click="handleSubmit(userTweet.id)"
+                :disabled="reply.length > 140 || reply.length === 0"
+              >
+                回覆
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -108,6 +202,8 @@ export default {
       userTweet: {},
       user: {},
       replies: [],
+      tweetModal: [],
+      reply: '',
     }
   },
   computed: {
@@ -191,6 +287,34 @@ export default {
         Toast.fire({
           icon: 'error',
           title: '無法取消按讚推文，請稍後再試',
+        })
+      }
+    },
+    handleClick(userTweet) {
+      this.tweetModal = userTweet
+    },
+    handleCancel() {
+      this.reply = ''
+    },
+    async handleSubmit(tweetId) {
+      try {
+        if (!this.reply) {
+          return false
+        }
+
+        const { data } = await tweetsAPI.reply({
+          tweetId,
+          comment: this.reply,
+        })
+
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法新增回覆，請稍後再試',
         })
       }
     },
@@ -353,6 +477,168 @@ export default {
         }
       }
     }
+  }
+}
+
+.modal-content {
+  width: 600px;
+  min-height: 400px;
+  border-radius: 14px;
+  background: var(--background);
+}
+
+.modal-header {
+  position: relative;
+  height: 54px;
+  border-bottom: 1px solid var(--border-and-divider);
+}
+
+.close {
+  position: absolute;
+  left: 0;
+  top: 15px;
+  width: 15px;
+  height: 15px;
+  color: var(--cancel-button);
+  &--text {
+    width: 15px;
+    height: 15px;
+  }
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  &__tweet {
+    display: flex;
+    flex-direction: row;
+    &__user-avatar {
+      position: relative;
+      padding-top: 3px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--user-avatar);
+      &::after {
+        content: '';
+        position: absolute;
+        top: 210%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 2px;
+        height: 80px;
+        background: var(--reply-connect-line);
+      }
+    }
+
+    &__content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      margin-left: 10px;
+      min-height: 150px;
+
+      &__info {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        &--name {
+          font-weight: 700;
+          font-size: 15px;
+          line-height: 21.72px;
+          color: var(--main-font-color);
+        }
+
+        &--account {
+          margin-left: 5px;
+          font-weight: 500;
+          font-size: 15px;
+          line-height: 21.72px;
+          color: var(--smaller-font-color);
+        }
+
+        &--time {
+          margin-left: 5px;
+          font-weight: 500;
+          font-size: 15px;
+          line-height: 21.72px;
+          color: var(--smaller-font-color);
+        }
+      }
+
+      &__text {
+        margin-top: 5px;
+        font-weight: 400;
+        font-size: 15px;
+        line-height: 22px;
+        color: var(--main-font-color);
+      }
+      &__reply-to {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        margin-top: 19px;
+        &--reply {
+          font-weight: 500;
+          font-size: 13px;
+          line-height: 13px;
+          color: var(--smaller-font-color);
+        }
+
+        &--account {
+          margin-left: 5px;
+          font-weight: 500;
+          font-size: 13px;
+          line-height: 13px;
+          color: var(--mentioned-account);
+        }
+      }
+    }
+  }
+
+  &__reply {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+    &__user-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--user-avatar);
+    }
+    textarea {
+      flex: 1;
+      border: none;
+      resize: none;
+      margin-left: 10px;
+      margin-top: 10px;
+      width: 100%;
+    }
+  }
+}
+
+.modal-footer {
+  border-top: none;
+  .btn-modal {
+    height: 38px;
+    width: 66px;
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 18px;
+  }
+}
+
+.error {
+  position: relative;
+  &::after {
+    content: '字數不可超過 140 字 ';
+    position: absolute;
+    bottom: 27px;
+    right: 101px;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 15px;
+    color: var(--error-color);
   }
 }
 </style>

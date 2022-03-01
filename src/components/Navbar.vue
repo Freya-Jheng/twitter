@@ -1,6 +1,8 @@
 <template>
   <nav class="navbar">
-    <img src="./../assets/logo@2x.png" alt="logo" class="logo" />
+    <router-link to="/home">
+      <img src="./../assets/logo@2x.png" alt="logo" class="logo" />
+    </router-link>
     <div class="navbar__items">
       <div class="navbar__items-item home">
         <router-link to="/home" class="navbar__items-link">
@@ -19,7 +21,7 @@
       </div>
       <div class="navbar__items-item profile">
         <router-link
-          :to=" { name: 'sub-profile', params: { id: currentUser.id }}"
+          :to="{ name: 'sub-profile', params: { id: currentUser.id } }"
           class="navbar__items-link"
         >
           <img
@@ -37,7 +39,7 @@
       </div>
       <div class="navbar__items-item setting">
         <router-link
-          :to="{ name:'setting', params: { id: currentUser.id }}"
+          :to="{ name: 'setting', params: { id: currentUser.id } }"
           class="navbar__items-link"
         >
           <img
@@ -135,16 +137,10 @@ export default {
   computed: {
     ...mapState(['currentUser', 'isAuthenticated']),
   },
-  created () {
-    this.fetch()
-  },
   methods: {
     logout() {
       this.$store.commit('revokeAuthentication')
       this.$router.push('/signin')
-    },
-    fetch () {
-      console.log('current',this.currentUser.id)
     },
     async handleSubmit() {
       try {
