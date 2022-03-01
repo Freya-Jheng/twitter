@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import usersAPI from './../apis/users'
 
 Vue.use(Vuex)
 
@@ -40,25 +41,25 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    // TODO 等後端 API 資料再串接
-    // async fetchCurrentUser({ commit }) {
-    //   try {
-    //     const { data } = await usersAPI.getCurrentUser()
-    //     const { id, email, name, image, isAdmin } = data
-    //     commit('setCurrentUser', {
-    //       id,
-    //       email,
-    //       name,
-    //       image,
-    //       isAdmin,
-    //     })
-    //     return true
-    //   } catch (error) {
-    //     console.error(error.message)
-    //     commit('revokeAuthentication')
-    //     return false
-    //   }
-    // },
+    async fetchCurrentUser({ commit }) {
+      try {
+        const { data } = await usersAPI.getCurrentUser()
+        const { id, account, name, email, isAdmin } = data
+
+        commit('setCurrentUser', {
+          id,
+          account,
+          name,
+          email,
+          isAdmin,
+        })
+        return true
+      } catch (error) {
+        console.error(error.message)
+        commit('revokeAuthentication')
+        return false
+      }
+    },
   },
   modules: {},
 })

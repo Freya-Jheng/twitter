@@ -74,9 +74,6 @@ export default {
   created() {
     this.fetchTweets()
   },
-  updated() {
-    this.fetchTweets()
-  },
 }
 </script>
 

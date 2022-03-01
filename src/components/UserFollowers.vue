@@ -1,35 +1,53 @@
 <template>
   <div class="user-followers">
-    <div class="user-followers-card">
+    <div
+      v-for="follower in followers"
+      :key="follower.followerId"
+      class="user-followers-card"
+    >
       <router-link
-        :to="{ name: 'sub-profile', params: { id: 1 } }"
+        :to="{ name: 'sub-profile', params: { id: follower.id } }"
         class="user-followers-card__avatar"
       >
-        <img src="" alt="" class="user-followers-card__avatar--img" />
+        <img
+          :src="follower.avatar"
+          alt=""
+          class="user-followers-card__avatar--img"
+        />
       </router-link>
       <div class="user-followers-card__container">
         <div class="user-followers-card__container__info">
           <div class="user-followers-card__container__info__user">
             <router-link
-              :to="{ name: 'sub-profile', params: { id: 1 } }"
+              :to="{ name: 'sub-profile', params: { id: follower.id } }"
               class="user-followers-card__container__info__user--name"
             >
-              123
+              {{ follower.name }}
             </router-link>
             <router-link
-              :to="{ name: 'sub-profile', params: { id: 1 } }"
+              :to="{ name: 'sub-profile', params: { id: follower.id } }"
               class="user-followers-card__container__info__user--account"
             >
-              ashley
+              {{ '@' + follower.account }}
             </router-link>
           </div>
-          <button class="user-followers-card__container__info__button button">
+          <button
+            v-if="follower.isFollowing"
+            class="user-followers-card__container__info__button button button-followed"
+            @click.stop.prevent="deleteFollowing(follower.followerId)"
+          >
+            正在跟隨
+          </button>
+          <button
+            v-if="!follower.isFollowing"
+            class="user-followers-card__container__info__button button button-not-followed"
+            @click.stop.prevent="addFollowing(follower.id)"
+          >
             跟隨
           </button>
         </div>
         <div class="user-followers-card__container--text">
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-          industry.
+          {{ follower.introduction ? follower.introduction : '' }}
         </div>
       </div>
     </div>
@@ -37,10 +55,92 @@
 </template>
 
 <script>
-// import { Toast } from './../utils/helpers'
+import usersAPI from './../apis/users'
+import { Toast } from './../utils/helpers'
 
 export default {
   name: 'UserFollowers',
+  data() {
+    return {
+      followers: [],
+    }
+  },
+  methods: {
+    async fetchFollowers(userId) {
+      try {
+        const response = await usersAPI.getFollowers({ userId })
+
+        if (response.status !== 200) {
+          throw new Error(response.statusText)
+        }
+
+        this.followers = response.data
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法取得追蹤資料，請稍後再試',
+        })
+      }
+    },
+    async addFollowing(userId) {
+      try {
+        const { data } = await usersAPI.addFollowing({ userId })
+
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+
+        this.followers = this.followers.map((follower) => {
+          if (follower.id != userId) {
+            return follower
+          } else {
+            return {
+              ...follower,
+              isFollowing: true,
+            }
+          }
+        })
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法追蹤使用者，請稍後再試',
+        })
+      }
+    },
+
+    async deleteFollowing(followerId) {
+      try {
+        const { data } = await usersAPI.deleteFollowing({ followerId })
+
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+
+        this.followers = this.followers.map((follower) => {
+          if (follower.followerId != followerId) {
+            return follower
+          } else {
+            return {
+              ...follower,
+              isFollowing: false,
+            }
+          }
+        })
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法取消追蹤使用者，請稍後再試',
+        })
+      }
+    },
+  },
+  created() {
+    const { id: userId } = this.$route.params
+    this.fetchFollowers(userId)
+  },
 }
 </script>
 
@@ -79,6 +179,9 @@ export default {
           font-size: 15px;
           line-height: 15px;
           color: var(--main-font-color);
+          &:hover {
+            text-decoration: underline;
+          }
         }
 
         &--account {
@@ -88,17 +191,6 @@ export default {
           line-height: 15px;
           color: var(--smaller-font-color);
         }
-      }
-
-      &__button {
-        background: transparent;
-        border: 1px solid var(--button-background);
-        color: var(--button-background);
-        width: 60px;
-        height: 25px;
-        font-weight: 700;
-        font-size: 15px;
-        line-height: 15px;
       }
     }
 
@@ -110,5 +202,24 @@ export default {
       color: var(--main-font-color);
     }
   }
+}
+
+.button-followed {
+  width: 90px;
+  height: 25px;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 15px;
+}
+
+.button-not-followed {
+  background: transparent;
+  border: 1px solid var(--button-background);
+  color: var(--button-background);
+  width: 60px;
+  height: 25px;
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 15px;
 }
 </style>

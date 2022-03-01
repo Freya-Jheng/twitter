@@ -79,7 +79,10 @@
           class="sing-up__form-label-group__password-check--input input"
         />
       </div>
-      <button class="sign-up__button button" :disabled="isProcessing">
+      <button
+        class="sign-up__button button"
+        :disabled="isProcessing || name.length > 50"
+      >
         {{ isProcessing ? '處理中' : '註冊' }}
       </button>
       <div class="sign-up__links">

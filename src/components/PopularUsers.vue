@@ -2,13 +2,17 @@
   <div class="popular-users">
     <div class="popular-users__title">Popular</div>
     <div class="popular-users__list">
-      <div class="popular-users__list__user-card">
+      <div
+        v-for="user in popularUsers"
+        :key="user.id"
+        class="popular-users__list__user-card"
+      >
         <router-link
-          :to="{ name: 'sub-profile', params: { id: 1 } }"
+          :to="{ name: 'sub-profile', params: { id: user.id } }"
           class="popular-users__list__user-card__avatar"
         >
           <img
-            src=""
+            :src="user.avatar"
             alt=""
             class="popular-users__list__user-card__avatar-img"
           />
@@ -16,84 +20,27 @@
         <div class="popular-users__list__user-card__wrapper">
           <div class="popular-users__list__user-card__wrapper__info">
             <router-link
-              :to="{ name: 'sub-profile', params: { id: 1 } }"
+              :to="{ name: 'sub-profile', params: { id: user.id } }"
               class="popular-users__list__user-card__wrapper__info--name"
-              >apple</router-link
+              >{{ user.name }}</router-link
             >
             <router-link
-              :to="{ name: 'sub-profile', params: { id: 1 } }"
+              :to="{ name: 'sub-profile', params: { id: user.id } }"
               class="popular-users__list__user-card__wrapper__info--account"
-              >apple</router-link
+              >{{ '@' + user.account }}</router-link
             >
           </div>
           <button
-            class="popular-users__list__user-card__wrapper__button button following"
+            v-if="user.isFollowing"
+            class="popular-users__list__user-card__wrapper__button button following button"
+            @click.stop.prevent="deleteFollowing(user.id)"
           >
             正在跟隨
           </button>
-        </div>
-      </div>
-
-      <!-- example 2 -->
-      <div class="popular-users__list__user-card">
-        <router-link
-          :to="{ name: 'sub-profile', params: { id: 1 } }"
-          class="popular-users__list__user-card__avatar"
-        >
-          <img
-            src=""
-            alt=""
-            class="popular-users__list__user-card__avatar-img"
-          />
-        </router-link>
-        <div class="popular-users__list__user-card__wrapper">
-          <div class="popular-users__list__user-card__wrapper__info">
-            <router-link
-              :to="{ name: 'sub-profile', params: { id: 1 } }"
-              class="popular-users__list__user-card__wrapper__info--name"
-              >apple</router-link
-            >
-            <router-link
-              :to="{ name: 'sub-profile', params: { id: 1 } }"
-              class="popular-users__list__user-card__wrapper__info--account"
-              >apple</router-link
-            >
-          </div>
           <button
-            class="popular-users__list__user-card__wrapper__button button follow"
-          >
-            跟隨
-          </button>
-        </div>
-      </div>
-
-      <!-- example 3 -->
-      <div class="popular-users__list__user-card">
-        <router-link
-          :to="{ name: 'sub-profile', params: { id: 1 } }"
-          class="popular-users__list__user-card__avatar"
-        >
-          <img
-            src=""
-            alt=""
-            class="popular-users__list__user-card__avatar-img"
-          />
-        </router-link>
-        <div class="popular-users__list__user-card__wrapper">
-          <div class="popular-users__list__user-card__wrapper__info">
-            <router-link
-              :to="{ name: 'sub-profile', params: { id: 1 } }"
-              class="popular-users__list__user-card__wrapper__info--name"
-              >apple</router-link
-            >
-            <router-link
-              :to="{ name: 'sub-profile', params: { id: 1 } }"
-              class="popular-users__list__user-card__wrapper__info--account"
-              >apple</router-link
-            >
-          </div>
-          <button
-            class="popular-users__list__user-card__wrapper__button button follow"
+            v-if="!user.isFollowing"
+            class="popular-users__list__user-card__wrapper__button button follow button-not-followed"
+            @click.stop.prevent="addFollowing(user.id)"
           >
             跟隨
           </button>
@@ -104,8 +51,88 @@
 </template>
 
 <script>
+import usersAPI from './../apis/users'
+import { Toast } from './../utils/helpers'
+
 export default {
   name: 'TopUsers',
+  data() {
+    return {
+      popularUsers: [],
+    }
+  },
+  methods: {
+    async getPopularUsers() {
+      try {
+        const response = await usersAPI.getTopUsers()
+
+        if (response.status !== 200) {
+          throw new Error(response.statusText)
+        }
+
+        this.popularUsers = response.data
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法取得 Popular 資料，請稍後再試',
+        })
+      }
+    },
+    async addFollowing(userId) {
+      try {
+        const { data } = await usersAPI.addFollowing({ userId })
+
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+
+        this.popularUsers = this.popularUsers.map((user) => {
+          if (user.id != userId) {
+            return user
+          } else {
+            return {
+              ...user,
+              isFollowing: true,
+            }
+          }
+        })
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法追蹤使用者，請稍後再試',
+        })
+      }
+    },
+
+    async deleteFollowing(userId) {
+      try {
+        const { data } = await usersAPI.deleteFollowing({ userId })
+
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+
+        this.popularUsers = this.popularUsers.map((user) => {
+          if (user.userId != userId) {
+            return user
+          } else {
+            return {
+              ...user,
+              isFollowing: false,
+            }
+          }
+        })
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法取消追蹤使用者，請稍後再試',
+        })
+      }
+    },
+  },
 }
 </script>
 

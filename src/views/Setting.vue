@@ -4,12 +4,12 @@
     <div class="setting">
       <div class="setting__title">帳號設定</div>
       <form @submit.stop.prevent="handleSubmit" class="setting__form">
-        <div class="setting__form__item account">
+        <div class="setting__form__item account at">
           <label class="setting__form__item-title">帳號</label>
           <input
             type="text"
             name="account"
-            class="setting__form__item-input account"
+            class="setting__form__item-input account-input"
             id="account"
             v-model="user.account"
           />
@@ -64,7 +64,7 @@
           />
         </div>
         <button
-          :disabled="isProcessing"
+          :disabled="isProcessing || user.name.length > 50"
           type="submit"
           class="setting__save btn"
         >
@@ -164,7 +164,17 @@ export default {
           password: this.password,
           checkPassword: this.checkPassword,
         })
-        console.log(response)
+
+        if (response.status !== 200) {
+          throw new Error(response.statusText)
+        }
+
+        Toast.fire({
+          icon: 'success',
+          title: '修改個人資料成功',
+        })
+
+        this.$router.push('/home')
       } catch (error) {
         console.log(error)
         Toast.fire({
@@ -260,7 +270,18 @@ export default {
   }
 }
 
-.name {
+.at:after {
+  position: absolute;
+  content: '@';
+  bottom: 4px;
+  left: 10px;
+}
+
+.account-input {
+  padding-left: 30px;
+}
+.name,
+.account {
   position: relative;
 }
 
@@ -278,7 +299,7 @@ export default {
   &::after {
     content: '字數超出上限';
     position: absolute;
-    top: 60px;
+    top: 55px;
     left: 0px;
     font-weight: 500;
     font-size: 15px;
