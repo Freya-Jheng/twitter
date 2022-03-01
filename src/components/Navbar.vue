@@ -19,7 +19,7 @@
       </div>
       <div class="navbar__items-item profile">
         <router-link
-          :to=" { name: 'sub-profile', params: { id: currentUser.id }}"
+          :to="{ name: 'sub-profile', params: { id: currentUser.id } }"
           class="navbar__items-link"
         >
           <img
@@ -37,7 +37,7 @@
       </div>
       <div class="navbar__items-item setting">
         <router-link
-          :to="{ name:'setting', params: { id: currentUser.id }}"
+          :to="{ name: 'setting', params: { id: currentUser.id } }"
           class="navbar__items-link"
         >
           <img
@@ -135,16 +135,10 @@ export default {
   computed: {
     ...mapState(['currentUser', 'isAuthenticated']),
   },
-  created () {
-    this.fetch()
-  },
   methods: {
     logout() {
       this.$store.commit('revokeAuthentication')
       this.$router.push('/signin')
-    },
-    fetch () {
-      console.log('current',this.currentUser.id)
     },
     async handleSubmit() {
       try {
