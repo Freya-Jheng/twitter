@@ -123,14 +123,14 @@
           </p>
           <div class="profile__container__bottom__introduction__follow">
             <router-link
-              to="/user/followings/:id"
+              to="/user/:id/followings/"
               class="
                 profile__container__bottom__introduction__follow__followings
               "
               >{{ currentUserData.followingsCount }}個<span>跟隨中</span></router-link
             >
             <router-link
-              to="/user/followers/:id"
+              to="/user/:id/followers/"
               class="
                 profile__container__bottom__introduction__follow__followers
               "

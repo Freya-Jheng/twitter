@@ -30,7 +30,6 @@
 </template>
 
 <script>
-// import { v4 as uuidv4 } from 'uuid'
 import { mapState } from 'vuex'
 
 
@@ -41,23 +40,6 @@ export default {
   },
   data() {
     return {
-      // tabs: [
-      //   {
-      //     id: uuidv4(),
-      //     title: '推文',
-      //     path: '/profile/tweets/:id',
-      //   },
-      //   {
-      //     id: uuidv4(),
-      //     title: '推文與回覆',
-      //     path: '/profile/responses/:id',
-      //   },
-      //   {
-      //     id: uuidv4(),
-      //     title: '喜歡的內容',
-      //     path: '/profile/liked/:id',
-      //   },
-      // ],
     }
   },
 }

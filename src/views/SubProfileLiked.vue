@@ -1,30 +1,30 @@
 <template>
   <div class="profile__tweets">
-    <div v-for="tweet in likedArray"
-    :key="tweet.id" class="profile__tweets__tweet">
-     
+    <div
+      v-for="tweet in likedTweets"
+      :key="tweet.id"
+      class="profile__tweets__tweet"
+    >
       <router-link to="" class="profile__tweets__tweet__avatar">
         <img :src="tweet.User.avatar" alt="" class="user-avatar" />
       </router-link>
       <div class="profile__tweets__tweet__wrapper">
         <div class="profile__tweets__tweet__wrapper__info">
-          <router-link to="" class="profile__tweets__tweet__wrapper__info--name"
-            >tweetName</router-link
+          <router-link
+            to=""
+            class="profile__tweets__tweet__wrapper__info--name"
+            >{{ tweet.User.name }}</router-link
           >
           <div class="profile__tweets__tweet__wrapper__info--account">
-            <router-link to="" class="router-link">{{
-              "@" + account
-            }}</router-link>
-            {{ " ・ " + createdAt }}
+            <router-link to="" class="router-link">
+              {{ "@" + tweet.User.account }}
+            </router-link>
+            ・ {{ tweet.Tweet.createdAt | fromNow }}
           </div>
         </div>
-
-        <router-link
-          :to="{ name: 'individual-tweet' }"
-          class="profile__tweets__tweet__wrapper__tweet"
-        >
-          hdbvkahsbdkahbdhvb,hsbdvhs,hdv,hVhdhdbv,</router-link
-        >
+        <router-link to="" class="profile__tweets__tweet__wrapper__tweet">
+          {{ tweet.Tweet.description }}
+        </router-link>
 
         <div class="profile__tweets__tweet__wrapper__icons">
           <div class="profile__tweets__tweet__wrapper__icons__comment">
@@ -33,24 +33,29 @@
               alt=""
               class="profile__tweets__tweet__wrapper__icons__comment--icon"
             />
-            <span class="profile__tweets__tweet__wrapper__icons__comment--count"
-              >70</span
+            <span
+              class="profile__tweets__tweet__wrapper__icons__comment--count"
+              >{{ tweet.Tweet.repliesCount }}</span
             >
           </div>
           <div class="profile__tweets__tweet__wrapper__icons__like">
             <img
+              v-if="!tweet.isLiked"
+              @click.stop.prevent="addLike(tweet.id)"
               src="./../assets/icon_like@2x.png"
               alt=""
               class="profile__tweets__tweet__wrapper__icons__like--icon"
             />
             <img
+              v-if="tweet.isLiked"
+              @click.stop.prevent="deleteLike(tweet.id)"
               src="./../assets/icon_like_fill@2x.png"
               alt=""
               class="profile__tweets__tweet__wrapper__icons__like--icon"
             />
-            <span class="profile__tweets__tweet__wrapper__icons__like--count"
-              >60</span
-            >
+            <span class="profile__tweets__tweet__wrapper__icons__like--count">{{
+              tweet.Tweet.likesCount
+            }}</span>
           </div>
         </div>
       </div>
@@ -59,43 +64,99 @@
 </template>
 
 <script>
-import {Toast} from '../utils/helpers'
-import userAPI from '../apis/users'
+import { Toast } from "../utils/helpers";
+import userAPI from "../apis/users";
+import { fromNowFilter } from "../utils/mixins";
+import tweetsAPI from '../apis/tweets'
 
 export default {
-  name: 'SubProfileLiked',
-  data () {
+  name: "SubProfileLiked",
+  data() {
     return {
-      likedArray: [],
-    }
+      likedTweets: [],
+    };
   },
-  created () {
-    const {id} = this.$route.params
-    this.fetchUserLiked(id)
+  mixins: [fromNowFilter],
+  created() {
+    const { id } = this.$route.params;
+    this.fetchUserLiked(id);
   },
   methods: {
-    async fetchUserLiked (userId) {
+    async fetchUserLiked(userId) {
       try {
-        const {data} = await userAPI.getUserLiked({userId})
-        console.log('like', data)
-        if (data.status === 'error') {
+        const { data } = await userAPI.getUserLiked({ userId });
+        console.log("like", data);
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+
+        this.likedTweets = data;
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法成功取的使用者按讚貼文！",
+        });
+      }
+    },
+    async addLike (tweetId) {
+      try {
+        const {data} = await tweetsAPI.addLike({ tweetId })
+
+        if (data.status !== 'success') {
           throw new Error (data.message)
         }
 
-        this.likedArray = data
-         
+        this.likedTweets = this.likedTweets.map ((tweet) => {
+          if (tweet.id !== tweetId) {
+            return tweet
+          } else {
+            console.log(tweet)
+            return {
+              ...tweet,
+              isLiked: true,
+              // likesCount: tweet.Tweet.likesCount + 1,
+            }
+          }
+        })
       } catch (error) {
         console.log(error)
         Toast.fire({
           icon: 'error',
-          title: '無法成功取的使用者按讚貼文！'
+          title: '無法成功按讚！'
+        })
+      }
+    },
+    async deleteLike (tweetId) {
+      try {
+        const {data} = await tweetsAPI.deleteLike({ tweetId })
+
+        if (data.status !== 'success') {
+          throw new Error (data.message)
+        }
+
+        this.likedTweets = this.likedTweets.map ((tweet) => {
+          if (tweet.id !== tweetId) {
+            return tweet
+          } else {
+            return {
+              ...tweet,
+              isLiked: false,
+              likesCount: tweet.Tweet.likesCount - 1
+            }
+          }
+        })
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法成功按讚！'
         })
       }
     }
-  }
-}
+  },
+};
 </script>
-
 
 <style scoped lang="scss">
 .profile__tweets {

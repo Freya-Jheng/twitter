@@ -15,7 +15,7 @@
             <router-link to="" class="router-link">
               {{"@" + tweet.Tweet.User.account}}
             </router-link>
-             ・ {{tweet.Tweet.createdAt}} 
+             ・ {{tweet.Tweet.createdAt | fromNow}} 
           </div>
         </div>
         <div class="profile__tweets__tweet__wrapper__response">
@@ -27,7 +27,7 @@
           </span>
         </div>
         <router-link
-          :to="{ name: 'individual-tweet', params: {id: tweet.TweetId }}"
+          to=""
           class="profile__tweets__tweet__wrapper__tweet"
         >
           {{tweet.comment}}</router-link
@@ -40,6 +40,7 @@
 <script>
 import {Toast} from '../utils/helpers'
 import userAPI from '../apis/users'
+import {fromNowFilter} from '../utils/mixins'
 
 export default {
   name: 'SubProfileResponse',
@@ -48,6 +49,9 @@ export default {
       TweetsArray: [],
     }
   },
+  mixins: [
+    fromNowFilter
+  ],
   created () {
     const {id} = this.$route.params
     this.fetchResponses(id)

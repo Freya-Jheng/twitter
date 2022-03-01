@@ -4,7 +4,7 @@ import NotFound from '../views/NotFound.vue'
 import SignIn from '../views/SignIn.vue'
 import Home from '../views/Home.vue'
 import AdminSignin from '../views/AdminSignin.vue'
-import AdminHome from '../views/AdminHome.vue'
+// import AdminHome from '../views/AdminHome.vue'
 import store from './../store'
 
 Vue.use(VueRouter)

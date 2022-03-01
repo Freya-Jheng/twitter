@@ -55,7 +55,7 @@ export default {
   methods: {
     async fetchUser(userId) {
       try {
-        const { data } = await userAPI.get({ userId });
+        const { data } = await userAPI.get({userId});
         const {
           id,
           account,
@@ -128,6 +128,7 @@ export default {
   .subProfile {
     position: relative;
     border: 1px solid var(--profile-border);
+    overflow-y: scroll;
   }
   .popular-users {
     height: 100%;

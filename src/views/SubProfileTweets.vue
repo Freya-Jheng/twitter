@@ -1,12 +1,14 @@
 <template>
   <div class="profile__tweets">
     <div class="profile__tweets__tweet" v-for="tweet in tweets"
-      :key="tweet.tweetId">
-      <router-link to="" class="profile__tweets__tweet__avatar">
+      :key="tweet.id">
+      <router-link 
+      to=""
+      class="profile__tweets__tweet__avatar">
         <img src="" alt="" class="user-avatar" />
       </router-link>
       <div class="profile__tweets__tweet__wrapper">
-        <div class="profile__tweetxs__tweet__wrapper__info">
+        <div class="profile__tweets__tweet__wrapper__info">
           <router-link to="" class="profile__tweets__tweet__wrapper__info--name"
             >{{currentUserData.name}}</router-link
           >
@@ -19,7 +21,7 @@
         </div>
 
         <router-link
-          :to="{ name: 'individual-tweet' }"
+          to=""
           class="profile__tweets__tweet__wrapper__tweet"
         >
           {{tweet.description}}</router-link
@@ -38,17 +40,21 @@
           </div>
           <div class="profile__tweets__tweet__wrapper__icons__like">
             <img
+              v-if="!tweet.isLiked"
+              @click.stop.prevent="addLike(tweet.id)"
               src="./../assets/icon_like@2x.png"
               alt=""
               class="profile__tweets__tweet__wrapper__icons__like--icon"
             />
             <img
+              v-if="tweet.isLiked"
+              @click.stop.prevent="deleteLike(tweet.id)"
               src="./../assets/icon_like_fill@2x.png"
               alt=""
               class="profile__tweets__tweet__wrapper__icons__like--icon"
             />
             <span class="profile__tweets__tweet__wrapper__icons__like--count"
-              >60</span
+              >{{tweet.likesCount}}</span
             >
           </div>
         </div>
@@ -61,7 +67,8 @@
 <script>
 import userAPI from '../apis/users'
 import {Toast} from '../utils/helpers'
-import { fromNowFilter } from './../utils/mixins'
+import { fromNowFilter } from '../utils/mixins'
+import tweetsAPI from '../apis/tweets'
 
 export default {
   name: 'SubProfileTweets',
@@ -75,7 +82,8 @@ export default {
   data () {
     return {
       tweets: [],
-      tweetsLength: ''
+      tweetsLength: '',
+      likedStatus: [],
     }
   },
   created () {
@@ -99,6 +107,60 @@ export default {
         Toast.fire({
           icon: 'error',
           title: "無法成功取得推文資料！"
+        })
+      }
+    },
+    async addLike (tweetId) {
+      try {
+        const {data} = await tweetsAPI.addLike({tweetId})
+
+        if (data.status === 'error') {
+          throw new Error (data.message)
+        }
+        this.tweets = this.tweets.map ((tweet) => {
+          if (tweet.id !== tweetId) {
+            return tweet
+          } else {
+            return {
+              ...tweet,
+              isLiked: true,
+              likesCount: tweet.likesCount + 1,
+            }
+          }
+
+        })
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法成功按讚！'
+        })
+      }
+    },
+    async deleteLike (tweetId) {
+      try {
+        const {data} = await tweetsAPI.deleteLike({tweetId})
+
+        if (data.status === 'error') {
+          throw new Error (data.message)
+        }
+        this.tweets = this.tweets.map ((tweet) => {
+          if (tweet.id !== tweetId) {
+            return tweet
+          } else {
+            return {
+              ...tweet,
+              isLiked: false,
+              likesCount: tweet.likesCount - 1,
+            }
+          }
+        })
+
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法成功取消按讚！'
         })
       }
     }
@@ -164,6 +226,7 @@ export default {
         display: flex;
         flex-direction: row;
         gap: 51px;
+        cursor: pointer;
         &__comment,
         &__like {
           display: flex;
