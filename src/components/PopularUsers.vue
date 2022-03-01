@@ -61,6 +61,9 @@ export default {
       popularUsers: [],
     }
   },
+  created() {
+    this.getPopularUsers()
+  },
   methods: {
     async getPopularUsers() {
       try {
@@ -81,10 +84,10 @@ export default {
     },
     async addFollowing(userId) {
       try {
-        const { data } = await usersAPI.addFollowing({ userId })
+        const response = await usersAPI.addFollowing({ userId })
 
-        if (data.status !== 'success') {
-          throw new Error(data.message)
+        if (response.status !== 200) {
+          throw new Error(response.statusText)
         }
 
         this.popularUsers = this.popularUsers.map((user) => {
@@ -108,10 +111,12 @@ export default {
 
     async deleteFollowing(userId) {
       try {
-        const { data } = await usersAPI.deleteFollowing({ userId })
+        const response = await usersAPI.deleteFollowing({ userId })
 
-        if (data.status !== 'success') {
-          throw new Error(data.message)
+        console.log(response)
+        console.log(userId)
+        if (response.status !== 200) {
+          throw new Error(response.statusText)
         }
 
         this.popularUsers = this.popularUsers.map((user) => {
