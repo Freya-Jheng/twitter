@@ -5,25 +5,27 @@
       <router-link 
       to=""
       class="profile__tweets__tweet__avatar">
-        <img :src="currentUserData.avatar" alt="" class="user-avatar" />
+        <img :src="currentUser.avatar" alt="" class="user-avatar" />
       </router-link>
       <div class="profile__tweets__tweet__wrapper">
         <div class="profile__tweets__tweet__wrapper__info">
           <router-link 
-          :to="{name: 'sub-profile', params: {id: currentUserData.id}}"
+          :to="{name: 'sub-profile', params: {id: currentUser.id}}"
           class="profile__tweets__tweet__wrapper__info--name"
-            >{{currentUserData.name}}</router-link
+            >{{currentUser.name}}</router-link
           >
           <div class="profile__tweets__tweet__wrapper__info--account">
-            <router-link to="" class="router-link">
+            <router-link 
+            :to="{name: 'sub-profile', params: {id: currentUser.id}}"
+            class="router-link">
               {{"@" + tweet.User.account}}
             </router-link>
-           ・{{ currentUserData.createdAt | fromNow }}
+           ・{{ currentUser.createdAt | fromNow }}
           </div>
         </div>
 
         <router-link
-          :to="{name: 'individual-tweet', params: {tweet_id: tweet.id}}"
+          :to="{ name: 'individual-tweet', params: {tweet_id: tweet.id }}"
           class="profile__tweets__tweet__wrapper__tweet"
         >
           {{tweet.description}}</router-link
@@ -38,10 +40,108 @@
               alt=""
               class="profile__tweets__tweet__wrapper__icons__comment--icon"
             />
+            <!-- data-toggle="modal" -->
             <span class="profile__tweets__tweet__wrapper__icons__comment--count"
               >{{tweet.repliesCount}}</span
             >
           </router-link>
+          <!-- modal -->
+          <!-- <div
+            class="modal fade"
+            :id="'tweet-' + tweet.id"
+            tabindex="-1"
+            aria-labelledby="replyModal"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                    @click="handleCancel"
+                  >
+                    <span aria-hidden="true" class="close--text">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <div class="modal-body__tweet">
+                    <div class="modal-body__tweet__user-avatar">
+                      <img
+                        v-if="tweet.User.avatar"
+                        :src="tweet.User.avatar"
+                        alt=""
+                        class="avatar"
+                      />
+                    </div>
+                    <div class="modal-body__tweet__content">
+                      <div class="modal-body__tweet__content__info">
+                        <div class="modal-body__tweet__content__info--name">
+                          {{ tweet.User.name }}
+                        </div>
+                        <div class="modal-body__tweet__content__info--account">
+                          {{ '@' + tweet.User.account }}
+                        </div>
+                        <div class="modal-body__tweet__content__info--time">
+                          {{ tweet.createdAt | fromNow }}
+                        </div>
+                      </div>
+                      <div class="modal-body__tweet__content__text">
+                        {{ tweet.description }}
+                      </div>
+                      <div class="modal-body__tweet__content__reply-to">
+                        <div
+                          class="modal-body__tweet__content__reply-to--reply"
+                        >
+                          回覆給
+                        </div>
+                        <div
+                          class="modal-body__tweet__content__reply-to--account"
+                        >
+                          {{ '@' + tweet.User.account }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-body__reply">
+                    <div class="modal-body__reply__user-avatar">
+                      <img
+                        v-if="currentUser.avatar"
+                        :src="currentUser.avatar"
+                        alt=""
+                        class="avatar"
+                      />
+                    </div>
+                    <form action="" class="reply">
+                      <textarea
+                        placeholder="推你的回覆"
+                        name="reply-textarea"
+                        id="reply-textarea"
+                        cols="50"
+                        rows="4"
+                        v-model="reply"
+                      ></textarea>
+                    </form>
+                  </div>
+                </div>
+                <div
+                  class="modal-footer"
+                  :class="{ error: reply.length > 140 }"
+                >
+                  <button
+                    class="btn-modal button"
+                    data-dismiss="modal"
+                    @click="handleSubmit(tweet.id)"
+                    :disabled="reply.length > 140 || reply.length === 0"
+                  >
+                    回覆
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div> -->
           <div class="profile__tweets__tweet__wrapper__icons__like">
             <img
               v-if="!tweet.isLiked"
@@ -73,15 +173,10 @@ import userAPI from '../apis/users'
 import {Toast} from '../utils/helpers'
 import { fromNowFilter } from '../utils/mixins'
 import tweetsAPI from '../apis/tweets'
+import { mapState } from 'vuex'
 
 export default {
   name: 'SubProfileTweets',
-  props: {
-    currentUserData: {
-      type: Object,
-      required: true,
-    }
-  },
   mixins: [fromNowFilter],
   data () {
     return {
@@ -89,6 +184,9 @@ export default {
       tweetsLength: '',
       likedStatus: [],
     }
+  },
+  computed: {
+    ...mapState(['currentUser']),
   },
   created () {
     const {id} = this.$route.params

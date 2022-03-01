@@ -9,7 +9,7 @@
       />
       <div class="profile__header__content">
         <span class="profile__header__content__name">
-          {{ currentUserData.name }}
+          {{ currentUser.name }}
         </span>
         <span class="profile__header__content__tweetsNum"
           > {{ tweetsLength }} 推文</span
@@ -19,12 +19,12 @@
     <div class="profile__container">
       <div class="profile__container__top">
         <img
-          :src="currentUserData.cover"
+          :src="currentUser.cover"
           alt="top-background"
           class="profile__container__top__background"
         />
         <img
-          :src="currentUserData.avatar"
+          :src="currentUser.avatar"
           alt="top-avatar"
           class="profile__container__top__avatar"
         />
@@ -70,10 +70,10 @@
               </div>
               <div class="modal-body">
                 <div class="modal-top">
-                  <img :src="currentUserData.cover" alt="background" class="background" />
+                  <img :src="currentUser.cover" alt="background" class="background" />
                   <img src="./../assets/icon_uploadPhoto@2x.png" alt="" class="upload-bg-image upload">
                   <img src="./../assets/icon_delete@2x.png" alt="" class="delete-image delete">
-                  <img :src="currentUserData.avatar" alt="avatar" class="avatar"/>
+                  <img :src="currentUser.avatar" alt="avatar" class="avatar"/>
                   <img src="./../assets/icon_uploadPhoto@2x.png" alt="" class="upload-avatar-image upload">  
                 </div>
                 <form class="modal-bottom">
@@ -109,17 +109,17 @@
           <div class="profile__container__bottom__introduction__name">
             <span
               class="profile__container__bottom__introduction__name-user-name"
-              >{{ currentUserData.name }}</span
+              >{{ currentUser.name }}</span
             >
             <span
               class="
                 profile__container__bottom__introduction__name-user-account
               "
-              >{{ currentUserData.account }}</span
+              >{{ currentUser.account }}</span
             >
           </div>
           <p class="profile__container__bottom__introduction__description">
-            {{ currentUserData.introduction }}
+            {{ currentUser.introduction }}
           </p>
           <div class="profile__container__bottom__introduction__follow">
             <router-link
@@ -127,14 +127,14 @@
               class="
                 profile__container__bottom__introduction__follow__followings
               "
-              >{{ currentUserData.followingsCount }}個<span>跟隨中</span></router-link
+              >{{ user.followingsCount }}個<span>跟隨中</span></router-link
             >
             <router-link
               to="/user/:id/followers/"
               class="
                 profile__container__bottom__introduction__follow__followers
               "
-              >{{ currentUserData.followersCount }}個<span>跟隨者</span></router-link
+              >{{ user.followersCount }}個<span>跟隨者</span></router-link
             >
           </div>
         </div>
@@ -144,6 +144,10 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
+import userAPI from '../apis/users'
+import {Toast} from '../utils/helpers'
+
 export default {
   props: {
     currentUserData: {
@@ -157,19 +161,43 @@ export default {
   },
   data () {
     return {
+      user: {},
       name: '',
       introduction: '',
       avatar: '',
       cover: '',
     }
   },
+  computed: {
+    ...mapState(['currentUser']),
+  },
   created() {
+    const { id } = this.$route.params
     this.fetchModal()
+    this.fetchCurrentUser( id )
   },
   methods: {
+    async fetchCurrentUser (userId) {
+      try {
+        const {data} = await userAPI.get({userId})
+
+        if (data.status !== 'success') {
+          throw new Error (data.message)
+        }
+        console.log(data)
+        this.user = data
+
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法成功取得追蹤人數！'
+        })
+      }
+    },
     fetchModal () {
-      this.name = this.currentUserData.name
-      this.introduction = this.currentUserData.introduction
+      this.name = this.currentUser.name
+      this.introduction = this.currentUser.introduction
     }
   }
 };

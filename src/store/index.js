@@ -25,7 +25,7 @@ export default new Vuex.Store({
   },
   mutations: {
     setCurrentUser(state, currentUser) {
-      console.log(currentUser)
+      console.log('this',currentUser)
       state.currentUser = {
         ...state.currentUser,
         ...currentUser,
@@ -45,7 +45,6 @@ export default new Vuex.Store({
       try {
         const { data } = await usersAPI.getCurrentUser()
         const { id, account, name, email, isAdmin } = data
-
         commit('setCurrentUser', {
           id,
           account,

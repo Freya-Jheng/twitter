@@ -14,7 +14,7 @@
           >
           <div class="profile__tweets__tweet__wrapper__info--account">
             <router-link 
-              :to="{name: 'sub-profile', params: { id: tweet.Tweet.User.id }}" 
+              :to="{name: 'sub-profile', params: { id: tweet.UserId }}" 
               class="router-link">
               {{"@" + currentUser.account}}
             </router-link>
@@ -24,13 +24,15 @@
         <div class="profile__tweets__tweet__wrapper__response">
           <span class="response-to"
             >回覆
-            <router-link to="" class="router-link">
+            <router-link 
+            :to="{name: 'sub-profile', params: { id: tweet.Tweet.UserId }}"
+            class="router-link">
               {{"@" + tweet.Tweet.User.account}}
             </router-link>
           </span>
         </div>
         <router-link
-          :to="{name: 'individual-tweet', params: {tweet_id: tweet.id}}"
+          :to="{name: 'individual-tweet', params: {tweet_id: tweet.TweetId}}"
           class="profile__tweets__tweet__wrapper__tweet"
         >
           {{tweet.Tweet.description}}</router-link
