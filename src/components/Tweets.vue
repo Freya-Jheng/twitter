@@ -46,7 +46,8 @@
               alt=""
               class="tweets-container__tweet__wrapper__icons__comment--icon"
               data-toggle="modal"
-              data-target="#replyModal"
+              :data-target="'#' + 'tweet-' + tweet.id"
+              @click="handleClick(tweet)"
             />
             <span
               class="tweets-container__tweet__wrapper__icons__comment--count"
@@ -57,7 +58,7 @@
           <!-- Modal -->
           <div
             class="modal fade"
-            id="replyModal"
+            :id="'tweet-' + tweet.id"
             tabindex="-1"
             aria-labelledby="replyModal"
             aria-hidden="true"
@@ -70,6 +71,7 @@
                     class="close"
                     data-dismiss="modal"
                     aria-label="Close"
+                    @click="handleCancel"
                   >
                     <span aria-hidden="true" class="close--text">&times;</span>
                   </button>
@@ -86,34 +88,41 @@
                     </div>
                     <div class="modal-body__tweet__content">
                       <div class="modal-body__tweet__content__info">
-                        <div
-                          class="modal-body__tweet__content__info--name"
-                        ></div>
+                        <div class="modal-body__tweet__content__info--name">
+                          {{ tweet.User.name }}
+                        </div>
                         <div class="modal-body__tweet__content__info--account">
-                          @apple
+                          {{ '@' + tweet.User.account }}
                         </div>
                         <div class="modal-body__tweet__content__info--time">
-                          2002/12/21
+                          {{ tweet.createdAt | fromNow }}
                         </div>
                       </div>
-                      <div class="modal-body__tweet__content__text">123</div>
+                      <div class="modal-body__tweet__content__text">
+                        {{ tweet.description }}
+                      </div>
                       <div class="modal-body__tweet__content__reply-to">
                         <div
                           class="modal-body__tweet__content__reply-to--reply"
                         >
-                          reply
+                          回覆給
                         </div>
                         <div
                           class="modal-body__tweet__content__reply-to--account"
                         >
-                          @apple
+                          {{ '@' + tweet.User.account }}
                         </div>
                       </div>
                     </div>
                   </div>
                   <div class="modal-body__reply">
                     <div class="modal-body__reply__user-avatar">
-                      <img src="" alt="" class="avatar" />
+                      <img
+                        v-if="currentUser.avatar"
+                        :src="currentUser.avatar"
+                        alt=""
+                        class="avatar"
+                      />
                     </div>
                     <form action="" class="reply">
                       <textarea
@@ -122,12 +131,21 @@
                         id="reply-textarea"
                         cols="50"
                         rows="4"
+                        v-model="reply"
                       ></textarea>
                     </form>
                   </div>
                 </div>
-                <div class="modal-footer">
-                  <button class="btn-modal button" data-dismiss="modal">
+                <div
+                  class="modal-footer"
+                  :class="{ error: reply.length > 140 }"
+                >
+                  <button
+                    class="btn-modal button"
+                    data-dismiss="modal"
+                    @click="handleSubmit(tweet.id)"
+                    :disabled="reply.length > 140 || reply.length === 0"
+                  >
                     回覆
                   </button>
                 </div>
@@ -162,6 +180,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import { fromNowFilter } from './../utils/mixins'
 import { Toast } from './../utils/helpers'
 import tweetsAPI from './../apis/tweets'
@@ -175,10 +194,14 @@ export default {
     },
   },
   mixins: [fromNowFilter],
+  computed: {
+    ...mapState(['currentUser', 'isAuthenticated']),
+  },
   data() {
     return {
       userTweets: [],
       tweetModal: [],
+      reply: '',
     }
   },
   methods: {
@@ -236,6 +259,45 @@ export default {
         Toast.fire({
           icon: 'error',
           title: '無法取消按讚推文，請稍後再試',
+        })
+      }
+    },
+    handleClick(tweet) {
+      this.tweetModal = tweet
+    },
+    handleCancel() {
+      this.reply = ''
+    },
+    async handleSubmit(tweetId) {
+      try {
+        if (!this.reply) {
+          return false
+        }
+
+        const { data } = await tweetsAPI.reply({
+          tweetId,
+          comment: this.reply,
+        })
+
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+
+        this.userTweets = this.userTweets.map((tweet) => {
+          if (tweet.id !== tweetId) {
+            return tweet
+          } else {
+            return {
+              ...tweet,
+              repliesCount: tweet.repliesCount + 1,
+            }
+          }
+        })
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法新增回覆，請稍後再試',
         })
       }
     },
@@ -490,6 +552,20 @@ export default {
     font-weight: 500;
     font-size: 18px;
     line-height: 18px;
+  }
+}
+
+.error {
+  position: relative;
+  &::after {
+    content: '字數不可超過 140 字 ';
+    position: absolute;
+    bottom: 27px;
+    right: 101px;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 15px;
+    color: var(--error-color);
   }
 }
 </style>
