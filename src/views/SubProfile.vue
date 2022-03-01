@@ -48,6 +48,7 @@ export default {
   },
   created() {
     const { id } = this.$route.params;
+    // this.$route.push(`/profile/tweets/tweet/${id}`)
     this.fetchUser(id);
     this.fetchUserTweets(id)
     console.log('id', id)

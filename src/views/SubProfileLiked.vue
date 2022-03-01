@@ -11,13 +11,13 @@
       <div class="profile__tweets__tweet__wrapper">
         <div class="profile__tweets__tweet__wrapper__info">
           <router-link
-            :to="{name: 'sub-profile', params: {id: tweet.Tweet.User.id}}"
+            :to="{name: 'sub-profile-tweets', params: {id: tweet.Tweet.User.id}}"
             class="profile__tweets__tweet__wrapper__info--name"
             >{{ tweet.Tweet.User.name }}</router-link
           >
           <div class="profile__tweets__tweet__wrapper__info--account">
             <router-link 
-            :to="{name: 'sub-profile', params: {id: tweet.Tweet.User.id}}"
+            :to="{name: 'sub-profile-tweets', params: {id: tweet.Tweet.User.id}}"
             class="router-link">
               {{ "@" + tweet.Tweet.User.account }}
             </router-link>
@@ -78,6 +78,7 @@ export default {
   data() {
     return {
       likedTweets: [],
+      likesCount: 0,
     };
   },
   mixins: [fromNowFilter],
@@ -89,11 +90,11 @@ export default {
     async fetchUserLiked(userId) {
       try {
         const { data } = await userAPI.getUserLiked({ userId });
-        console.log("like", data);
+        
         if (data.status === "error") {
           throw new Error(data.message);
         }
-
+        this.likesCount = data.Tweet.likesCount
         this.likedTweets = data;
       } catch (error) {
         console.log(error);
@@ -105,23 +106,22 @@ export default {
     },
     async addLike (tweetId) {
       try {
-        const {data} = await tweetsAPI.addLike({ tweetId })
-        console.log(tweetId)
-        if (data.status !== 'success') {
+        const {data} = await tweetsAPI.addLike({tweetId})
+
+        if (data.status === 'error') {
           throw new Error (data.message)
         }
-        
-        this.likedTweets = this.likedTweets.map ((tweet) => {
+        this.tweets = this.tweets.map ((tweet) => {
           if (tweet.id !== tweetId) {
             return tweet
           } else {
-            console.log(tweet)
             return {
               ...tweet,
               isLiked: true,
-              likesCount: tweet.Tweet.likesCount + 1,
+              // likesCount: tweet.likesCount + 1,
             }
           }
+
         })
       } catch (error) {
         console.log(error)
@@ -133,28 +133,28 @@ export default {
     },
     async deleteLike (tweetId) {
       try {
-        const {data} = await tweetsAPI.deleteLike({ tweetId })
+        const {data} = await tweetsAPI.deleteLike({tweetId})
 
-        if (data.status !== 'success') {
+        if (data.status === 'error') {
           throw new Error (data.message)
         }
-
-        this.likedTweets = this.likedTweets.map ((tweet) => {
+        this.tweets = this.tweets.map ((tweet) => {
           if (tweet.id !== tweetId) {
             return tweet
           } else {
             return {
               ...tweet,
               isLiked: false,
-              likesCount: tweet.Tweet.likesCount - 1
+              // likesCount: tweet.likesCount - 1,
             }
           }
         })
+
       } catch (error) {
         console.log(error)
         Toast.fire({
           icon: 'error',
-          title: '無法成功按讚！'
+          title: '無法成功取消按讚！'
         })
       }
     }

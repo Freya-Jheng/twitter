@@ -10,13 +10,13 @@
       <div class="profile__tweets__tweet__wrapper">
         <div class="profile__tweets__tweet__wrapper__info">
           <router-link 
-          :to="{name: 'sub-profile', params: {id: currentUser.id}}"
+          :to="{name: 'sub-profile-tweets', params: {id: currentUser.id}}"
           class="profile__tweets__tweet__wrapper__info--name"
-            >{{currentUser.name}}</router-link
+            >{{tweet.User.name}}</router-link
           >
           <div class="profile__tweets__tweet__wrapper__info--account">
             <router-link 
-            :to="{name: 'sub-profile', params: {id: currentUser.id}}"
+            :to="{name: 'sub-profile-tweets', params: {id: currentUser.id}}"
             class="router-link">
               {{"@" + tweet.User.account}}
             </router-link>

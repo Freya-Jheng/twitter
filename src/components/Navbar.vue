@@ -21,7 +21,7 @@
       </div>
       <div class="navbar__items-item profile">
         <router-link
-          :to="{ name: 'sub-profile', params: { id: currentUser.id } }"
+          :to="{ name: 'sub-profile-tweets', params: { id: currentUser.id } }"
           class="navbar__items-link"
         >
           <img
