@@ -52,9 +52,6 @@
 <script>
 export default {
   name: 'AdminNavbar',
-  data() {
-    return {}
-  },
   methods: {
     logout() {
       this.$store.commit('revokeAuthentication')

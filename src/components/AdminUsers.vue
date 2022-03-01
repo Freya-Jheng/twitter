@@ -2,19 +2,31 @@
   <div class="admin__users">
     <div class="admin__users__title">使用者列表</div>
     <div class="admin__users__cards">
-      <div class="admin__users__cards__card">
+      <div
+        class="admin__users__cards__card"
+        v-for="user in users"
+        :key="user.id"
+      >
         <div class="admin__users__cards__card__top">
-          <img src="" alt="" class="admin__users__cards__card__top--bg-image" />
-          <img src="" alt="" class="admin__users__cards__card__top--avatar" />
+          <img
+            :src="user.cover"
+            alt=""
+            class="admin__users__cards__card__top--bg-image"
+          />
+          <img
+            :src="user.avatar"
+            alt=""
+            class="admin__users__cards__card__top--avatar"
+          />
         </div>
         <div class="admin__users__cards__card__bottom">
           <div class="admin__users__cards__card__bottom__names">
-            <span class="admin__users__cards__card__bottom__names--name"
-              >Name</span
-            >
-            <span class="admin__users__cards__card__bottom__names--account"
-              >account</span
-            >
+            <span class="admin__users__cards__card__bottom__names--name">{{
+              user.name
+            }}</span>
+            <span class="admin__users__cards__card__bottom__names--account">{{
+              '@' + user.account
+            }}</span>
           </div>
           <div class="admin__users__cards__card__bottom__icons">
             <div class="admin__users__cards__card__bottom__icons__response">
@@ -24,10 +36,8 @@
                 class="admin__users__cards__card__bottom__icons__response--icon"
               />
               <span
-                class="
-                  admin__users__cards__card__bottom__icons__response--number
-                "
-                >1.5k</span
+                class="admin__users__cards__card__bottom__icons__response--number"
+                >{{ user.repliesCount }}</span
               >
             </div>
             <div class="admin__users__cards__card__bottom__icons__like">
@@ -39,25 +49,22 @@
               <img
                 src="../assets/icon_like_fill@2x.png"
                 alt=""
-                class="
-                  admin__users__cards__card__bottom__icons__like--icon
-                  d-none
-                "
+                class="admin__users__cards__card__bottom__icons__like--icon d-none"
               />
               <span
                 class="admin__users__cards__card__bottom__icons__like--number"
-                >1.5k</span
+                >{{ user.likesCount }}</span
               >
             </div>
           </div>
           <div class="admin__users__cards__card__bottom__follows">
             <span class="admin__users__cards__card__bottom__follows--followings"
-              >35個<span>跟隨中</span></span
+              >{{ user.followingsCount + '個' }}<span>跟隨中</span></span
             >
             <span
               to="/user/followers/:id"
               class="admin__users__cards__card__bottom__follows--followers"
-              >35個<span>跟隨者</span></span
+              >{{ user.followersCount + '個' }}<span>跟隨者</span></span
             >
           </div>
         </div>
@@ -67,41 +74,40 @@
 </template>
 
 <script>
-import {Toast} from '../utils/helpers'
+import { Toast } from '../utils/helpers'
 import adminAPI from '../apis/admin'
 
 export default {
   name: 'AdminUsers',
-  data () {
+  data() {
     return {
-
+      users: [],
     }
   },
-  created () {
+  created() {
     this.fetchUsers()
   },
   methods: {
-    async fetchUsers () {
+    async fetchUsers() {
       try {
-        const {data} = await adminAPI.getUsers()
-        console.log(data)
+        const response = await adminAPI.getUsers()
 
+        if (response.status !== 200) {
+          throw new Error(response.statusText)
+        }
+
+        this.users = response.data
       } catch (error) {
         console.log(error)
-        Toast.fire ({
+        Toast.fire({
           icon: 'error',
-          title: '無法成功載入使用者清單！'
+          title: '無法成功載入使用者清單！',
         })
       }
-    }
-
-  }
+    },
+  },
 }
-
 </script>
-
-
-
 
 <style scoped lang="scss">
 .admin__users {
@@ -120,14 +126,14 @@ export default {
   &__cards {
     width: 95%;
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    grid-auto-rows: auto;
+    grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
     &__card {
       width: 245px;
       height: 314px;
       position: relative;
       border: 1px solid var(--border-and-divider);
       border-radius: 10px;
+      margin: 15px;
       &__top {
         &--bg-image {
           width: 100%;
@@ -155,6 +161,7 @@ export default {
         justify-content: center;
         align-items: center;
         gap: 15px;
+        background: var(--admin-user-background);
         &__names {
           display: flex;
           flex-direction: column;

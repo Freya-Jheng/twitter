@@ -74,6 +74,15 @@ export default {
   created() {
     this.fetchTweets()
   },
+  // watch: {
+  //   userTweets: {
+  //     handler() {
+  //       this.fetchTweets()
+  //     },
+  //     deep: true,
+  //     immediate: true,
+  //   },
+  // },
 }
 </script>
 
