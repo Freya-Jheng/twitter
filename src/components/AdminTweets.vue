@@ -1,49 +1,53 @@
 <template>
   <div class="admin__tweets">
     <div class="admin__tweets__title">推文清單</div>
-    <ul class="admin__tweets__list">
-      <li
-        v-for="tweet in allTweets"
-        :key="tweet.id"
-        class="admin__tweets__list__item"
-      >
-        <div class="wrapper">
-          <div
-            :to="{ name: 'sub-profile', params: { id: tweet.UserId } }"
-            class="admin__tweets__list__item__avatar"
-          >
-            <img :src="tweet.User.avatar" alt="" class="user-avatar" />
-          </div>
-          <div class="admin__tweets__list__item__info">
+    <Spinner v-if="isLoading" />
+    <template>
+      <ul class="admin__tweets__list">
+        <li
+          v-for="tweet in allTweets"
+          :key="tweet.id"
+          class="admin__tweets__list__item"
+        >
+          <div class="wrapper">
             <div
               :to="{ name: 'sub-profile', params: { id: tweet.UserId } }"
-              class="admin__tweets__list__item__info__content"
+              class="admin__tweets__list__item__avatar"
             >
-              <span class="admin__tweets__list__item__info__content--name">{{
-                tweet.User.name
-              }}</span>
+              <img :src="tweet.User.avatar" alt="" class="user-avatar" />
+            </div>
+            <div class="admin__tweets__list__item__info">
               <div
                 :to="{ name: 'sub-profile', params: { id: tweet.UserId } }"
-                class="admin__tweets__list__item__info__content--account"
+                class="admin__tweets__list__item__info__content"
               >
-                <span class="router-link">{{ '@' + tweet.User.account }} </span>
-                ・ {{ tweet.createdAt | fromNow }}
+                <span class="admin__tweets__list__item__info__content--name">{{
+                  tweet.User.name
+                }}</span>
+                <div
+                  :to="{ name: 'sub-profile', params: { id: tweet.UserId } }"
+                  class="admin__tweets__list__item__info__content--account"
+                >
+                  <span class="router-link"
+                    >{{ '@' + tweet.User.account }}
+                  </span>
+                  ・ {{ tweet.createdAt | fromNow }}
+                </div>
               </div>
+              <p class="admin__tweets__list__item__info__content__tweet">
+                {{ tweet.description | ellipsis }}
+              </p>
             </div>
-            <p class="admin__tweets__list__item__info__content__tweet">
-              {{ tweet.description | ellipsis }}
-            </p>
           </div>
-        </div>
-        <button
-          type="button"
-          class="admin__tweets__list__item__button"
-          @click.stop.prevent="deleteTweet(tweet.id)"
-        >
-          <img src="../assets/icon_delete_black@2x.png" alt="" />
-        </button>
-      </li>
-    </ul>
+          <button
+            type="button"
+            class="admin__tweets__list__item__button"
+            @click.stop.prevent="deleteTweet(tweet.id)"
+          >
+            <img src="../assets/icon_delete_black@2x.png" alt="" />
+          </button>
+        </li></ul
+    ></template>
   </div>
 </template>
 
@@ -52,12 +56,17 @@ import tweetsAPI from './../apis/tweets'
 import adminAPI from './../apis/admin'
 import { Toast } from './../utils/helpers'
 import { fromNowFilter } from './../utils/mixins'
+import Spinner from './../components/Spinner'
 
 export default {
   name: 'AdminTweets',
+  components: {
+    Spinner,
+  },
   data() {
     return {
       allTweets: [],
+      isLoading: true,
     }
   },
   mixins: [fromNowFilter],
@@ -81,8 +90,10 @@ export default {
         }
 
         this.allTweets = response.data
+        this.isLoading = false
       } catch (error) {
         console.log(error)
+        this.isLoading = false
         Toast.fire({
           icon: 'error',
           title: '無法取得推文資料，請稍後再試',
