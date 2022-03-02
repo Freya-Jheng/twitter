@@ -85,7 +85,14 @@
               </button>
             </div>
             <div class="modal-body">
-              <img :src="currentUser.avatar" alt="avatar" class="avatar" />
+              <div class="avatar-wrapper">
+                <img
+                  v-if="currentUser.avatar"
+                  :src="currentUser.avatar"
+                  alt="avatar"
+                  class="avatar"
+                />
+              </div>
               <form action="" class="create__tweet">
                 <textarea
                   v-model="tweet"
@@ -99,8 +106,17 @@
             </div>
             <div class="modal-footer" :class="{ error: tweet.length > 140 }">
               <button
+                v-if="tweet.length > 0"
                 class="btn-modal"
                 data-dismiss="modal"
+                @click="handleSubmit"
+                :disabled="tweet.length > 140"
+              >
+                推文
+              </button>
+              <button
+                v-if="tweet.length === 0"
+                class="btn-modal"
                 @click="handleSubmit"
                 :disabled="tweet.length > 140"
               >
@@ -147,8 +163,9 @@ export default {
         if (!this.tweet) {
           Toast.fire({
             icon: 'warning',
-            title: '請輸入推文內容',
+            title: '內容不可空白！',
           })
+
           return
         }
 
@@ -329,6 +346,12 @@ nav {
   }
 }
 
+.avatar-wrapper {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--user-avatar);
+}
 .error {
   position: relative;
   &::after {

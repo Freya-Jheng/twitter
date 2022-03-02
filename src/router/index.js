@@ -149,6 +149,16 @@ router.beforeEach(async (to, from, next) => {
     return
   }
 
+  // 如果是 user 且要去 admin 頁面，則轉址到 home 頁面
+  if (
+    isAuthenticated &&
+    adminWithAuthentication.includes(to.name) &&
+    store.state.currentUser.role === 'user'
+  ) {
+    next('/home')
+    return
+  }
+
   // 如果 admin 驗證通過，則轉址到 admin-tweets 頁面
   if (
     isAuthenticated &&
@@ -166,16 +176,6 @@ router.beforeEach(async (to, from, next) => {
     store.state.currentUser.role === 'admin'
   ) {
     next('/admin/tweets')
-    return
-  }
-
-  // 如果是 user 且要去 admin 頁面，則轉址到 home 頁面
-  if (
-    isAuthenticated &&
-    adminWithAuthentication.includes(to.name) &&
-    store.state.currentUser.role === 'user'
-  ) {
-    next('/home')
     return
   }
 

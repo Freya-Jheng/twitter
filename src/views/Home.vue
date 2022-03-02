@@ -59,7 +59,6 @@ export default {
     },
     afterCreateTweet(payload) {
       const { id, UserId, account, avatar, description } = payload
-      console.log('hello')
 
       this.userTweets.push({
         id,
