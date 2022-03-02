@@ -64,7 +64,7 @@ export default {
 <style scoped lang="scss">
 .admin__navbar {
   width: 235px;
-  height: 100%;
+  height: 100vh;
   color: var(--main-font-color);
   font-size: 18px;
   font-weight: 700;
@@ -88,9 +88,7 @@ export default {
     display: flex;
     flex-direction: column;
     gap: 37px;
-    .router-link-active {
-      color: var(--button-background);
-    }
+
     .navbar__items-item {
       width: 90%;
       .active {
@@ -144,5 +142,9 @@ export default {
       height: 22px;
     }
   }
+}
+
+.router-link-active {
+  color: var(--button-background);
 }
 </style>

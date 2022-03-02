@@ -35,4 +35,8 @@ export default {
   width: 100%;
   padding-right: 19.5px;
 }
+
+.router-link-active {
+  color: var(--button-background);
+}
 </style>

@@ -115,21 +115,29 @@ export default {
 
 <style scoped lang="scss">
 .admin__tweets {
+  position: relative;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   border: 1px solid var(--border-and-divider);
   font-size: 15px;
   font-weight: 500;
   cursor: default;
+  overflow-y: scroll;
+
   &__title {
+    position: sticky;
+    top: 0;
     width: 100%;
     padding: 15px 0 14px 26.5px;
     font-size: 18px;
     font-weight: 700;
     border-bottom: 1px solid var(--border-and-divider);
+    z-index: 2;
+    background: var(--background);
   }
   &__list {
     width: 100%;
+
     &__item {
       width: 100%;
       height: 75px;
@@ -149,7 +157,7 @@ export default {
           width: 50px;
           height: 50px;
           border-radius: 50%;
-          background-color: grey;
+          background-color: var(--user-avatar);
         }
       }
       &__info {
@@ -164,16 +172,28 @@ export default {
           gap: 5px;
           &--name {
             font-weight: 700;
+            font-size: 15px;
+            line-height: 21.75px;
             color: var(--main-font-color);
             &:hover {
               text-decoration: underline;
             }
           }
           &--account {
+            font-weight: 500;
+            font-size: 15px;
+            line-height: 21.72px;
             color: var(--smaller-font-color);
             .router-link {
               color: var(--smaller-font-color);
             }
+          }
+
+          &__tweet {
+            font-weight: 500;
+            font-size: 15px;
+            line-height: 22px;
+            color: var(--main-font-color);
           }
         }
       }
