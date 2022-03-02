@@ -48,7 +48,7 @@ export default {
         if (!this.newTweet) {
           Toast.fire({
             icon: 'warning',
-            title: '請輸入推文內容',
+            title: '內容不可空白!',
           })
           return
         }
@@ -187,7 +187,7 @@ export default {
 .error {
   position: relative;
   &::after {
-    content: '字數不可超過 140 字 ';
+    content: '字數超出上限！';
     position: absolute;
     bottom: 20px;
     right: 101px;

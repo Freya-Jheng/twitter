@@ -104,6 +104,13 @@ export default {
           this.error = true
         }
 
+        if (
+          error.response.data.message ===
+          'Error: you are admin user, permission denied'
+        ) {
+          this.error = true
+        }
+
         if (error.response.data.message === 'Error: password does not match.') {
           Toast.fire({
             icon: 'warning',
@@ -190,7 +197,7 @@ export default {
 .error {
   position: relative;
   &::after {
-    content: '帳號不存在';
+    content: '帳號不存在!';
     position: absolute;
     top: 100%;
     left: 0px;

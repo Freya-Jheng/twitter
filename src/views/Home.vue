@@ -59,6 +59,7 @@ export default {
     },
     afterCreateTweet(payload) {
       const { id, UserId, account, avatar, description } = payload
+      console.log('hello')
 
       this.userTweets.push({
         id,
@@ -69,20 +70,13 @@ export default {
         },
         description,
       })
+
+      this.fetchTweets()
     },
   },
   created() {
     this.fetchTweets()
   },
-  // watch: {
-  //   userTweets: {
-  //     handler() {
-  //       this.fetchTweets()
-  //     },
-  //     deep: true,
-  //     immediate: true,
-  //   },
-  // },
 }
 </script>
 

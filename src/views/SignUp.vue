@@ -148,7 +148,7 @@ export default {
         if (this.password !== this.checkPassword) {
           Toast.fire({
             icon: 'warning',
-            title: '密碼輸入不一致',
+            title: 'password 不一致',
           })
           return
         }
