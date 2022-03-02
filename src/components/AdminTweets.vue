@@ -31,7 +31,7 @@
               </div>
             </div>
             <p class="admin__tweets__list__item__info__content__tweet">
-              {{ tweet.description }}
+              {{ tweet.description | ellipsis }}
             </p>
           </div>
         </div>
@@ -61,6 +61,17 @@ export default {
     }
   },
   mixins: [fromNowFilter],
+  filters: {
+    ellipsis: function (value) {
+      if (value.length > 50) {
+        let newValue = value.slice(0, 50) + '.'.repeat(3)
+
+        return newValue
+      }
+
+      return value
+    },
+  },
   methods: {
     async fetchTweets() {
       try {

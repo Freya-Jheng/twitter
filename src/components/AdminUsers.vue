@@ -37,7 +37,7 @@
               />
               <span
                 class="admin__users__cards__card__bottom__icons__response--number"
-                >{{ user.repliesCount }}</span
+                >{{ user.repliesCount | transNumber }}</span
               >
             </div>
             <div class="admin__users__cards__card__bottom__icons__like">
@@ -53,7 +53,7 @@
               />
               <span
                 class="admin__users__cards__card__bottom__icons__like--number"
-                >{{ user.likesCount }}</span
+                >{{ user.likesCount | transNumber }}</span
               >
             </div>
           </div>
@@ -83,6 +83,23 @@ export default {
     return {
       users: [],
     }
+  },
+  filters: {
+    transNumber: function (value) {
+      if (value >= 1000000000) {
+        return (value / 1000000000).toFixed(1).replace(/\.0$/, '') + 'G'
+      }
+
+      if (value >= 1000000) {
+        return (value / 1000000).toFixed(1).replace(/\.0$/, '') + 'M'
+      }
+
+      if (value >= 1000) {
+        return (value / 1000).toFixed(1).replace(/\.0$/, '') + 'K'
+      }
+
+      return value
+    },
   },
   created() {
     this.fetchUsers()
