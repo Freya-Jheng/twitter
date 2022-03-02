@@ -124,7 +124,14 @@ router.beforeEach(async (to, from, next) => {
     isAuthenticated = await store.dispatch('fetchCurrentUser')
   }
 
-  const pathWithoutAuthentication = ['sign-in', 'sign-up']
+  const pathWithoutAuthentication = ['sign-in', 'sign-up', 'adminSignin']
+
+  const adminWithAuthentication = [
+    'admin',
+    'admin-home',
+    'admin-tweets',
+    'admin-users',
+  ]
 
   // 如果驗證不通過，則轉址到 sign-in 頁面
   if (!isAuthenticated && !pathWithoutAuthentication.includes(to.name)) {
@@ -132,11 +139,46 @@ router.beforeEach(async (to, from, next) => {
     return
   }
 
-  // 如果驗證通過，則轉址到 home 頁面
-  if (isAuthenticated && pathWithoutAuthentication.includes(to.name)) {
+  // 如果 user 驗證通過，則轉址到 home 頁面
+  if (
+    isAuthenticated &&
+    pathWithoutAuthentication.includes(to.name) &&
+    store.state.currentUser.role === 'user'
+  ) {
     next('/home')
     return
   }
+
+  // 如果 admin 驗證通過，則轉址到 admin-tweets 頁面
+  if (
+    isAuthenticated &&
+    pathWithoutAuthentication.includes(to.name) &&
+    store.state.currentUser.role === 'admin'
+  ) {
+    next('/admin/tweets')
+    return
+  }
+
+  // 如果是 admin 且要去 user 頁面，則轉址到 admin-tweets 頁面
+  if (
+    isAuthenticated &&
+    !adminWithAuthentication.includes(to.name) &&
+    store.state.currentUser.role === 'admin'
+  ) {
+    next('/admin/tweets')
+    return
+  }
+
+  // 如果是 user 且要去 admin 頁面，則轉址到 home 頁面
+  if (
+    isAuthenticated &&
+    adminWithAuthentication.includes(to.name) &&
+    store.state.currentUser.role === 'user'
+  ) {
+    next('/home')
+    return
+  }
+
   next()
 })
 
