@@ -227,7 +227,8 @@ export default {
       position: relative;
       display: flex;
       flex-direction: column;
-      width: 61%;
+      width: 662px;
+      outline: 1px solid red;
       gap: 32px;
       margin-top: 30px;
       padding-left: 20px;
