@@ -11,22 +11,33 @@
       <div class="profile__tweets__tweet__wrapper">
         <div class="profile__tweets__tweet__wrapper__info">
           <router-link
-            :to="{name: 'sub-profile-tweets', params: {id: tweet.Tweet.User.id}}"
+            :to="{
+              name: 'sub-profile-tweets',
+              params: { id: tweet.Tweet.User.id },
+            }"
             class="profile__tweets__tweet__wrapper__info--name"
             >{{ tweet.Tweet.User.name }}</router-link
           >
           <div class="profile__tweets__tweet__wrapper__info--account">
-            <router-link 
-            :to="{name: 'sub-profile-tweets', params: {id: tweet.Tweet.User.id}}"
-            class="router-link">
+            <router-link
+              :to="{
+                name: 'sub-profile-tweets',
+                params: { id: tweet.Tweet.User.id },
+              }"
+              class="router-link"
+            >
               {{ "@" + tweet.Tweet.User.account }}
             </router-link>
             ・ {{ tweet.Tweet.User.createdAt | fromNow }}
           </div>
         </div>
-        <router-link 
-        :to="{name: 'individual-tweet', params: {tweet_id: tweet.TweetId}}"
-        class="profile__tweets__tweet__wrapper__tweet">
+        <router-link
+          :to="{
+            name: 'individual-tweet',
+            params: { tweet_id: tweet.TweetId },
+          }"
+          class="profile__tweets__tweet__wrapper__tweet"
+        >
           {{ tweet.Tweet.description }}
         </router-link>
 
@@ -57,9 +68,12 @@
               alt=""
               class="profile__tweets__tweet__wrapper__icons__like--icon"
             />
-            <span class="profile__tweets__tweet__wrapper__icons__like--count">{{
+            <span
+              class="profile__tweets__tweet__wrapper__icons__like--count"
+            ></span>
+            {{
               tweet.Tweet.likesCount
-            }}</span>
+            }}
           </div>
         </div>
       </div>
@@ -77,7 +91,7 @@ export default {
   name: "SubProfileLiked",
   data() {
     return {
-      likedTweets: [],
+      likedTweets: {},
       likesCount: 0,
     };
   },
@@ -91,12 +105,22 @@ export default {
       try {
         const { data } = await userAPI.getUserLiked({ userId });
         
+       this.likedTweets = data
         if (data.status === "error") {
           throw new Error(data.message);
         }
-        this.likesCount = data.Tweet.likesCount
-        this.likedTweets = data;
-      } catch (error) {
+        // this.likedTweets = data
+        // this.likesTweets = this.likesTweets.map( tweet => {
+        //   if (userId !== tweet.Tweet.User.id) {
+        //     return tweet
+        //   } else {
+        //     return {
+        //       ...tweet,
+        //       likesCount: tweet.likesCount + 1
+        //     }
+        //   }
+        // })
+        } catch (error) {
         console.log(error);
         Toast.fire({
           icon: "error",
@@ -118,7 +142,7 @@ export default {
             return {
               ...tweet,
               isLiked: true,
-              // likesCount: tweet.likesCount + 1,
+              likesCount: tweet.Tweet.likesCount + 1,
             }
           }
 
@@ -145,7 +169,7 @@ export default {
             return {
               ...tweet,
               isLiked: false,
-              // likesCount: tweet.likesCount - 1,
+              likesCount: tweet.Tweet.likesCount + 1,
             }
           }
         })

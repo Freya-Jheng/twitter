@@ -9,7 +9,7 @@
       />
       <div class="profile__header__content">
         <span class="profile__header__content__name">
-          {{ currentUser.name }}
+          {{ user.name }}
         </span>
         <span class="profile__header__content__tweetsNum"
           > {{ tweetsLength }} 推文</span
@@ -19,12 +19,12 @@
     <div class="profile__container">
       <div class="profile__container__top">
         <img
-          :src="currentUser.cover"
+          :src="user.cover"
           alt="top-background"
           class="profile__container__top__background"
         />
         <img
-          :src="currentUser.avatar"
+          :src="user.avatar"
           alt="top-avatar"
           class="profile__container__top__avatar"
         />
@@ -70,10 +70,10 @@
               </div>
               <div class="modal-body">
                 <div class="modal-top">
-                  <img :src="currentUser.cover" alt="background" class="background" />
+                  <img :src="user.cover" alt="background" class="background" />
                   <img src="./../assets/icon_uploadPhoto@2x.png" alt="" class="upload-bg-image upload">
                   <img src="./../assets/icon_delete@2x.png" alt="" class="delete-image delete">
-                  <img :src="currentUser.avatar" alt="avatar" class="avatar"/>
+                  <img :src="user.avatar" alt="avatar" class="avatar"/>
                   <img src="./../assets/icon_uploadPhoto@2x.png" alt="" class="upload-avatar-image upload">  
                 </div>
                 <form class="modal-bottom">
@@ -83,7 +83,7 @@
                       <input 
                       v-model="name"
                       type="text" class="name-input" id="name-input" />
-                      <span class="letters">{{"字數"}}<span class="letters-length"></span>/50</span>
+                      <span class="letters">9<span class="letters-length"></span>/50</span>
                     </label>
                     <label class="introduction-label">
                       <div class="title"> 自我介紹 </div>
@@ -95,7 +95,7 @@
                         cols="65"
                         rows="5"
                       ></textarea>
-                      <span class="letters"><span class="letters-length">{{"字數"}}</span>/160</span>
+                      <span class="letters"><span class="letters-length">0</span>/160</span>
                     </label>
                   </div>
                 </form>
@@ -109,17 +109,17 @@
           <div class="profile__container__bottom__introduction__name">
             <span
               class="profile__container__bottom__introduction__name-user-name"
-              >{{ currentUser.name }}</span
+              >{{ user.name }}</span
             >
             <span
               class="
                 profile__container__bottom__introduction__name-user-account
               "
-              >{{ currentUser.account }}</span
+              >{{ user.account }}</span
             >
           </div>
           <p class="profile__container__bottom__introduction__description">
-            {{ currentUser.introduction }}
+            {{ user.introduction }}
           </p>
           <div class="profile__container__bottom__introduction__follow">
             <router-link
@@ -150,10 +150,6 @@ import {Toast} from '../utils/helpers'
 
 export default {
   props: {
-    currentUserData: {
-      type: Object,
-      required: true,
-    },
     tweetsLength: {
       type: Number,
       required: true,
@@ -180,11 +176,10 @@ export default {
     async fetchCurrentUser (userId) {
       try {
         const {data} = await userAPI.get({userId})
-
+        
         if (data.status !== 'success') {
           throw new Error (data.message)
         }
-        console.log(data)
         this.user = data
 
       } catch (error) {

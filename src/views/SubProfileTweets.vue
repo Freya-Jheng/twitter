@@ -196,7 +196,7 @@ export default {
     async fetchTweets (userId) {
       try {
         const {data} = await userAPI.getUserTweets({userId})
-        console.log('tweets',data)
+        
         if (data.status === 'error') {
           throw new Error (data.message)
         }

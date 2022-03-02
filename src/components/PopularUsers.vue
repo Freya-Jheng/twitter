@@ -113,8 +113,6 @@ export default {
       try {
         const response = await usersAPI.deleteFollowing({ userId })
 
-        console.log(response)
-        console.log(userId)
         if (response.status !== 200) {
           throw new Error(response.statusText)
         }

@@ -48,10 +48,8 @@ export default {
   },
   created() {
     const { id } = this.$route.params;
-    // this.$route.push(`/profile/tweets/tweet/${id}`)
     this.fetchUser(id);
     this.fetchUserTweets(id)
-    console.log('id', id)
   },
   methods: {
     async fetchUser(userId) {
@@ -97,11 +95,10 @@ export default {
     async fetchUserTweets (userId) {
       try {
         const {data} = await userAPI.getUserTweets({userId})
-        console.log('id',userId)
+
         if (data.status === 'error') {
           throw new Error (data.message)
         }
-        console.log(data)
         this.Tweets = data
         this.tweetsLength = this.Tweets.length
 

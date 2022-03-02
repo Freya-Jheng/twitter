@@ -25,7 +25,7 @@
           <span class="response-to"
             >回覆
             <router-link 
-            :to="{name: 'sub-profile-tweets', params: { id: tweet.Tweet.UserId }}"
+            :to="{name: 'sub-profile-tweets', params: { id: tweet.Tweet.User.id }}"
             class="router-link">
               {{"@" + tweet.Tweet.User.account}}
             </router-link>
@@ -67,7 +67,6 @@ export default {
     async fetchResponses(userId) {
       try {
         const {data} = await userAPI.getUserResponses({userId})
-        console.log('re', data)
         
         if (data.status === 'error') {
           throw new Error (data.message)
