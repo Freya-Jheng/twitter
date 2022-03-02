@@ -51,6 +51,7 @@
               :data-target="'#' + 'tweet-' + tweet.TweetId"
               @click="handleClick(tweet)"
             />
+            
             <span
               class="profile__tweets__tweet__wrapper__icons__comment--count"
               >{{ tweet.Tweet.repliesCount }}</span
@@ -144,7 +145,7 @@
                   <button
                     class="btn-modal button"
                     data-dismiss="modal"
-                    @click="handleSubmit(tweet.id)"
+                    @click="handleSubmit(tweet.TweetId)"
                     :disabled="reply.length > 140 || reply.length === 0"
                   >
                     回覆
@@ -204,12 +205,12 @@ export default {
     async fetchUserLiked(userId) {
       try {
         const { data } = await userAPI.getUserLiked({ userId });
-        console.log(data);
+        console.log('data',data);
         if (data.status === "error") {
           throw new Error(data.message);
         }
         this.likedTweets = data;
-
+        console.log(this.likedTweets)
         this.likedTweets = this.likedTweets.map((tweet) => {
           if (userId !== tweet.Tweet.User.id) {
             return tweet;
