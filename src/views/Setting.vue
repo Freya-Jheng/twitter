@@ -158,7 +158,7 @@ export default {
           return
         }
         const response = await usersAPI.update({
-          userId: this.currentUser.id,
+          userId: this.user.id,
           account: this.user.account,
           name: this.user.name,
           password: this.password,
@@ -174,7 +174,8 @@ export default {
           title: '修改個人資料成功',
         })
 
-        this.$router.push('/home')
+        // this.$router.push('/home')
+        this.fetchUser()
       } catch (error) {
         console.log(error)
         Toast.fire({
@@ -200,7 +201,7 @@ export default {
 .main-setting {
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 600px 1.22fr;
+  grid-template-columns: 1fr 980px;
   grid-template-rows: auto;
   height: 100vh;
   padding: 0 6%;
