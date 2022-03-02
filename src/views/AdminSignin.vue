@@ -5,7 +5,10 @@
         <img src="./../assets/logo@2x.png" alt="logo" />
       </div>
       <div class="sign-in__header">後台登入</div>
-      <div class="sign-in__form-label-group form-label-group">
+      <div
+        class="sign-in__form-label-group form-label-group"
+        :class="{ error: !account && error }"
+      >
         <label for="account" class="sing-in__form-label-group__account label"
           >帳號</label
         >
@@ -16,6 +19,7 @@
           autofocus
           v-model="account"
           class="sing-in__form-label-group__account--input input"
+          :class="{ error_input: !account && error }"
         />
       </div>
 
@@ -59,6 +63,7 @@ export default {
       account: '',
       password: '',
       isProcessing: false,
+      error: false,
     }
   },
   methods: {
@@ -72,6 +77,7 @@ export default {
           return
         }
 
+        this.error = false
         this.isProcessing = true
 
         const response = await adminAPI.signIn({
@@ -91,10 +97,21 @@ export default {
         this.isProcessing = false
         this.account = ''
         this.password = ''
-        Toast.fire({
-          icon: 'warning',
-          title: '帳號或密碼錯誤',
-        })
+
+        if (
+          error.response.data.message ===
+            'Error: you are not admin user, permission denied' ||
+          error.response.data.message === 'Error: acount does not exist.'
+        ) {
+          this.error = true
+        }
+
+        if (error.response.data.message === 'Error: password does not match.') {
+          Toast.fire({
+            icon: 'warning',
+            title: '帳號或密碼錯誤',
+          })
+        }
       }
     },
   },
@@ -170,5 +187,23 @@ export default {
       }
     }
   }
+}
+
+.error {
+  position: relative;
+  &::after {
+    content: '帳號不存在!';
+    position: absolute;
+    top: 100%;
+    left: 0px;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 15px;
+    color: var(--error-color);
+  }
+}
+
+.error_input {
+  border-bottom: 2px solid var(--error-color);
 }
 </style>
