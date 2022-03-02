@@ -100,7 +100,7 @@ export default {
         this.account = ''
         this.password = ''
 
-        if (error.response.data.message === 'Error: acount does not exist.') {
+        if (error.response.data.message === 'Error: account does not exist.') {
           this.error = true
         }
 

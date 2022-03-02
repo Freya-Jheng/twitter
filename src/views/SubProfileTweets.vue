@@ -39,20 +39,23 @@
               src="./../assets/icon_reply@2x.png"
               alt=""
               class="profile__tweets__tweet__wrapper__icons__comment--icon"
+              data-toggle="modal"
+              :data-target="'#' + 'tweet-' + tweet.id"
+              @click="handleClick(tweet)"
             />
-            <!-- data-toggle="modal" -->
+            
             <span class="profile__tweets__tweet__wrapper__icons__comment--count"
               >{{tweet.repliesCount}}</span
             >
           </router-link>
           <!-- modal -->
-          <!-- <div
+          <div
             class="modal fade"
             :id="'tweet-' + tweet.id"
             tabindex="-1"
             aria-labelledby="replyModal"
             aria-hidden="true"
-          >
+          > 
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
@@ -61,8 +64,9 @@
                     class="close"
                     data-dismiss="modal"
                     aria-label="Close"
-                    @click="handleCancel"
+                    
                   >
+                  <!-- @click="handleCancel" -->
                     <span aria-hidden="true" class="close--text">&times;</span>
                   </button>
                 </div>
@@ -141,7 +145,7 @@
                 </div>
               </div>
             </div>
-          </div> -->
+          </div> 
           <div class="profile__tweets__tweet__wrapper__icons__like">
             <img
               v-if="!tweet.isLiked"
@@ -183,6 +187,7 @@ export default {
       tweets: [],
       tweetsLength: '',
       likedStatus: [],
+      reply: ''
     }
   },
   computed: {
@@ -265,7 +270,46 @@ export default {
           title: '無法成功取消按讚！'
         })
       }
-    }
+    },
+    handleCancel() {
+      this.reply = ''
+    },
+    handleClick(tweet) {
+      this.tweetModal = tweet
+    },
+    async handleSubmit(tweetId) {
+      try {
+        if (!this.reply) {
+          return false
+        }
+
+        const { data } = await tweetsAPI.reply({
+          tweetId,
+          comment: this.reply,
+        })
+
+        if (data.status !== 'success') {
+          throw new Error(data.message)
+        }
+
+        this.tweets = this.tweets.map((tweet) => {
+          if (tweet.id !== tweetId) {
+            return tweet
+          } else {
+            return {
+              ...tweet,
+              repliesCount: tweet.repliesCount + 1,
+            }
+          }
+        })
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法新增回覆，請稍後再試',
+        })
+      }
+    },
   }
 }
 </script>

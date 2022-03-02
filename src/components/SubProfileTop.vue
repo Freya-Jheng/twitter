@@ -123,14 +123,14 @@
           </p>
           <div class="profile__container__bottom__introduction__follow">
             <router-link
-              :to="{name: 'user-followings', params: {id: currentUser.id}}"
+              :to="{name: 'user-followings', params: {id: user.id}}"
               class="
                 profile__container__bottom__introduction__follow__followings
               "
               >{{ user.followingsCount }}個<span>跟隨中</span></router-link
             >
             <router-link
-               :to="{name: 'user-followers', params: {id: currentUser.id}}"
+               :to="{name: 'user-followers', params: {id: user.id}}"
               class="
                 profile__container__bottom__introduction__follow__followers
               "
@@ -144,7 +144,7 @@
 </template>
 
 <script>
-import {mapState} from 'vuex'
+// import {mapState} from 'vuex'
 import userAPI from '../apis/users'
 import {Toast} from '../utils/helpers'
 
@@ -164,9 +164,9 @@ export default {
       cover: '',
     }
   },
-  computed: {
-    ...mapState(['currentUser']),
-  },
+  // computed: {
+  //   ...mapState(['currentUser']),
+  // },
   created() {
     const { id } = this.$route.params
     this.fetchModal()
@@ -191,8 +191,8 @@ export default {
       }
     },
     fetchModal () {
-      this.name = this.currentUser.name
-      this.introduction = this.currentUser.introduction
+      this.name = this.user.name
+      this.introduction = this.user.introduction
     }
   }
 };
