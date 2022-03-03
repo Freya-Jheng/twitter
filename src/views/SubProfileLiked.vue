@@ -51,7 +51,7 @@
               :data-target="'#' + 'tweet-' + tweet.TweetId"
               @click="handleClick(tweet)"
             />
-            
+
             <span
               class="profile__tweets__tweet__wrapper__icons__comment--count"
               >{{ tweet.Tweet.repliesCount }}</span
@@ -173,7 +173,7 @@
             <span
               class="profile__tweets__tweet__wrapper__icons__like--count"
             ></span>
-            {{ tweet.Tweet.likesCount }}
+            {{ tweet.likesCount }}
           </div>
         </div>
       </div>
@@ -193,7 +193,7 @@ export default {
     return {
       likedTweets: [],
       likesCount: 0,
-      reply: ''
+      reply: "",
     };
   },
   mixins: [fromNowFilter],
@@ -205,23 +205,18 @@ export default {
     async fetchUserLiked(userId) {
       try {
         const { data } = await userAPI.getUserLiked({ userId });
-        console.log('data',data);
         if (data.status === "error") {
           throw new Error(data.message);
         }
         this.likedTweets = data;
-        console.log(this.likedTweets)
         this.likedTweets = this.likedTweets.map((tweet) => {
-          if (userId !== tweet.Tweet.User.id) {
-            return tweet;
-          } else {
-            return {
-              ...tweet,
-              isLiked: true,
-              likesCount: tweet.likesCount + 1,
-            };
+          return {
+            ...tweet,
+            likesCount: tweet.Tweet.likesCount,
+            isLiked: true,
           }
-        });
+        })
+        
       } catch (error) {
         console.log(error);
         Toast.fire({
@@ -233,21 +228,22 @@ export default {
     async addLike(tweetId) {
       try {
         const { data } = await tweetsAPI.addLike({ tweetId });
-
+        console.log('data',data)
         if (data.status === "error") {
           throw new Error(data.message);
         }
         this.likedTweets = this.likedTweets.map((tweet) => {
-          if (tweet.id !== tweetId) {
+          if (tweet.Tweet.id !== tweetId) {
             return tweet;
           } else {
             return {
               ...tweet,
               isLiked: true,
-              likesCount: tweet.Tweet.likesCount + 1,
+              likesCount: tweet.likesCount + 1,
             };
           }
         });
+        console.log('final',this.likedTweets)
       } catch (error) {
         console.log(error);
         Toast.fire({
@@ -263,14 +259,14 @@ export default {
         if (data.status === "error") {
           throw new Error(data.message);
         }
-        this.tweets = this.tweets.map((tweet) => {
-          if (tweet.id !== tweetId) {
+        this.likedTweets = this.likedTweets.map((tweet) => {
+          if (tweet.Tweet.id !== tweetId) {
             return tweet;
           } else {
             return {
               ...tweet,
               isLiked: false,
-              likesCount: tweet.Tweet.likesCount + 1,
+              likesCount: tweet.likesCount - 1,
             };
           }
         });

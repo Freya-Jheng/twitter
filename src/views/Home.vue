@@ -40,6 +40,7 @@ export default {
           throw new Error(response.statusText)
         }
         this.userTweets = response.data
+        console.log('home',this.userTweets)
 
         // 將推文進行排序
         this.userTweets = this.userTweets.sort((a, b) => {
