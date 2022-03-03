@@ -168,6 +168,7 @@ export default {
         if (response.status !== 200) {
           throw new Error(response.statusText)
         }
+        this.$store.dispatch('fetchCurrentUser')
 
         Toast.fire({
           icon: 'success',

@@ -109,6 +109,8 @@ export default {
         }
 
         this.allTweets = this.allTweets.filter((tweet) => tweet.id !== tweetId)
+
+        this.fetchTweets()
       } catch (error) {
         console.log(error)
         Toast.fire({
