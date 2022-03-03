@@ -28,7 +28,7 @@
             >
               {{ "@" + tweet.Tweet.User.account }}
             </router-link>
-            ・ {{ tweet.Tweet.User.createdAt | fromNow }}
+            ・ {{ tweet.createdAt | fromNow }}
           </div>
         </div>
         <router-link
@@ -214,9 +214,17 @@ export default {
             ...tweet,
             likesCount: tweet.Tweet.likesCount,
             isLiked: true,
-          }
+          };
+        });
+        // 排序
+        this.likedTweets = this.likedTweets.sort((a, b) => {
+          return a.createdAt > b.createdAt
+            ? -1
+            : a.Tweet.createdAt < b.Tweet.createdAt
+            ? 1
+            : 0
         })
-        
+
       } catch (error) {
         console.log(error);
         Toast.fire({
@@ -228,10 +236,11 @@ export default {
     async addLike(tweetId) {
       try {
         const { data } = await tweetsAPI.addLike({ tweetId });
-        console.log('data',data)
+        
         if (data.status === "error") {
           throw new Error(data.message);
         }
+
         this.likedTweets = this.likedTweets.map((tweet) => {
           if (tweet.Tweet.id !== tweetId) {
             return tweet;
@@ -243,7 +252,6 @@ export default {
             };
           }
         });
-        console.log('final',this.likedTweets)
       } catch (error) {
         console.log(error);
         Toast.fire({

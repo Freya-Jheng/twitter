@@ -11,8 +11,8 @@
         <span class="profile__header__content__name">
           {{ user.name }}
         </span>
-        <span class="profile__header__content__tweetsNum"
-          > {{ tweetsLength }} 推文</span
+        <span class="profile__header__content__tweetsNum">
+          {{ tweetsLength }} 推文</span
         >
       </div>
     </div>
@@ -46,60 +46,110 @@
         >
           <div class="modal-dialog">
             <div class="modal-content">
-              <div class="modal-header">
-                <div class="header-left">
-                  <button
-                    type="button"
-                    class="close"
-                    data-dismiss="modal"
-                    aria-label="Close"
-                  >
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                  <span class="modal-title" id="editModalLabel"
-                    >編輯個人資料</span
-                  >
-                </div>
-                <button
-                  type="button"
-                  class="btn header-right"
-                  data-dismiss="modal"
-                >
-                  儲存
-                </button>
-              </div>
-              <div class="modal-body">
-                <div class="modal-top">
-                  <img :src="user.cover" alt="background" class="background" />
-                  <img src="./../assets/icon_uploadPhoto@2x.png" alt="" class="upload-bg-image upload">
-                  <img src="./../assets/icon_delete@2x.png" alt="" class="delete-image delete">
-                  <img :src="user.avatar" alt="avatar" class="avatar"/>
-                  <img src="./../assets/icon_uploadPhoto@2x.png" alt="" class="upload-avatar-image upload">  
-                </div>
-                <form class="modal-bottom">
-                  <div class="form-group">
-                    <label for="name-input" class="name-label">
-                      <div class="title"> 名稱 </div>
-                      <input 
-                      v-model="name"
-                      type="text" class="name-input" id="name-input" />
-                      <span class="letters">9<span class="letters-length"></span>/50</span>
-                    </label>
-                    <label class="introduction-label">
-                      <div class="title"> 自我介紹 </div>
-                      <textarea
-                        v-model="introduction"
-                        name="introduction-input"
-                        class="introduction-input"
-                        id="description-input"
-                        cols="65"
-                        rows="5"
-                      ></textarea>
-                      <span class="letters"><span class="letters-length">0</span>/160</span>
-                    </label>
+              <form @submit.stop.prevent="handleSubmit">
+                <div class="modal-header">
+                  <div class="header-left">
+                    <button
+                      type="button"
+                      class="close"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    <span class="modal-title" id="editModalLabel"
+                      >編輯個人資料</span
+                    >
                   </div>
-                </form>
-              </div>
+                  <button type="submit" class="btn header-right">儲存</button>
+                </div>
+                <div class="modal-body">
+                  <div class="modal-top">
+                    <img
+                      v-if="user.cover"
+                      :src="user.cover"
+                      alt="background"
+                      class="background"
+                    />
+                    <label for="cover-upload">
+                      <img
+                        src="./../assets/icon_uploadPhoto@2x.png"
+                        alt="background"
+                        class="upload-bg-image upload"
+                      />
+                    </label>
+                    <input
+                      id="cover-upload"
+                      type="file"
+                      name="cover-upload"
+                      accept="image/*"
+                      class="form-control-file d-none"
+                      @change="handleBackgroundChange"
+                    />
+                    <img
+                      src="./../assets/icon_delete@2x.png"
+                      alt=""
+                      class="delete-image delete"
+                    />
+                    <img
+                      v-if="user.avatar"
+                      :src="user.avatar"
+                      alt="avatar"
+                      class="avatar"
+                    />
+                    <label
+                      class="upload-avatar-image-label"
+                      for="avatar-upload"
+                    >
+                      <img
+                        src="./../assets/icon_uploadPhoto@2x.png"
+                        alt="avatar"
+                        class="upload-avatar-image upload"
+                      />
+                    </label>
+                    <input
+                      id="avatar-upload"
+                      type="file"
+                      name="avatar-upload"
+                      accept="image/*"
+                      class="form-control-file d-none"
+                      @change="handleAvatarChange"
+                    />
+                  </div>
+                  <div class="modal-bottom">
+                    <div class="form-group">
+                      <label class="name-label" for="name-input">
+                        <div class="title">名稱</div>
+                        <input
+                          v-model="user.name"
+                          type="text"
+                          class="name-input"
+                          id="name-input"
+                          name="name-input"
+                          required
+                        />
+                        <span class="letters"
+                          >9<span class="letters-length"></span>/50</span
+                        >
+                      </label>
+                      <label class="introduction-label">
+                        <div class="title">自我介紹</div>
+                        <textarea
+                          v-model="user.introduction"
+                          name="introduction-input"
+                          class="introduction-input"
+                          id="description-input"
+                          cols="65"
+                          rows="5"
+                        ></textarea>
+                        <span class="letters"
+                          ><span class="letters-length">0</span>/160</span
+                        >
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>
@@ -123,14 +173,14 @@
           </p>
           <div class="profile__container__bottom__introduction__follow">
             <router-link
-              :to="{name: 'user-followings', params: {id: user.id}}"
+              :to="{ name: 'user-followings', params: { id: user.id } }"
               class="
                 profile__container__bottom__introduction__follow__followings
               "
               >{{ user.followingsCount }}個<span>跟隨中</span></router-link
             >
             <router-link
-               :to="{name: 'user-followers', params: {id: user.id}}"
+              :to="{ name: 'user-followers', params: { id: user.id } }"
               class="
                 profile__container__bottom__introduction__follow__followers
               "
@@ -145,56 +195,138 @@
 
 <script>
 // import {mapState} from 'vuex'
-import userAPI from '../apis/users'
-import {Toast} from '../utils/helpers'
+import userAPI from "../apis/users";
+import { Toast } from "../utils/helpers";
 
 export default {
   props: {
     tweetsLength: {
       type: Number,
       required: true,
-    }
+    },
   },
-  data () {
+  data() {
     return {
-      user: {},
-      name: '',
-      introduction: '',
-      avatar: '',
-      cover: '',
-    }
+      user: {
+        id: 0,
+        name: "",
+        introduction: "",
+        avatar: "",
+        cover: "",
+        account: "",
+      },
+    };
   },
   // computed: {
   //   ...mapState(['currentUser']),
   // },
   created() {
-    const { id } = this.$route.params
-    this.fetchModal()
-    this.fetchCurrentUser( id )
+    const { id } = this.$route.params;
+    // this.fetchModal();
+    this.fetchCurrentUser(id);
   },
   methods: {
-    async fetchCurrentUser (userId) {
+    async fetchCurrentUser(userId) {
       try {
-        const {data} = await userAPI.get({userId})
-        
+        const { data } = await userAPI.get({ userId });
+
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        const { name, introduction, avatar, cover, account, id } = data;
+        this.user = {
+          name,
+          introduction,
+          avatar,
+          cover,
+          account,
+          id
+        };
+        console.log("current", this.user);
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法成功取得追蹤人數！",
+        });
+      }
+    },
+    // fetchModal() {
+    //   this.name = this.user.name;
+    //   this.introduction = this.user.introduction;
+    //   this.avatar = this.user.avatar
+    //   this.cover = this.user.cover
+    // },
+    handleBackgroundChange(e) {
+      const files = e.target.files;
+      console.log("files", files);
+      if (files.length === 0) {
+        return (this.user.cover = null);
+      } else {
+        const imageURL = window.URL.createObjectURL(files[0]);
+        this.user.cover = imageURL;
+      }
+    },
+    handleAvatarChange(e) {
+      const files = e.target.files;
+      console.log("files", files);
+      if (files.length === 0) {
+        return (this.user.avatar = null);
+      } else {
+        const imageURL = window.URL.createObjectURL(files[0]);
+        this.user.avatar = imageURL;
+        console.log("this", imageURL);
+      }
+    },
+    async handleSubmit(e) {
+      try {
+        const form = e.target;
+        const formData = new FormData(form);
+
+        if (!this.user.name) {
+          Toast.fire({
+            icon: "warning",
+            title: "請填寫名稱",
+          });
+          return;
+        }
+        if (!this.user.introduction) {
+          Toast.fire({
+            icon: "warning",
+            title: "請填寫自我介紹",
+          });
+          return;
+        }
+        if (!this.user.avatar) {
+          Toast.fire({
+            icon: "warning",
+            title: "請選擇大頭貼",
+          });
+          return;
+        }
+        const { data } = await userAPI.update({
+          userId: this.user.id,
+          name: this.user.name,
+          introduction: this.user.introduction,
+          avatar: this.user.avatar,
+          cover: this.user.cover,
+        })
+        console.log('submit',data)
+
         if (data.status !== 'success') {
           throw new Error (data.message)
         }
-        this.user = data
 
+        console.log(formData);
       } catch (error) {
-        console.log(error)
+        console.log(error);
         Toast.fire({
-          icon: 'error',
-          title: '無法成功取得追蹤人數！'
-        })
+          icon: "error",
+          title: "無法成功更新使用者資料",
+        });
       }
     },
-    fetchModal () {
-      this.name = this.user.name
-      this.introduction = this.user.introduction
-    }
-  }
+  },
 };
 </script>
 
@@ -368,22 +500,26 @@ export default {
           height: 200px;
           background-color: grey;
           position: absolute;
-          top:0
+          top: 0;
+          border: 1px solid grey;
         }
         .avatar {
           width: 120px;
           height: 120px;
           border-radius: 50%;
-          border: 4px solid var(--background);          
+          border: 4px solid var(--background);
           background-color: pink;
           position: absolute;
           top: 140px;
           left: 14px;
         }
-        .upload, .delete {
+        .upload,
+        .delete {
           width: 20px;
           height: 20px;
           color: var(--background);
+          background-color: var(--smaller-font-color);
+          border-radius: 4px;
           cursor: pointer;
         }
         .delete {
@@ -395,6 +531,7 @@ export default {
           position: absolute;
           top: 90px;
           left: 262px;
+          border: 1px solid var(--user-avatar);
         }
         .upload-avatar-image {
           position: absolute;
@@ -421,7 +558,7 @@ export default {
             padding: 0 15px;
             &::after {
               position: absolute;
-              content: '';
+              content: "";
               top: 100%;
               left: 0;
               width: 100%;
@@ -430,7 +567,8 @@ export default {
               background-color: var(--input-underline);
             }
           }
-          input, textarea {
+          input,
+          textarea {
             border: unset;
             background-color: var(--input-background);
           }

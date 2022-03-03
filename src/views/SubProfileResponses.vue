@@ -18,7 +18,7 @@
               class="router-link">
               {{"@" + currentUser.account}}
             </router-link>
-             ・ {{tweet.Tweet.createdAt | fromNow}} 
+             ・ {{tweet.createdAt | fromNow}} 
           </div>
         </div>
         <div class="profile__tweets__tweet__wrapper__response">
@@ -35,7 +35,7 @@
           :to="{name: 'individual-tweet', params: {tweet_id: tweet.TweetId}}"
           class="profile__tweets__tweet__wrapper__tweet"
         >
-          {{tweet.Tweet.description}}</router-link
+          {{tweet.comment}}</router-link
         >
       </div>
     </div>
@@ -73,6 +73,14 @@ export default {
         }
 
         this.TweetsArray = data
+        
+        this.TweetsArray = this.TweetsArray.sort((a, b) => {
+          return a.createdAt > b.createdAt
+            ? -1
+            : a.Tweet.createdAt < b.Tweet.createdAt
+            ? 1
+            : 0
+        })
          
       } catch (error) {
         console.log(error)
