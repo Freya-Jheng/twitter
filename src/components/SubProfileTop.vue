@@ -29,6 +29,7 @@
           class="profile__container__top__avatar"
         />
         <button
+          v-if="user.id===currentUser.id"
           type="button"
           class="profile__container__top__btn"
           data-toggle="modal"
@@ -196,6 +197,7 @@
 <script>
 import userAPI from "../apis/users";
 import { Toast } from "../utils/helpers";
+import { mapState } from 'vuex'
 
 export default {
   props: {
@@ -207,6 +209,9 @@ export default {
     //   type: Object,
     //   required: true,
     // }
+  },
+  computed: {
+    ...mapState(['currentUser', 'isAuthenticated']),
   },
   data() {
     return {

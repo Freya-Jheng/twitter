@@ -49,8 +49,9 @@ export default {
   // watch: {
   //   '$route.params.id': {
   //     handler: function(id) {
-
-  //       console.log(search)
+  //       this.fetchUser(id);
+  //       this.fetchUserTweets(id)
+  //       // console.log(search)
   //     },
   //     deep: true,
   //     immediate: true
