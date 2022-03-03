@@ -46,6 +46,16 @@ export default {
     NavTab,
     PopularUsers,
   },
+  // watch: {
+  //   '$route.params.id': {
+  //     handler: function(id) {
+
+  //       console.log(search)
+  //     },
+  //     deep: true,
+  //     immediate: true
+  //   }
+  // },
   created() {
     const { id } = this.$route.params;
     this.fetchUser(id);

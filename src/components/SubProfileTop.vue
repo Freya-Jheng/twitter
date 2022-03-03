@@ -84,7 +84,7 @@
                       name="cover-upload"
                       accept="image/*"
                       class="form-control-file d-none"
-                      @change="handleBackgroundChange"
+                      @change="handleCoverChange"
                     />
                     <img
                       src="./../assets/icon_delete@2x.png"
@@ -194,7 +194,6 @@
 </template>
 
 <script>
-// import {mapState} from 'vuex'
 import userAPI from "../apis/users";
 import { Toast } from "../utils/helpers";
 
@@ -204,6 +203,10 @@ export default {
       type: Number,
       required: true,
     },
+    // currentUserData: {
+    //   type: Object,
+    //   required: true,
+    // }
   },
   data() {
     return {
@@ -214,16 +217,26 @@ export default {
         avatar: "",
         cover: "",
         account: "",
+        followingsCount: 0,
+        followersCount: 0,
       },
     };
   },
-  // computed: {
-  //   ...mapState(['currentUser']),
-  // },
+  watch: {
+    '$route.params.id': {
+      handler: function(id) {
+        this.fetchCurrentUser(id);
+        // console.log(search)
+      },
+      deep: true,
+      immediate: true
+    }
+  },
   created() {
-    const { id } = this.$route.params;
-    // this.fetchModal();
-    this.fetchCurrentUser(id);
+    // const { id } = this.currentUserData;
+    const {id} = this.$route.params
+    // this.fetchCurrentUser(id);
+    console.log(id)
   },
   methods: {
     async fetchCurrentUser(userId) {
@@ -233,16 +246,17 @@ export default {
         if (data.status !== "success") {
           throw new Error(data.message);
         }
-        const { name, introduction, avatar, cover, account, id } = data;
+        const { name, introduction, avatar, cover, account, id, followingsCount, followersCount } = data;
         this.user = {
           name,
           introduction,
           avatar,
           cover,
           account,
-          id
+          id,
+          followingsCount,
+          followersCount
         };
-        console.log("current", this.user);
       } catch (error) {
         console.log(error);
         Toast.fire({
@@ -251,15 +265,8 @@ export default {
         });
       }
     },
-    // fetchModal() {
-    //   this.name = this.user.name;
-    //   this.introduction = this.user.introduction;
-    //   this.avatar = this.user.avatar
-    //   this.cover = this.user.cover
-    // },
-    handleBackgroundChange(e) {
+    handleCoverChange(e) {
       const files = e.target.files;
-      console.log("files", files);
       if (files.length === 0) {
         return (this.user.cover = null);
       } else {
@@ -269,20 +276,15 @@ export default {
     },
     handleAvatarChange(e) {
       const files = e.target.files;
-      console.log("files", files);
       if (files.length === 0) {
         return (this.user.avatar = null);
       } else {
         const imageURL = window.URL.createObjectURL(files[0]);
         this.user.avatar = imageURL;
-        console.log("this", imageURL);
       }
     },
-    async handleSubmit(e) {
+    async handleSubmit() {
       try {
-        const form = e.target;
-        const formData = new FormData(form);
-
         if (!this.user.name) {
           Toast.fire({
             icon: "warning",
@@ -310,14 +312,17 @@ export default {
           introduction: this.user.introduction,
           avatar: this.user.avatar,
           cover: this.user.cover,
-        })
-        console.log('submit',data)
+        });
+        console.log(data)
 
-        if (data.status !== 'success') {
-          throw new Error (data.message)
+        if (data.status !== "success") {
+          throw new Error(data.message);
         }
-
-        console.log(formData);
+        
+        Toast.fire({
+          icon: 'success',
+          title: '個人資料已更新！'
+        })
       } catch (error) {
         console.log(error);
         Toast.fire({

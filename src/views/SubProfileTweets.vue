@@ -206,7 +206,6 @@ export default {
         }
 
         this.tweets = data
-        console.log('test',this.tweets)
         this.tweetsLength = this.tweets.length
         
         // 排序

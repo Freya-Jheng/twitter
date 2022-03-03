@@ -9,8 +9,8 @@
       <div class="profile__tweets__tweet__wrapper">
         <div class="profile__tweets__tweet__wrapper__info">
           <router-link 
-          :to="{name: 'sub-profile-tweets', params: {id: tweet.Tweet.User.id}}" class="profile__tweets__tweet__wrapper__info--name"
-            >{{currentUser.name}}</router-link
+          :to="{name: 'sub-profile', params: {id: tweet.Tweet.User.id}}" class="profile__tweets__tweet__wrapper__info--name"
+            >{{tweet.Tweet.User.name}}</router-link
           >
           <div class="profile__tweets__tweet__wrapper__info--account">
             <router-link 
@@ -73,7 +73,7 @@ export default {
         }
 
         this.TweetsArray = data
-        
+        console.log('re',data)
         this.TweetsArray = this.TweetsArray.sort((a, b) => {
           return a.createdAt > b.createdAt
             ? -1
@@ -94,7 +94,7 @@ export default {
       try {
         const { data } = await userAPI.get({userId})
         if (data.status !== 'success') {
-          console.log(data.message)
+          throw new Error (data.message)
         }
 
         this.currentUser = data

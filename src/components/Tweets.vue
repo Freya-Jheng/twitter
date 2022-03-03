@@ -218,7 +218,6 @@ export default {
   methods: {
     fetchTweets() {
       this.userTweets = this.initialUserTweets
-      console.log('origin',this.userTweets)
     },
     async addLike(tweetId) {
       try {
@@ -239,7 +238,6 @@ export default {
             }
           }
         })
-        console.log('tweet',this.userTweets)
       } catch (error) {
         console.log(error)
         Toast.fire({
