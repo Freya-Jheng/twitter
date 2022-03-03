@@ -29,6 +29,7 @@ export default {
     avatar,
     password,
     checkPassword,
+    formData
   }) {
     return apiHelper.put(`/users/${userId}`, {
       account,
@@ -39,6 +40,7 @@ export default {
       avatar,
       password,
       checkPassword,
+      formData
     })
   },
   get({ userId }) {

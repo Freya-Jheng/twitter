@@ -29,7 +29,7 @@
           class="profile__container__top__avatar"
         />
         <button
-          type="submit"
+          type="button"
           class="profile__container__top__btn"
           data-toggle="modal"
           data-target="#editModal"
@@ -46,108 +46,107 @@
         >
           <div class="modal-dialog">
             <div class="modal-content">
-              <div class="modal-header">
-                <div class="header-left">
-                  <button
-                    type="button"
-                    class="close"
-                    data-dismiss="modal"
-                    aria-label="Close"
-                  >
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                  <span class="modal-title" id="editModalLabel"
-                    >編輯個人資料</span
-                  >
+              <form @submit.stop.prevent="handleSubmit">
+                <div class="modal-header">
+                  <div class="header-left">
+                    <button
+                      type="button"
+                      class="close"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    <span class="modal-title" id="editModalLabel"
+                      >編輯個人資料</span
+                    >
+                  </div>
+                  <button type="submit" class="btn header-right">儲存</button>
                 </div>
-                <button
-                  type="button"
-                  class="btn header-right"
-                  data-dismiss="modal"
-                >
-                  儲存
-                </button>
-              </div>
-              <form
-              @submit.stop.prevent="handleSubmit"
-              class="modal-body">
-                <div class="modal-top">
-                  <img
-                    v-if="user.cover"
-                    :src="user.cover"
-                    alt="background"
-                    class="background"
-                  />
-                  <label for="image">
+                <div class="modal-body">
+                  <div class="modal-top">
                     <img
-                      src="./../assets/icon_uploadPhoto@2x.png"
+                      v-if="user.cover"
+                      :src="user.cover"
                       alt="background"
-                      class="upload-bg-image upload"
+                      class="background"
                     />
-                  </label>
-                  <input
-                    id="image"
-                    type="file"
-                    name="image"
-                    accept="image/*"
-                    class="form-control-file d-none"
-                    @change="handleBackgroundChange"
-                  />
-                  <img
-                    src="./../assets/icon_delete@2x.png"
-                    alt=""
-                    class="delete-image delete"
-                  />
-                  <img
-                    v-if="user.avatar"
-                    :src="user.avatar"
-                    alt="avatar"
-                    class="avatar"
-                  />
-                  <label class="upload-avatar-image-label" for="avatar-upload">
-                    <img
-                      src="./../assets/icon_uploadPhoto@2x.png"
-                      alt="avatar"
-                      class="upload-avatar-image upload"
-                    />
-                  </label>
-                  <input
-                    id="avatar-upload"
-                    type="file"
-                    name="avatar-upload"
-                    accept="image/*"
-                    class="form-control-file d-none"
-                    @change="handleAvatarChange"
-                  />
-                </div>
-                <div class="modal-bottom">
-                  <div class="form-group">
-                    <label for="name-input" class="name-label">
-                      <div class="title">名稱</div>
-                      <input
-                        v-model="user.name"
-                        type="text"
-                        class="name-input"
-                        id="name-input"
+                    <label for="cover-upload">
+                      <img
+                        src="./../assets/icon_uploadPhoto@2x.png"
+                        alt="background"
+                        class="upload-bg-image upload"
                       />
-                      <span class="letters"
-                        >9<span class="letters-length"></span>/50</span
-                      >
                     </label>
-                    <label class="introduction-label">
-                      <div class="title">自我介紹</div>
-                      <textarea
-                        v-model="user.introduction"
-                        name="introduction-input"
-                        class="introduction-input"
-                        id="description-input"
-                        cols="65"
-                        rows="5"
-                      ></textarea>
-                      <span class="letters"
-                        ><span class="letters-length">0</span>/160</span
-                      >
+                    <input
+                      id="cover-upload"
+                      type="file"
+                      name="cover-upload"
+                      accept="image/*"
+                      class="form-control-file d-none"
+                      @change="handleBackgroundChange"
+                    />
+                    <img
+                      src="./../assets/icon_delete@2x.png"
+                      alt=""
+                      class="delete-image delete"
+                    />
+                    <img
+                      v-if="user.avatar"
+                      :src="user.avatar"
+                      alt="avatar"
+                      class="avatar"
+                    />
+                    <label
+                      class="upload-avatar-image-label"
+                      for="avatar-upload"
+                    >
+                      <img
+                        src="./../assets/icon_uploadPhoto@2x.png"
+                        alt="avatar"
+                        class="upload-avatar-image upload"
+                      />
                     </label>
+                    <input
+                      id="avatar-upload"
+                      type="file"
+                      name="avatar-upload"
+                      accept="image/*"
+                      class="form-control-file d-none"
+                      @change="handleAvatarChange"
+                    />
+                  </div>
+                  <div class="modal-bottom">
+                    <div class="form-group">
+                      <label class="name-label" for="name-input">
+                        <div class="title">名稱</div>
+                        <input
+                          v-model="user.name"
+                          type="text"
+                          class="name-input"
+                          id="name-input"
+                          name="name-input"
+                          required
+                        />
+                        <span class="letters"
+                          >9<span class="letters-length"></span>/50</span
+                        >
+                      </label>
+                      <label class="introduction-label">
+                        <div class="title">自我介紹</div>
+                        <textarea
+                          v-model="user.introduction"
+                          name="introduction-input"
+                          class="introduction-input"
+                          id="description-input"
+                          cols="65"
+                          rows="5"
+                        ></textarea>
+                        <span class="letters"
+                          ><span class="letters-length">0</span>/160</span
+                        >
+                      </label>
+                    </div>
                   </div>
                 </div>
               </form>
@@ -208,11 +207,14 @@ export default {
   },
   data() {
     return {
-      user: {},
-      name: "",
-      introduction: "",
-      avatar: "",
-      cover: "",
+      user: {
+        id: 0,
+        name: "",
+        introduction: "",
+        avatar: "",
+        cover: "",
+        account: "",
+      },
     };
   },
   // computed: {
@@ -220,7 +222,7 @@ export default {
   // },
   created() {
     const { id } = this.$route.params;
-    this.fetchModal();
+    // this.fetchModal();
     this.fetchCurrentUser(id);
   },
   methods: {
@@ -231,8 +233,16 @@ export default {
         if (data.status !== "success") {
           throw new Error(data.message);
         }
-        this.user = data;
-        console.log('current', this.user)
+        const { name, introduction, avatar, cover, account, id } = data;
+        this.user = {
+          name,
+          introduction,
+          avatar,
+          cover,
+          account,
+          id
+        };
+        console.log("current", this.user);
       } catch (error) {
         console.log(error);
         Toast.fire({
@@ -241,17 +251,17 @@ export default {
         });
       }
     },
-    fetchModal() {
-      this.name = this.user.name;
-      this.introduction = this.user.introduction;
-      // this.avatar = this.user.avatar
-      // this.cover = this.user.cover
-    },
+    // fetchModal() {
+    //   this.name = this.user.name;
+    //   this.introduction = this.user.introduction;
+    //   this.avatar = this.user.avatar
+    //   this.cover = this.user.cover
+    // },
     handleBackgroundChange(e) {
       const files = e.target.files;
       console.log("files", files);
       if (files.length === 0) {
-        return this.user.cover = null 
+        return (this.user.cover = null);
       } else {
         const imageURL = window.URL.createObjectURL(files[0]);
         this.user.cover = imageURL;
@@ -261,20 +271,61 @@ export default {
       const files = e.target.files;
       console.log("files", files);
       if (files.length === 0) {
-        return this.user.avatar = null
+        return (this.user.avatar = null);
       } else {
         const imageURL = window.URL.createObjectURL(files[0]);
         this.user.avatar = imageURL;
-        console.log('this',imageURL)
+        console.log("this", imageURL);
       }
     },
-    handleSubmit (e) {
-      const form = e.target
-      const formData = new FormData(form)
-      for (let [name, value] of formData.entries()) {
-        console.log(name + ': ' + value)
+    async handleSubmit(e) {
+      try {
+        const form = e.target;
+        const formData = new FormData(form);
+
+        if (!this.user.name) {
+          Toast.fire({
+            icon: "warning",
+            title: "請填寫名稱",
+          });
+          return;
+        }
+        if (!this.user.introduction) {
+          Toast.fire({
+            icon: "warning",
+            title: "請填寫自我介紹",
+          });
+          return;
+        }
+        if (!this.user.avatar) {
+          Toast.fire({
+            icon: "warning",
+            title: "請選擇大頭貼",
+          });
+          return;
+        }
+        const { data } = await userAPI.update({
+          userId: this.user.id,
+          name: this.user.name,
+          introduction: this.user.introduction,
+          avatar: this.user.avatar,
+          cover: this.user.cover,
+        })
+        console.log('submit',data)
+
+        if (data.status !== 'success') {
+          throw new Error (data.message)
+        }
+
+        console.log(formData);
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法成功更新使用者資料",
+        });
       }
-    }
+    },
   },
 };
 </script>
