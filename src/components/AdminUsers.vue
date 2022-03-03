@@ -40,7 +40,7 @@
                 />
                 <span
                   class="admin__users__cards__card__bottom__icons__response--number"
-                  >{{ user.repliesCount | transNumber }}</span
+                  >{{ user.tweetsCount | transNumber }}</span
                 >
               </div>
               <div class="admin__users__cards__card__bottom__icons__like">
