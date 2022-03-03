@@ -176,23 +176,17 @@ export default {
 
         this.$router.push('/home')
       } catch (error) {
-        console.log(error)
-        Toast.fire({
-          icon: 'error',
-          title: '無法修改個人資料，請稍後再試',
-        })
-
-        if (error.response.data.message === 'Error: Email already exists!') {
+        if (
+          error.response.data.message === 'Error: Acount or Email repeated!'
+        ) {
           Toast.fire({
             icon: 'error',
-            title: 'email 已重覆註冊！',
+            title: '帳號或 email 重複，請重新輸入',
           })
-        }
-
-        if (error.response.data.message === 'Error: account already exists!') {
+        } else {
           Toast.fire({
             icon: 'error',
-            title: 'email 已重覆註冊！',
+            title: '無法修改個人資料，請稍後再試',
           })
         }
       }
