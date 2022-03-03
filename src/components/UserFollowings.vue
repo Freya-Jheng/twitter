@@ -75,6 +75,15 @@ export default {
         }
 
         this.followings = response.data
+
+        // 將 followings 進行排序
+        this.followings = this.followings.sort((a, b) => {
+          return a.createdAt > b.createdAt
+            ? -1
+            : a.createdAt < b.createdAt
+            ? 1
+            : 0
+        })
       } catch (error) {
         console.log(error)
         Toast.fire({
