@@ -84,7 +84,7 @@ export default {
     },
     async addFollowing(userId) {
       try {
-        const response = await usersAPI.addFollowing({ userId })
+        const response = await usersAPI.addFollowing({ followerId: userId })
 
         if (response.status !== 200) {
           throw new Error(response.statusText)
@@ -100,6 +100,8 @@ export default {
             }
           }
         })
+
+        this.getPopularUsers()
       } catch (error) {
         console.log(error)
         Toast.fire({
@@ -111,7 +113,7 @@ export default {
 
     async deleteFollowing(userId) {
       try {
-        const response = await usersAPI.deleteFollowing({ userId })
+        const response = await usersAPI.deleteFollowing({ followingId: userId })
 
         if (response.status !== 200) {
           throw new Error(response.statusText)
@@ -127,6 +129,8 @@ export default {
             }
           }
         })
+
+        this.getPopularUsers()
       } catch (error) {
         console.log(error)
         Toast.fire({
