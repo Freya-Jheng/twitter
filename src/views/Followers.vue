@@ -17,14 +17,17 @@
         </div>
       </div>
       <ul class="followers__nav-tabs">
-        <li class="followers__nav-tabs__item">
+        <li
+          class="followers__nav-tabs__item"
+          :class="{ active: $route.path === 'following' }"
+        >
           <router-link
             class="followers__nav-tabs__item--link"
             :to="{ name: 'user-followers', params: { id: currentUser.id } }"
             >跟隨者</router-link
           >
         </li>
-        <li class="followers__nav-tabs__item">
+        <li class="followers__nav-tabs__item" :class="{ active: $route.path }">
           <router-link
             class="followers__nav-tabs__item--link"
             :to="{ name: 'user-followings', params: { id: currentUser.id } }"
@@ -70,9 +73,8 @@ export default {
     // },
   },
   created() {
-    // const { userId } = this.$route.params
+    // const userId = this.currentUser.id
     // console.log(userId)
-    // this.fetchTweets(userId)
   },
 }
 </script>
@@ -156,4 +158,5 @@ export default {
     }
   }
 }
+
 </style>

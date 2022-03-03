@@ -1,24 +1,47 @@
-# twitter
+# Simple Twitter Project
 
-## Project setup
+## 1. 下載專案到本地
+
+```
+git clone https://github.com/Freya-Jheng/twitter.git
+```
+
+## 2. 進入專案資料夾
+
+```
+cd twitter
+```
+
+## 3. 安裝專案所需套件
+
 ```
 npm install
 ```
 
+## 4. 啟動指令
+
 ### Compiles and hot-reloads for development
+
 ```
 npm run serve
 ```
 
 ### Compiles and minifies for production
+
 ```
 npm run build
 ```
 
 ### Lints and fixes files
+
 ```
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Contributors
+
+```
+Freya Jheng
+
+Anson Chang
+```

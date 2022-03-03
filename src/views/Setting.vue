@@ -174,14 +174,27 @@ export default {
           title: '修改個人資料成功',
         })
 
-        // this.$router.push('/home')
-        this.fetchUser()
+        this.$router.push('/home')
       } catch (error) {
         console.log(error)
         Toast.fire({
           icon: 'error',
           title: '無法修改個人資料，請稍後再試',
         })
+
+        if (error.response.data.message === 'Error: Email already exists!') {
+          Toast.fire({
+            icon: 'error',
+            title: 'email 已重覆註冊！',
+          })
+        }
+
+        if (error.response.data.message === 'Error: account already exists!') {
+          Toast.fire({
+            icon: 'error',
+            title: 'email 已重覆註冊！',
+          })
+        }
       }
     },
   },

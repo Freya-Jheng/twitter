@@ -32,16 +32,16 @@
             </router-link>
           </div>
           <button
-            v-if="following.isFollowed"
+            v-if="following.isFollowing"
             class="user-following-card__container__info__button button button-followed"
-            @click.stop.prevent="deleteFollowing(following.followingId)"
+            @click.stop.prevent="deleteFollowing(following.id)"
           >
             正在跟隨
           </button>
           <button
-            v-if="!following.isFollowed"
+            v-if="!following.isFollowing"
             class="user-following-card__container__info__button button button-not-followed"
-            @click.stop.prevent="addFollowing(following.id)"
+            @click.stop.prevent="addFollowing(following.followingId)"
           >
             跟隨
           </button>
@@ -75,6 +75,15 @@ export default {
         }
 
         this.followings = response.data
+
+        // 將 followings 進行排序
+        this.followings = this.followings.sort((a, b) => {
+          return a.createdAt > b.createdAt
+            ? -1
+            : a.createdAt < b.createdAt
+            ? 1
+            : 0
+        })
       } catch (error) {
         console.log(error)
         Toast.fire({
@@ -83,21 +92,23 @@ export default {
         })
       }
     },
-    async addFollowing(userId) {
+    async addFollowing(followingId) {
       try {
-        const { data } = await usersAPI.addFollowing({ userId })
+        const response = await usersAPI.addFollowing({
+          followerId: followingId,
+        })
 
-        if (data.status !== 'success') {
-          throw new Error(data.message)
+        if (response.status !== 200) {
+          throw new Error(response.statusText)
         }
 
         this.followings = this.followings.map((following) => {
-          if (following.id != userId) {
+          if (following.followingId != followingId) {
             return following
           } else {
             return {
               ...following,
-              isFollowed: true,
+              isFollowing: true,
             }
           }
         })
@@ -112,22 +123,15 @@ export default {
 
     async deleteFollowing(followingId) {
       try {
-        const { data } = await usersAPI.deleteFollowing({ followingId })
+        const response = await usersAPI.deleteFollowing({ followingId })
 
-        if (data.status !== 'success') {
-          throw new Error(data.message)
+        if (response.status !== 200) {
+          throw new Error(response.statusText)
         }
 
-        this.followings = this.followings.map((following) => {
-          if (following.followingId != followingId) {
-            return following
-          } else {
-            return {
-              ...following,
-              isFollowed: false,
-            }
-          }
-        })
+        this.followings = this.followings.filter(
+          (following) => following.followingId !== followingId
+        )
       } catch (error) {
         console.log(error)
         Toast.fire({

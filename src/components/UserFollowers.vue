@@ -41,7 +41,7 @@
           <button
             v-if="!follower.isFollowing"
             class="user-followers-card__container__info__button button button-not-followed"
-            @click.stop.prevent="addFollowing(follower.id)"
+            @click.stop.prevent="addFollowing(follower.followerId)"
           >
             跟隨
           </button>
@@ -75,6 +75,15 @@ export default {
         }
 
         this.followers = response.data
+
+         // 將 followers 進行排序
+        this.followers = this.followers.sort((a, b) => {
+          return a.createdAt > b.createdAt
+            ? -1
+            : a.createdAt < b.createdAt
+            ? 1
+            : 0
+        })
       } catch (error) {
         console.log(error)
         Toast.fire({
@@ -83,16 +92,16 @@ export default {
         })
       }
     },
-    async addFollowing(userId) {
+    async addFollowing(followerId) {
       try {
-        const { data } = await usersAPI.addFollowing({ userId })
+        const response = await usersAPI.addFollowing({ followerId })
 
-        if (data.status !== 'success') {
-          throw new Error(data.message)
+        if (response.status !== 200) {
+          throw new Error(response.statusText)
         }
 
         this.followers = this.followers.map((follower) => {
-          if (follower.id != userId) {
+          if (follower.followerId !== followerId) {
             return follower
           } else {
             return {
@@ -112,10 +121,11 @@ export default {
 
     async deleteFollowing(followerId) {
       try {
-        const { data } = await usersAPI.deleteFollowing({ followerId })
-
-        if (data.status !== 'success') {
-          throw new Error(data.message)
+        const response = await usersAPI.deleteFollowing({
+          followingId: followerId,
+        })
+        if (response.status !== 200) {
+          throw new Error(response.statusText)
         }
 
         this.followers = this.followers.map((follower) => {

@@ -40,7 +40,7 @@
                 />
                 <span
                   class="admin__users__cards__card__bottom__icons__response--number"
-                  >{{ user.tweetsCount | transNumber }}</span
+                  >{{ user.TweetsCount | transNumber }}</span
                 >
               </div>
               <div class="admin__users__cards__card__bottom__icons__like">
@@ -56,19 +56,19 @@
                 />
                 <span
                   class="admin__users__cards__card__bottom__icons__like--number"
-                  >{{ user.likesCount | transNumber }}</span
+                  >{{ user.likedCount | transNumber }}</span
                 >
               </div>
             </div>
             <div class="admin__users__cards__card__bottom__follows">
               <span
                 class="admin__users__cards__card__bottom__follows--followings"
-                >{{ user.followingsCount + ' 個' }}<span>跟隨中</span></span
+                >{{ user.followingCount + ' 個' }}<span>跟隨中</span></span
               >
               <span
                 to="/user/followers/:id"
                 class="admin__users__cards__card__bottom__follows--followers"
-                >{{ user.followersCount + ' 個' }}<span>跟隨者</span></span
+                >{{ user.followedCount + ' 個' }}<span>跟隨者</span></span
               >
             </div>
           </div>
