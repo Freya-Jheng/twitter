@@ -170,6 +170,8 @@ export default {
         this.$router.push({ name: 'sign-in' })
       } catch (error) {
         this.isProcessing = false
+
+        console.log(error.response.data.message)
         if (error.response.data.message === 'Error: Email already exists!') {
           Toast.fire({
             icon: 'error',
@@ -180,7 +182,7 @@ export default {
         if (error.response.data.message === 'Error: account already exists!') {
           Toast.fire({
             icon: 'error',
-            title: 'email 已重覆註冊！',
+            title: '帳號已重覆註冊！',
           })
         }
       }
