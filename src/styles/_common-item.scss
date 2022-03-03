@@ -39,3 +39,15 @@ input {
     border-color: var(--input-underline-hover);
   }
 }
+
+.router-link-active {
+  color: var(--button-background);
+}
+
+.router-link-exact-active {
+  color: var(--button-background);
+}
+
+.active {
+  color: var(--button-background);
+}
