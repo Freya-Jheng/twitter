@@ -112,10 +112,7 @@ export default {
         }
 
         if (error.response.data.message === 'Error: password does not match.') {
-          Toast.fire({
-            icon: 'warning',
-            title: '帳號或密碼錯誤',
-          })
+          this.error = true
         }
       }
     },
