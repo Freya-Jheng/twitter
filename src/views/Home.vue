@@ -4,7 +4,10 @@
     <!-- <router-view /> -->
     <div class="tweets">
       <CreateTweet @after-create-tweet="afterCreateTweet" />
-      <Tweets :initial-user-tweets="userTweets" />
+      <Tweets
+        :initial-user-tweets="userTweets"
+        @after-create-reply="afterCreateReply"
+      />
     </div>
     <PopularUsers />
   </div>
@@ -70,6 +73,9 @@ export default {
         description,
       })
 
+      this.fetchTweets()
+    },
+    afterCreateReply() {
       this.fetchTweets()
     },
   },

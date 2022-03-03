@@ -19,7 +19,7 @@
           >
             <img
               v-if="user.avatar"
-              :src="user.avatar"
+              :src="user.avatar ? user.avatar : ' '"
               alt=""
               class="user-avatar"
             />
@@ -109,7 +109,7 @@
                 <div class="modal-body__tweet__user-avatar">
                   <img
                     v-if="userTweet.User.avatar"
-                    :src="userTweet.User.avatar"
+                    :src="userTweet.User.avatar ? userTweet.User.avatar : ''"
                     alt=""
                     class="avatar"
                   />
@@ -143,7 +143,7 @@
                 <div class="modal-body__reply__user-avatar">
                   <img
                     v-if="currentUser.avatar"
-                    :src="currentUser.avatar"
+                    :src="currentUser.avatar ? currentUser.avatar : ''"
                     alt=""
                     class="avatar"
                   />
@@ -160,12 +160,25 @@
                 </form>
               </div>
             </div>
-            <div class="modal-footer" :class="{ error: reply.length > 140 }">
+            <div
+              class="modal-footer"
+              :class="{
+                error: reply.length > 140,
+                reply_error: error && reply.length === 0,
+              }"
+            >
               <button
+                v-if="reply.length > 0 && reply.length <= 140"
                 class="btn-modal button"
                 data-dismiss="modal"
-                @click="handleSubmit(userTweet.id)"
-                :disabled="reply.length > 140 || reply.length === 0"
+                @click="handleSubmit(tweetModal.id)"
+              >
+                回覆
+              </button>
+              <button
+                v-if="reply.length === 0 || reply.length > 140"
+                class="btn-modal button"
+                @click="handleSubmit()"
               >
                 回覆
               </button>
@@ -204,6 +217,7 @@ export default {
       replies: [],
       tweetModal: [],
       reply: '',
+      error: false,
     }
   },
   computed: {
@@ -299,7 +313,13 @@ export default {
     async handleSubmit(tweetId) {
       try {
         if (!this.reply) {
-          return false
+          this.error = true
+
+          return
+        }
+
+        if (this.reply.length > 140) {
+          return
         }
 
         const { data } = await tweetsAPI.reply({
@@ -310,8 +330,16 @@ export default {
         if (data.status !== 'success') {
           throw new Error(data.message)
         }
+
+        this.reply = ''
+        this.error = false
+
+        this.fetchTweet(tweetId)
+        this.fetchReplies(tweetId)
       } catch (error) {
         console.log(error)
+        this.reply = ''
+        this.error = false
         Toast.fire({
           icon: 'error',
           title: '無法新增回覆，請稍後再試',
@@ -632,6 +660,20 @@ export default {
   position: relative;
   &::after {
     content: '字數不可超過 140 字 ';
+    position: absolute;
+    bottom: 27px;
+    right: 101px;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 15px;
+    color: var(--error-color);
+  }
+}
+
+.reply_error {
+  position: relative;
+  &::after {
+    content: '內容不可空白';
     position: absolute;
     bottom: 27px;
     right: 101px;

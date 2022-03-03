@@ -369,4 +369,8 @@ nav {
     color: var(--error-color);
   }
 }
+
+.router-link-active {
+  color: var(--button-background);
+}
 </style>
