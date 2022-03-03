@@ -196,10 +196,20 @@ export default {
       reply: "",
     };
   },
+  watch: {
+    '$route.params.id': {
+      handler: function(id) {
+        this.fetchUserLiked(id)
+        // console.log(search)
+      },
+      deep: true,
+      immediate: true
+    }
+  },
   mixins: [fromNowFilter],
   created() {
-    const { id } = this.$route.params;
-    this.fetchUserLiked(id);
+    // const { id } = this.$route.params;
+    // this.fetchUserLiked(id);
   },
   methods: {
     async fetchUserLiked(userId) {
@@ -222,9 +232,8 @@ export default {
             ? -1
             : a.Tweet.createdAt < b.Tweet.createdAt
             ? 1
-            : 0
-        })
-
+            : 0;
+        });
       } catch (error) {
         console.log(error);
         Toast.fire({
@@ -236,7 +245,7 @@ export default {
     async addLike(tweetId) {
       try {
         const { data } = await tweetsAPI.addLike({ tweetId });
-        
+
         if (data.status === "error") {
           throw new Error(data.message);
         }

@@ -6,7 +6,7 @@
       :key="tweet.id"
     >
       <router-link
-        :to="{ name: 'sub-profile', params: { id: tweet.UserId } }"
+        :to="{ name: 'sub-profile-tweets', params: { id: tweet.UserId } }"
         class="tweets-container__tweet__user-avatar"
       >
         <img
@@ -19,13 +19,13 @@
       <div class="tweets-container__tweet__wrapper">
         <div class="tweets-container__tweet__wrapper__info">
           <router-link
-            :to="{ name: 'sub-profile', params: { id: tweet.UserId } }"
+            :to="{ name: 'sub-profile-tweets', params: { id: tweet.UserId } }"
             class="tweets-container__tweet__wrapper__info--name"
             >{{ tweet.User.name }}</router-link
           >
           <div class="tweets-container__tweet__wrapper__info--account">
             <router-link
-              :to="{ name: 'sub-profile', params: { id: tweet.UserId } }"
+              :to="{ name: 'sub-profile-tweets', params: { id: tweet.UserId } }"
               class="router-link"
               >{{ '@' + tweet.User.account }}</router-link
             >・{{ tweet.createdAt | fromNow }}

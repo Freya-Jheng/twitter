@@ -192,9 +192,19 @@ export default {
   computed: {
     ...mapState(['currentUser']),
   },
+  watch: {
+    '$route.params.id': {
+      handler: function(id) {
+        this.fetchTweets(id)
+        // console.log(search)
+      },
+      deep: true,
+      immediate: true
+    }
+  },
   created () {
-    const {id} = this.$route.params
-    this.fetchTweets(id)
+    // const {id} = this.$route.params
+    // this.fetchTweets(id)
   },
   methods: {
     async fetchTweets (userId) {

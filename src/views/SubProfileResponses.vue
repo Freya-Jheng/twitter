@@ -10,7 +10,7 @@
         <div class="profile__tweets__tweet__wrapper__info">
           <router-link 
           :to="{name: 'sub-profile', params: {id: tweet.Tweet.User.id}}" class="profile__tweets__tweet__wrapper__info--name"
-            >{{tweet.Tweet.User.name}}</router-link
+            >{{currentUser.name}}</router-link
           >
           <div class="profile__tweets__tweet__wrapper__info--account">
             <router-link 
@@ -58,10 +58,21 @@ export default {
   mixins: [
     fromNowFilter
   ],
+  watch: {
+    '$route.params.id': {
+      handler: function(id) {
+        this.fetchResponses(id)
+        this.fetchCurrentUser(id)
+        // console.log(search)
+      },
+      deep: true,
+      immediate: true
+    }
+  },
   created () {
-    const {id} = this.$route.params
-    this.fetchResponses(id)
-    this.fetchCurrentUser(id)
+    // const {id} = this.$route.params
+    // this.fetchResponses(id)
+    // this.fetchCurrentUser(id)
   },
   methods: {
     async fetchResponses(userId) {

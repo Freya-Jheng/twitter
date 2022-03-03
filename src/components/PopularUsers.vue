@@ -20,12 +20,12 @@
         <div class="popular-users__list__user-card__wrapper">
           <div class="popular-users__list__user-card__wrapper__info">
             <router-link
-              :to="{ name: 'sub-profile', params: { id: user.id } }"
+              :to="{ name: 'sub-profile-tweets', params: { id: user.id } }"
               class="popular-users__list__user-card__wrapper__info--name"
               >{{ user.name }}</router-link
             >
             <router-link
-              :to="{ name: 'sub-profile', params: { id: user.id } }"
+              :to="{ name: 'sub-profile-tweets', params: { id: user.id } }"
               class="popular-users__list__user-card__wrapper__info--account"
               >{{ '@' + user.account }}</router-link
             >
