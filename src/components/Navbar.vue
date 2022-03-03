@@ -3,6 +3,7 @@
     <router-link to="/home">
       <img src="./../assets/logo@2x.png" alt="logo" class="logo" />
     </router-link>
+    <template> </template>
     <div class="navbar__items">
       <div class="navbar__items-item home">
         <router-link to="/home" class="navbar__items-link">
@@ -213,6 +214,7 @@ export default {
 
 <style scoped lang="scss">
 nav {
+  position: relative;
   width: 235px;
   height: 100%;
   color: var(--main-font-color);
@@ -333,6 +335,8 @@ nav {
     }
   }
   .logout {
+    position: absolute;
+    bottom: 17px;
     display: flex;
     flex-direction: row;
     gap: 37px;
@@ -364,5 +368,9 @@ nav {
     line-height: 15px;
     color: var(--error-color);
   }
+}
+
+.router-link-active {
+  color: var(--button-background);
 }
 </style>

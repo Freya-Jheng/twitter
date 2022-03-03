@@ -138,13 +138,23 @@
                 </div>
                 <div
                   class="modal-footer"
-                  :class="{ error: reply.length > 140 }"
+                  :class="{
+                    error: reply.length > 140,
+                    reply_error: error && reply.length === 0,
+                  }"
                 >
                   <button
+                    v-if="reply.length > 0 && reply.length <= 140"
                     class="btn-modal button"
                     data-dismiss="modal"
                     @click="handleSubmit(tweet.id)"
-                    :disabled="reply.length > 140 || reply.length === 0"
+                  >
+                    回覆
+                  </button>
+                  <button
+                    v-if="reply.length === 0 || reply.length > 140"
+                    class="btn-modal button"
+                    @click="handleSubmit(tweet.id)"
                   >
                     回覆
                   </button>
@@ -202,6 +212,7 @@ export default {
       userTweets: [],
       tweetModal: [],
       reply: '',
+      error: false,
     }
   },
   methods: {
@@ -273,7 +284,13 @@ export default {
     async handleSubmit(tweetId) {
       try {
         if (!this.reply) {
-          return false
+          this.error = true
+
+          return
+        }
+
+        if (this.reply.length > 140) {
+          return
         }
 
         const { data } = await tweetsAPI.reply({
@@ -295,8 +312,16 @@ export default {
             }
           }
         })
+
+        this.reply = ''
+        this.error = false
+
+        this.$emit('after-create-reply')
       } catch (error) {
         console.log(error)
+        this.reply = ''
+        this.error = false
+
         Toast.fire({
           icon: 'error',
           title: '無法新增回覆，請稍後再試',
@@ -561,6 +586,20 @@ export default {
   position: relative;
   &::after {
     content: '字數不可超過 140 字 ';
+    position: absolute;
+    bottom: 27px;
+    right: 101px;
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 15px;
+    color: var(--error-color);
+  }
+}
+
+.reply_error {
+  position: relative;
+  &::after {
+    content: '內容不可空白';
     position: absolute;
     bottom: 27px;
     right: 101px;
