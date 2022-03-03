@@ -20,7 +20,7 @@
             class="router-link">
               {{"@" + tweet.User.account}}
             </router-link>
-           ・{{ currentUser.createdAt | fromNow }}
+           ・{{ tweet.createdAt | fromNow }}
           </div>
         </div>
 
@@ -186,7 +186,6 @@ export default {
     return {
       tweets: [],
       tweetsLength: '',
-      likedStatus: [],
       reply: ''
     }
   },
@@ -207,7 +206,17 @@ export default {
         }
 
         this.tweets = data
+        console.log('test',this.tweets)
         this.tweetsLength = this.tweets.length
+        
+        // 排序
+        this.tweets = this.tweets.sort((a, b) => {
+          return a.createdAt > b.createdAt
+            ? -1
+            : a.createdAt < b.createdAt
+            ? 1
+            : 0
+        })
 
       } catch (error) {
         console.log(error)
