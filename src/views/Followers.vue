@@ -3,17 +3,21 @@
     <Navbar />
     <div class="followers">
       <div class="followers__header">
-        <img
-          src="./../assets/icon_back@2x.png"
-          alt=""
-          class="followers__header__back"
-          @click="$router.back()"
-        />
+        <router-link
+          :to="{ name: 'sub-profile-tweets', params: { id: user.id } }"
+          class="navbar__items-link"
+          ><img
+            src="./../assets/icon_back@2x.png"
+            alt=""
+            class="followers__header__back"
+        /></router-link>
         <div class="followers__header__content">
           <div class="followers__header__content__user-name">
-            {{ currentUser.name }}
+            {{ user.name }}
           </div>
-          <div class="followers__header__content__tweet-counts">{{}}</div>
+          <div class="followers__header__content__tweet-counts">
+            {{ userTweets.length + ' 推文' }}
+          </div>
         </div>
       </div>
       <ul class="followers__nav-tabs">
@@ -23,14 +27,20 @@
         >
           <router-link
             class="followers__nav-tabs__item--link"
-            :to="{ name: 'user-followers', params: { id: currentUser.id } }"
+            :to="{
+              name: 'user-followers',
+              params: { id: this.$route.params.id },
+            }"
             >跟隨者</router-link
           >
         </li>
         <li class="followers__nav-tabs__item" :class="{ active: $route.path }">
           <router-link
             class="followers__nav-tabs__item--link"
-            :to="{ name: 'user-followings', params: { id: currentUser.id } }"
+            :to="{
+              name: 'user-followings',
+              params: { id: this.$route.params.id },
+            }"
             >正在跟隨</router-link
           >
         </li>
@@ -45,8 +55,8 @@
 import Navbar from './../components/Navbar'
 import PopularUsers from './../components/PopularUsers'
 import { mapState } from 'vuex'
-// import { Toast } from './../utils/helpers'
-// import usersAPI from './../apis/users'
+import { Toast } from './../utils/helpers'
+import usersAPI from './../apis/users'
 
 export default {
   name: 'UserFollowers',
@@ -57,24 +67,52 @@ export default {
   computed: {
     ...mapState(['currentUser', 'isAuthenticated']),
   },
+  data() {
+    return {
+      user: {},
+      userTweets: {},
+    }
+  },
   methods: {
-    // async fetchTweets(userId) {
-    //   try {
-    //     const response = await usersAPI.getUserTweets({ userId })
-    //     console.log(response)
-    //     console.log(response.data)
-    //   } catch (error) {
-    //     console.log(error)
-    //     Toast.fire({
-    //       icon: 'error',
-    //       title: '無法去得推文資料，請稍後再試',
-    //     })
-    //   }
-    // },
+    async fetchUser(userId) {
+      try {
+        const response = await usersAPI.get({ userId })
+
+        if (response.status !== 200) {
+          throw new Error(response.statusText)
+        }
+
+        this.user = response.data
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法取得使用者資利，請稍後再試',
+        })
+      }
+    },
+    async fetchTweets(userId) {
+      try {
+        const response = await usersAPI.getUserTweets({ userId })
+
+        if (response.status !== 200) {
+          throw new Error(response.statusText)
+        }
+
+        this.userTweets = response.data
+      } catch (error) {
+        console.log(error)
+        Toast.fire({
+          icon: 'error',
+          title: '無法取得推文資料，請稍後再試',
+        })
+      }
+    },
   },
   created() {
-    // const userId = this.currentUser.id
-    // console.log(userId)
+    const userId = this.$route.params.id
+    this.fetchUser(userId)
+    this.fetchTweets(userId)
   },
 }
 </script>
@@ -158,5 +196,4 @@ export default {
     }
   }
 }
-
 </style>
