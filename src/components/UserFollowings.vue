@@ -11,6 +11,7 @@
           class="user-following-card__avatar"
         >
           <img
+            v-if="following.avatar"
             :src="following.avatar"
             alt=""
             class="user-following-card__avatar--img"
