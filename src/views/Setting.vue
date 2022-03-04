@@ -161,8 +161,8 @@ export default {
           userId: this.user.id,
           account: this.user.account,
           name: this.user.name,
-          password: this.password,
-          checkPassword: this.checkPassword,
+          password: this.user.password,
+          checkPassword: this.user.checkPassword,
         })
 
         if (response.status !== 200) {

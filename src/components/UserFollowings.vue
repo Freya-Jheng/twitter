@@ -1,55 +1,61 @@
 <template>
   <div class="user-following">
-    <div
-      v-for="following in followings"
-      :key="following.followingId"
-      class="user-following-card"
-    >
-      <router-link
-        :to="{ name: 'sub-profile', params: { id: following.id } }"
-        class="user-following-card__avatar"
+    <template v-if="followings.length > 0">
+      <div
+        v-for="following in followings"
+        :key="following.followingId"
+        class="user-following-card"
       >
-        <img
-          :src="following.avatar"
-          alt=""
-          class="user-following-card__avatar--img"
-        />
-      </router-link>
-      <div class="user-following-card__container">
-        <div class="user-following-card__container__info">
-          <div class="user-following-card__container__info__user">
-            <router-link
-              :to="{ name: 'sub-profile', params: { id: following.id } }"
-              class="user-following-card__container__info__user--name"
+        <router-link
+          :to="{ name: 'sub-profile', params: { id: following.id } }"
+          class="user-following-card__avatar"
+        >
+          <img
+            v-if="following.avatar"
+            :src="following.avatar"
+            alt=""
+            class="user-following-card__avatar--img"
+          />
+        </router-link>
+        <div class="user-following-card__container">
+          <div class="user-following-card__container__info">
+            <div class="user-following-card__container__info__user">
+              <router-link
+                :to="{ name: 'sub-profile', params: { id: following.id } }"
+                class="user-following-card__container__info__user--name"
+              >
+                {{ following.name }}
+              </router-link>
+              <router-link
+                :to="{ name: 'sub-profile', params: { id: following.id } }"
+                class="user-following-card__container__info__user--account"
+              >
+                {{ '@' + following.account }}
+              </router-link>
+            </div>
+            <button
+              v-if="following.isFollowing"
+              class="user-following-card__container__info__button button button-followed"
+              @click.stop.prevent="deleteFollowing(following.id)"
             >
-              {{ following.name }}
-            </router-link>
-            <router-link
-              :to="{ name: 'sub-profile', params: { id: following.id } }"
-              class="user-following-card__container__info__user--account"
+              正在跟隨
+            </button>
+            <button
+              v-if="!following.isFollowing"
+              class="user-following-card__container__info__button button button-not-followed"
+              @click.stop.prevent="addFollowing(following.followingId)"
             >
-              {{ '@' + following.account }}
-            </router-link>
+              跟隨
+            </button>
           </div>
-          <button
-            v-if="following.isFollowing"
-            class="user-following-card__container__info__button button button-followed"
-            @click.stop.prevent="deleteFollowing(following.id)"
-          >
-            正在跟隨
-          </button>
-          <button
-            v-if="!following.isFollowing"
-            class="user-following-card__container__info__button button button-not-followed"
-            @click.stop.prevent="addFollowing(following.followingId)"
-          >
-            跟隨
-          </button>
-        </div>
-        <div class="user-following-card__container--text">
-          {{ following.introduction ? following.introduction : '' }}
+          <div class="user-following-card__container--text">
+            {{ following.introduction ? following.introduction : '' }}
+          </div>
         </div>
       </div>
+    </template>
+    <div v-else>
+      <h5 class="mt-6 text-center">目前沒有追隨中的帳號</h5>
     </div>
   </div>
 </template>
