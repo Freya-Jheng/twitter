@@ -38,16 +38,17 @@
           編輯個人資料
         </button>
         <div v-if="user.id !== currentUser.id" class="not-current-user">
-          <a href="" class="email">
+          <div class="email">
             <img src="../assets/btn_messege@2x.png" alt="" class="email-ico" />
-          </a>
-          <router-link to="" class="notice">
+          </div>
+          <div class="notice">
             <img
               src="../assets/btn_noti_active@2x.png"
               alt=""
               class="notice-ico"
             />
-          </router-link>
+          </div>
+
           <div class="follow-status">
             <span> 正在跟隨 </span>
           </div>
@@ -66,6 +67,7 @@
                 <div class="modal-header">
                   <div class="header-left">
                     <button
+                      @click="handleCancel"
                       type="button"
                       class="close"
                       data-dismiss="modal"
@@ -236,6 +238,7 @@ export default {
 
       return value
     },
+    ...mapState(['currentUser', 'isAuthenticated']),
   },
   data() {
     return {
@@ -256,16 +259,13 @@ export default {
     '$route.params.id': {
       handler: function (id) {
         this.fetchCurrentUser(id)
-        // console.log(search)
       },
       deep: true,
       immediate: true,
     },
   },
   created() {
-    // const { id } = this.currentUserData;
     const { id } = this.$route.params
-    // this.fetchCurrentUser(id);
     console.log(id)
   },
   methods: {
@@ -288,6 +288,7 @@ export default {
           followersCount,
           email,
         } = data
+
         this.user = {
           name,
           introduction,
@@ -341,6 +342,31 @@ export default {
           })
           return
         }
+
+        if (!this.user.name) {
+          Toast.fire({
+            icon: 'warning',
+            title: '請輸入姓名！',
+          })
+          return
+        }
+
+        if (!this.user.introduction) {
+          Toast.fire({
+            icon: 'warning',
+            title: '請填寫自我介紹！',
+          })
+          return
+        }
+
+        if (this.user.introduction.length > 140) {
+          Toast.fire({
+            icon: 'warning',
+            title: '自我介紹需要在140字以內！',
+          })
+          return
+        }
+
         if (!this.user.avatar) {
           Toast.fire({
             icon: 'warning',
@@ -348,6 +374,7 @@ export default {
           })
           return
         }
+
         const { data } = await userAPI.update({
           userId: this.user.id,
           name: this.user.name,
@@ -355,6 +382,7 @@ export default {
           avatar: this.user.avatar,
           cover: this.user.cover,
         })
+
         console.log(data)
 
         if (data.status !== 'success') {
@@ -371,6 +399,41 @@ export default {
           icon: 'error',
           title: '無法成功更新使用者資料',
         })
+      }
+    },
+    async handleCancel() {
+      try {
+        if (this.user.introduction.length >= 140) {
+          this.user.introduction = ''
+          Toast.fire({
+            icon: 'warning',
+            title: '自我介紹需要在140字以內！',
+          })
+          return
+        }
+        if (!this.user.name) {
+          Toast.fire({
+            icon: 'warning',
+            title: '請輸入姓名！',
+          })
+          return
+        }
+        if (!this.user.introduction) {
+          Toast.fire({
+            icon: 'warning',
+            title: '請填寫自我介紹！',
+          })
+          return
+        }
+        if (!this.user.avatar) {
+          Toast.fire({
+            icon: 'warning',
+            title: '請選擇大頭貼！',
+          })
+          return
+        }
+      } catch (error) {
+        console.log(error)
       }
     },
   },
@@ -674,6 +737,10 @@ export default {
       font-size: 15px;
       font-weight: bold;
     }
+  }
+  .notice,
+  .email {
+    cursor: pointer;
   }
 }
 </style>
