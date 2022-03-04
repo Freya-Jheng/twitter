@@ -29,7 +29,7 @@
           class="profile__container__top__avatar"
         />
         <button
-          v-if="user.id===currentUser.id"
+          v-if="user.id === currentUser.id"
           type="button"
           class="profile__container__top__btn"
           data-toggle="modal"
@@ -37,19 +37,19 @@
         >
           編輯個人資料
         </button>
-        <div 
-          v-if="user.id !== currentUser.id"
-          class="not-current-user">
-          <a href = "" class="email">
-            <img src="../assets/btn_messege@2x.png" alt="" class="email-ico">
+        <div v-if="user.id !== currentUser.id" class="not-current-user">
+          <a href="" class="email">
+            <img src="../assets/btn_messege@2x.png" alt="" class="email-ico" />
           </a>
           <router-link to="" class="notice">
-            <img src="../assets/btn_noti_active@2x.png" alt="" class="notice-ico">
+            <img
+              src="../assets/btn_noti_active@2x.png"
+              alt=""
+              class="notice-ico"
+            />
           </router-link>
           <div class="follow-status">
-            <span>
-              正在跟隨
-            </span>
+            <span> 正在跟隨 </span>
           </div>
         </div>
         <!-- Modal -->
@@ -145,7 +145,7 @@
                           required
                         />
                         <span class="letters"
-                          >9<span class="letters-length"></span>/50</span
+                          >{{ nameRemaining | remainingFilter }} / 50</span
                         >
                       </label>
                       <label class="introduction-label">
@@ -159,7 +159,7 @@
                           rows="5"
                         ></textarea>
                         <span class="letters"
-                          ><span class="letters-length">0</span>/160</span
+                          >{{ introRemaining | remainingFilter }} / 160</span
                         >
                       </label>
                     </div>
@@ -178,9 +178,7 @@
               >{{ user.name }}</span
             >
             <span
-              class="
-                profile__container__bottom__introduction__name-user-account
-              "
+              class="profile__container__bottom__introduction__name-user-account"
               >{{ user.account }}</span
             >
           </div>
@@ -190,16 +188,12 @@
           <div class="profile__container__bottom__introduction__follow">
             <router-link
               :to="{ name: 'user-followings', params: { id: user.id } }"
-              class="
-                profile__container__bottom__introduction__follow__followings
-              "
+              class="profile__container__bottom__introduction__follow__followings"
               >{{ user.followingsCount }}個<span>跟隨中</span></router-link
             >
             <router-link
               :to="{ name: 'user-followers', params: { id: user.id } }"
-              class="
-                profile__container__bottom__introduction__follow__followers
-              "
+              class="profile__container__bottom__introduction__follow__followers"
               >{{ user.followersCount }}個<span>跟隨者</span></router-link
             >
           </div>
@@ -210,8 +204,8 @@
 </template>
 
 <script>
-import userAPI from "../apis/users";
-import { Toast } from "../utils/helpers";
+import userAPI from '../apis/users'
+import { Toast } from '../utils/helpers'
 import { mapState } from 'vuex'
 
 export default {
@@ -227,48 +221,73 @@ export default {
   },
   computed: {
     ...mapState(['currentUser', 'isAuthenticated']),
+    nameRemaining() {
+      return 50 - this.user.name.length
+    },
+    introRemaining() {
+      return 160 - this.user.introduction.length
+    },
+  },
+  filters: {
+    remainingFilter: function (value) {
+      if (value < 0) {
+        return 0
+      }
+
+      return value
+    },
   },
   data() {
     return {
       user: {
         id: 0,
-        name: "",
-        introduction: "",
-        avatar: "",
-        cover: "",
-        account: "",
+        name: '',
+        introduction: '',
+        avatar: '',
+        cover: '',
+        account: '',
         followingsCount: 0,
         followersCount: 0,
         email: '',
       },
-    };
+    }
   },
   watch: {
     '$route.params.id': {
-      handler: function(id) {
-        this.fetchCurrentUser(id);
+      handler: function (id) {
+        this.fetchCurrentUser(id)
         // console.log(search)
       },
       deep: true,
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   created() {
     // const { id } = this.currentUserData;
-    const {id} = this.$route.params
+    const { id } = this.$route.params
     // this.fetchCurrentUser(id);
     console.log(id)
   },
   methods: {
     async fetchCurrentUser(userId) {
       try {
-        const { data } = await userAPI.get({ userId });
+        const { data } = await userAPI.get({ userId })
 
-        if (data.status !== "success") {
-          throw new Error(data.message);
+        if (data.status !== 'success') {
+          throw new Error(data.message)
         }
 
-        const { name, introduction, avatar, cover, account, id, followingsCount, followersCount, email } = data;
+        const {
+          name,
+          introduction,
+          avatar,
+          cover,
+          account,
+          id,
+          followingsCount,
+          followersCount,
+          email,
+        } = data
         this.user = {
           name,
           introduction,
@@ -278,56 +297,56 @@ export default {
           id,
           followingsCount,
           followersCount,
-          email
-        };
+          email,
+        }
       } catch (error) {
-        console.log(error);
+        console.log(error)
         Toast.fire({
-          icon: "error",
-          title: "無法成功取得追蹤人數！",
-        });
+          icon: 'error',
+          title: '無法成功取得追蹤人數！',
+        })
       }
     },
     handleCoverChange(e) {
-      const files = e.target.files;
+      const files = e.target.files
       if (files.length === 0) {
-        return (this.user.cover = null);
+        return (this.user.cover = null)
       } else {
-        const imageURL = window.URL.createObjectURL(files[0]);
-        this.user.cover = imageURL;
+        const imageURL = window.URL.createObjectURL(files[0])
+        this.user.cover = imageURL
       }
     },
     handleAvatarChange(e) {
-      const files = e.target.files;
+      const files = e.target.files
       if (files.length === 0) {
-        return (this.user.avatar = null);
+        return (this.user.avatar = null)
       } else {
-        const imageURL = window.URL.createObjectURL(files[0]);
-        this.user.avatar = imageURL;
+        const imageURL = window.URL.createObjectURL(files[0])
+        this.user.avatar = imageURL
       }
     },
     async handleSubmit() {
       try {
         if (!this.user.name) {
           Toast.fire({
-            icon: "warning",
-            title: "請填寫名稱",
-          });
-          return;
+            icon: 'warning',
+            title: '請填寫名稱',
+          })
+          return
         }
         if (!this.user.introduction) {
           Toast.fire({
-            icon: "warning",
-            title: "請填寫自我介紹",
-          });
-          return;
+            icon: 'warning',
+            title: '請填寫自我介紹',
+          })
+          return
         }
         if (!this.user.avatar) {
           Toast.fire({
-            icon: "warning",
-            title: "請選擇大頭貼",
-          });
-          return;
+            icon: 'warning',
+            title: '請選擇大頭貼',
+          })
+          return
         }
         const { data } = await userAPI.update({
           userId: this.user.id,
@@ -335,27 +354,27 @@ export default {
           introduction: this.user.introduction,
           avatar: this.user.avatar,
           cover: this.user.cover,
-        });
+        })
         console.log(data)
 
-        if (data.status !== "success") {
-          throw new Error(data.message);
+        if (data.status !== 'success') {
+          throw new Error(data.message)
         }
-        
+
         Toast.fire({
           icon: 'success',
-          title: '個人資料已更新！'
+          title: '個人資料已更新！',
         })
       } catch (error) {
-        console.log(error);
+        console.log(error)
         Toast.fire({
-          icon: "error",
-          title: "無法成功更新使用者資料",
-        });
+          icon: 'error',
+          title: '無法成功更新使用者資料',
+        })
       }
     },
   },
-};
+}
 </script>
 
 <style scoped lang="scss">
@@ -452,7 +471,7 @@ export default {
             font-weight: 500;
             color: var(--smaller-font-color);
             &::before {
-              content: "@";
+              content: '@';
             }
           }
         }
@@ -586,7 +605,7 @@ export default {
             padding: 0 15px;
             &::after {
               position: absolute;
-              content: "";
+              content: '';
               top: 100%;
               left: 0;
               width: 100%;
@@ -649,7 +668,7 @@ export default {
     text-align: center;
     line-height: 35px;
     cursor: pointer;
-    
+
     span {
       color: var(--background);
       font-size: 15px;
@@ -658,4 +677,3 @@ export default {
   }
 }
 </style>
-
