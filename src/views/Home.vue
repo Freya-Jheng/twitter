@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <Navbar />
+
     <!-- <router-view /> -->
     <div class="tweets">
       <CreateTweet @after-create-tweet="afterCreateTweet" />
@@ -18,6 +19,7 @@ import Navbar from './../components/Navbar'
 import CreateTweet from './../components/CreateTweet.vue'
 import Tweets from './../components/Tweets'
 import PopularUsers from './../components/PopularUsers'
+
 import { Toast } from './../utils/helpers'
 import tweetsAPI from './../apis/tweets'
 
@@ -54,6 +56,7 @@ export default {
         })
       } catch (error) {
         console.log(error)
+
         Toast.fire({
           icon: 'error',
           title: '無法取得推文資料，請稍後再試',

@@ -1,55 +1,60 @@
 <template>
   <div class="user-followers">
-    <div
-      v-for="follower in followers"
-      :key="follower.followerId"
-      class="user-followers-card"
-    >
-      <router-link
-        :to="{ name: 'sub-profile', params: { id: follower.id } }"
-        class="user-followers-card__avatar"
+    <template v-if="followers.length > 0">
+      <div
+        v-for="follower in followers"
+        :key="follower.followerId"
+        class="user-followers-card"
       >
-        <img
-          :src="follower.avatar"
-          alt=""
-          class="user-followers-card__avatar--img"
-        />
-      </router-link>
-      <div class="user-followers-card__container">
-        <div class="user-followers-card__container__info">
-          <div class="user-followers-card__container__info__user">
-            <router-link
-              :to="{ name: 'sub-profile', params: { id: follower.id } }"
-              class="user-followers-card__container__info__user--name"
+        <router-link
+          :to="{ name: 'sub-profile', params: { id: follower.id } }"
+          class="user-followers-card__avatar"
+        >
+          <img
+            :src="follower.avatar"
+            alt=""
+            class="user-followers-card__avatar--img"
+          />
+        </router-link>
+        <div class="user-followers-card__container">
+          <div class="user-followers-card__container__info">
+            <div class="user-followers-card__container__info__user">
+              <router-link
+                :to="{ name: 'sub-profile', params: { id: follower.id } }"
+                class="user-followers-card__container__info__user--name"
+              >
+                {{ follower.name }}
+              </router-link>
+              <router-link
+                :to="{ name: 'sub-profile', params: { id: follower.id } }"
+                class="user-followers-card__container__info__user--account"
+              >
+                {{ '@' + follower.account }}
+              </router-link>
+            </div>
+            <button
+              v-if="follower.isFollowing"
+              class="user-followers-card__container__info__button button button-followed"
+              @click.stop.prevent="deleteFollowing(follower.followerId)"
             >
-              {{ follower.name }}
-            </router-link>
-            <router-link
-              :to="{ name: 'sub-profile', params: { id: follower.id } }"
-              class="user-followers-card__container__info__user--account"
+              正在跟隨
+            </button>
+            <button
+              v-if="!follower.isFollowing"
+              class="user-followers-card__container__info__button button button-not-followed"
+              @click.stop.prevent="addFollowing(follower.followerId)"
             >
-              {{ '@' + follower.account }}
-            </router-link>
+              跟隨
+            </button>
           </div>
-          <button
-            v-if="follower.isFollowing"
-            class="user-followers-card__container__info__button button button-followed"
-            @click.stop.prevent="deleteFollowing(follower.followerId)"
-          >
-            正在跟隨
-          </button>
-          <button
-            v-if="!follower.isFollowing"
-            class="user-followers-card__container__info__button button button-not-followed"
-            @click.stop.prevent="addFollowing(follower.followerId)"
-          >
-            跟隨
-          </button>
-        </div>
-        <div class="user-followers-card__container--text">
-          {{ follower.introduction ? follower.introduction : '' }}
+          <div class="user-followers-card__container--text">
+            {{ follower.introduction ? follower.introduction : '' }}
+          </div>
         </div>
       </div>
+    </template>
+    <div v-else>
+      <h5 class="mt-6 text-center">目前沒有追隨者</h5>
     </div>
   </div>
 </template>
@@ -76,7 +81,7 @@ export default {
 
         this.followers = response.data
 
-         // 將 followers 進行排序
+        // 將 followers 進行排序
         this.followers = this.followers.sort((a, b) => {
           return a.createdAt > b.createdAt
             ? -1

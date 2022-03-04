@@ -88,6 +88,7 @@ export default {
           password: this.password,
         })
 
+        console.log(response)
         if (response.data.tokenData.status !== 'success') {
           throw new Error(response.data.tokenData.message)
         }
@@ -100,7 +101,7 @@ export default {
         this.account = ''
         this.password = ''
 
-        if (error.response.data.message === 'Error: account does not exist.') {
+        if (error.response.data.message === 'Error: acount does not exist.') {
           this.error = true
         }
 
