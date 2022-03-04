@@ -160,6 +160,7 @@ export default {
         const response = await usersAPI.update({
           userId: this.user.id,
           account: this.user.account,
+          email: this.user.email,
           name: this.user.name,
           password: this.user.password,
           checkPassword: this.user.checkPassword,
