@@ -4,7 +4,7 @@
       <li class="nav-item active">
         <router-link 
         :to="{name: 'sub-profile-tweets', params: {
-        id: currentUser.id
+        id: this.$route.params.id
         }}" class="nav-link">
         推文
         </router-link>
@@ -12,7 +12,7 @@
       <li class="nav-item">
         <router-link 
         :to="{name: 'sub-profile-responses', params: {
-        id: currentUser.id
+        id: this.$route.params.id
         }}" class="nav-link">
         推文與回覆
         </router-link>
@@ -20,7 +20,7 @@
       <li class="nav-item">
         <router-link 
         :to="{name: 'sub-profile-liked', params: {
-        id: currentUser.id
+        id: this.$route.params.id
         }}" class="nav-link">
         喜歡的內容
         </router-link>

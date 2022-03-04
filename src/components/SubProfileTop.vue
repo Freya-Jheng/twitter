@@ -37,6 +37,21 @@
         >
           編輯個人資料
         </button>
+        <div 
+          v-if="user.id !== currentUser.id"
+          class="not-current-user">
+          <a href = "" class="email">
+            <img src="../assets/btn_messege@2x.png" alt="" class="email-ico">
+          </a>
+          <router-link to="" class="notice">
+            <img src="../assets/btn_noti_active@2x.png" alt="" class="notice-ico">
+          </router-link>
+          <div class="follow-status">
+            <span>
+              正在跟隨
+            </span>
+          </div>
+        </div>
         <!-- Modal -->
         <div
           class="modal fade"
@@ -224,6 +239,7 @@ export default {
         account: "",
         followingsCount: 0,
         followersCount: 0,
+        email: '',
       },
     };
   },
@@ -251,7 +267,8 @@ export default {
         if (data.status !== "success") {
           throw new Error(data.message);
         }
-        const { name, introduction, avatar, cover, account, id, followingsCount, followersCount } = data;
+
+        const { name, introduction, avatar, cover, account, id, followingsCount, followersCount, email } = data;
         this.user = {
           name,
           introduction,
@@ -260,7 +277,8 @@ export default {
           account,
           id,
           followingsCount,
-          followersCount
+          followersCount,
+          email
         };
       } catch (error) {
         console.log(error);
@@ -607,6 +625,35 @@ export default {
           }
         }
       }
+    }
+  }
+}
+.not-current-user {
+  position: absolute;
+  top: 265px;
+  right: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 180px;
+  img {
+    width: 35px;
+    height: 35px;
+  }
+  .follow-status {
+    width: 90px;
+    height: 35px;
+    background-color: var(--button-background);
+    border-radius: 100px;
+    text-align: center;
+    line-height: 35px;
+    cursor: pointer;
+    
+    span {
+      color: var(--background);
+      font-size: 15px;
+      font-weight: bold;
     }
   }
 }
